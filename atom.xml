@@ -3,11 +3,11 @@
   <title>Yzctzl</title>
   
   <subtitle>真的勇士，敢于直面惨淡的人生 | 向天再借五百年</subtitle>
-  <link href="https://yzctzl.github.com/atom.xml" rel="self"/>
+  <link href="https://yzctzl.github.io/atom.xml" rel="self"/>
   
-  <link href="https://yzctzl.github.com/"/>
+  <link href="https://yzctzl.github.io/"/>
   <updated>2023-02-10T04:28:55.237Z</updated>
-  <id>https://yzctzl.github.com/</id>
+  <id>https://yzctzl.github.io/</id>
   
   <author>
     <name>yzctzl</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>FLV：不许动手动脚</title>
-    <link href="https://yzctzl.github.com/decff57f50d2/"/>
-    <id>https://yzctzl.github.com/decff57f50d2/</id>
+    <link href="https://yzctzl.github.io/decff57f50d2/"/>
+    <id>https://yzctzl.github.io/decff57f50d2/</id>
     <published>2023-02-10T03:22:03.571Z</published>
     <updated>2023-02-10T04:28:55.237Z</updated>
     
@@ -30,23 +30,23 @@
     
     
     
-    <category term="AV" scheme="https://yzctzl.github.com/categories/AV/"/>
+    <category term="AV" scheme="https://yzctzl.github.io/categories/AV/"/>
     
     
-    <category term="AV" scheme="https://yzctzl.github.com/tags/AV/"/>
+    <category term="AV" scheme="https://yzctzl.github.io/tags/AV/"/>
     
-    <category term="FFmpeg" scheme="https://yzctzl.github.com/tags/FFmpeg/"/>
+    <category term="FFmpeg" scheme="https://yzctzl.github.io/tags/FFmpeg/"/>
     
-    <category term="Live" scheme="https://yzctzl.github.com/tags/Live/"/>
+    <category term="Live" scheme="https://yzctzl.github.io/tags/Live/"/>
     
-    <category term="FLV" scheme="https://yzctzl.github.com/tags/FLV/"/>
+    <category term="FLV" scheme="https://yzctzl.github.io/tags/FLV/"/>
     
   </entry>
   
   <entry>
     <title>PlayGround</title>
-    <link href="https://yzctzl.github.com/7ca37fa6f41a/"/>
-    <id>https://yzctzl.github.com/7ca37fa6f41a/</id>
+    <link href="https://yzctzl.github.io/7ca37fa6f41a/"/>
+    <id>https://yzctzl.github.io/7ca37fa6f41a/</id>
     <published>2023-02-05T13:02:47.950Z</published>
     <updated>2023-02-07T04:35:14.525Z</updated>
     
@@ -57,17 +57,17 @@
     
     
     
-    <category term="Samples" scheme="https://yzctzl.github.com/categories/Samples/"/>
+    <category term="Samples" scheme="https://yzctzl.github.io/categories/Samples/"/>
     
     
-    <category term="samples" scheme="https://yzctzl.github.com/tags/samples/"/>
+    <category term="samples" scheme="https://yzctzl.github.io/tags/samples/"/>
     
   </entry>
   
   <entry>
     <title>Hello World</title>
-    <link href="https://yzctzl.github.com/e8615d1b44f9/"/>
-    <id>https://yzctzl.github.com/e8615d1b44f9/</id>
+    <link href="https://yzctzl.github.io/e8615d1b44f9/"/>
+    <id>https://yzctzl.github.io/e8615d1b44f9/</id>
     <published>2023-02-05T10:46:26.768Z</published>
     <updated>2023-02-05T12:54:56.080Z</updated>
     

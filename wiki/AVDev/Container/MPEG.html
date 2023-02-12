@@ -20,18 +20,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
   
-  <title>Container：ISOBMFF - Yzctzl</title>
+  <title>Container,Protocol：MPEG - Yzctzl</title>
 
   
-    <meta name="description" content="MP4  GPAC https:&#x2F;&#x2F;github.com&#x2F;gpac&#x2F;gpac&#x2F;wiki&#x2F;  Bento4 https:&#x2F;&#x2F;www.bento4.com&#x2F;  parser 关于解析器  dump 有时候需要将 mp4 的 box 信息 dump 出来用于分析，有很多工具可以做这件事：  Bento4：mp4dump --verbosity 0 --format json $FILE GPAC：m">
+    <meta name="description" content="关于 MPEG 制定的一些标准。   MPEG 2 TS  分析工具  https:&#x2F;&#x2F;hls-js.netlify.app TSDuck：https:&#x2F;&#x2F;github.com&#x2F;tsduck&#x2F;tsduck EasyICE   HLS 中文标准：https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;e97f6555a070  https:&#x2F;&#x2F;www.jongbel.com&#x2F;manual-analysi">
 <meta property="og:type" content="website">
-<meta property="og:title" content="ISOBMFF">
+<meta property="og:title" content="MPEG">
 <meta property="og:url" content="https://yzctzl.github.io/wiki/AVDev/Container/MPEG.html">
 <meta property="og:site_name" content="Yzctzl">
-<meta property="og:description" content="MP4  GPAC https:&#x2F;&#x2F;github.com&#x2F;gpac&#x2F;gpac&#x2F;wiki&#x2F;  Bento4 https:&#x2F;&#x2F;www.bento4.com&#x2F;  parser 关于解析器  dump 有时候需要将 mp4 的 box 信息 dump 出来用于分析，有很多工具可以做这件事：  Bento4：mp4dump --verbosity 0 --format json $FILE GPAC：m">
+<meta property="og:description" content="关于 MPEG 制定的一些标准。   MPEG 2 TS  分析工具  https:&#x2F;&#x2F;hls-js.netlify.app TSDuck：https:&#x2F;&#x2F;github.com&#x2F;tsduck&#x2F;tsduck EasyICE   HLS 中文标准：https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;e97f6555a070  https:&#x2F;&#x2F;www.jongbel.com&#x2F;manual-analysi">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-02-11T14:17:05.683Z">
-<meta property="article:modified_time" content="2023-02-11T14:17:05.683Z">
+<meta property="article:published_time" content="2023-02-12T11:46:54.146Z">
+<meta property="article:modified_time" content="2023-02-12T11:46:54.146Z">
 <meta property="article:author" content="yzctzl">
 <meta name="twitter:card" content="summary">
   
@@ -49,7 +49,7 @@
   
 
   
-    <link rel="shortcut icon" href="/about/logo.png">
+    <link rel="shortcut icon" href="/img/meta/logo.png">
   
 
   
@@ -85,17 +85,17 @@
 
 
 
-<div class="widgets"><widget class="widget-wrapper logo-wrap wiki"><div class="widget-body"><a style="filter: grayscale(100%)" class="wiki-home cap" href="/"><svg aria-hidden="true" viewBox="0 0 16 16" width="1rem" height="1rem" fill="currentColor"><path fill-rule="evenodd" d="M7.78 12.53a.75.75 0 01-1.06 0L2.47 8.28a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L4.81 7h7.44a.75.75 0 010 1.5H4.81l2.97 2.97a.75.75 0 010 1.06z"></path></svg>所有项目</a><a class="title" href="/wiki/AVDev/Container/MPEG.html"><div class="main" ff="title">Container</div><div class="sub cap">学习与分析音视频的各种容器与其工具</div></a></div></widget>
+<div class="widgets"><widget class="widget-wrapper logo-wrap wiki"><div class="widget-body"><a style="filter: grayscale(100%)" class="wiki-home cap" href="/"><svg aria-hidden="true" viewBox="0 0 16 16" width="1rem" height="1rem" fill="currentColor"><path fill-rule="evenodd" d="M7.78 12.53a.75.75 0 01-1.06 0L2.47 8.28a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L4.81 7h7.44a.75.75 0 010 1.5H4.81l2.97 2.97a.75.75 0 010 1.06z"></path></svg>所有项目</a><a class="title" href="/wiki/AVDev/Container/MPEG.html"><div class="main" ff="title">Container,Protocol</div><div class="sub cap">学习与分析音视频的各种容器与协议</div></a></div></widget>
 <widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" data-filter="/wiki/AVDev/" placeholder="文章搜索"><svg t="1670596976048" class="icon search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2676" width="200" height="200"><path d="M938.2 832.6L723.8 618.1c-2.5-2.5-5.3-4.4-7.9-6.4 36.2-55.6 57.3-121.8 57.3-193.1C773.3 222.8 614.6 64 418.7 64S64 222.8 64 418.6c0 195.9 158.8 354.6 354.6 354.6 71.3 0 137.5-21.2 193.2-57.4 2 2.7 3.9 5.4 6.3 7.8L832.5 938c14.6 14.6 33.7 21.9 52.8 21.9 19.1 0 38.2-7.3 52.8-21.8 29.2-29.1 29.2-76.4 0.1-105.5M418.7 661.3C284.9 661.3 176 552.4 176 418.6 176 284.9 284.9 176 418.7 176c133.8 0 242.6 108.9 242.6 242.7 0 133.7-108.9 242.6-242.6 242.6" p-id="2677"></path></svg></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div></div></widget>
 
 
 
 
-<widget class="widget-wrapper toc multi" id="data-toc"><div class="widget-header cap dis-select"><span class="name">现代</span></div><div class="widget-body fs14"><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/AVDev/Container/MPEG.html#start"><span class="toc-text">ISOBMFF</span></a><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#mp4"><span class="toc-text"> MP4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gpac"><span class="toc-text"> GPAC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bento4"><span class="toc-text"> Bento4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parser"><span class="toc-text"> parser</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#dump"><span class="toc-text"> dump</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#repair"><span class="toc-text"> Repair</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text"> </span></a></li></ol></li></ol></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/AVDev/Container/Matroska.html"><span class="toc-text">Matroska</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/AVDev/Container/TS.html"><span class="toc-text">Transport Stream</span></a></div></div><div class="widget-header cap dis-select"><span class="name">过去</span></div><div class="widget-body fs14"><div class="doc-tree"><a class="doc-tree-link" href="/wiki/AVDev/Container/FLV.html"><span class="toc-text">Flash Video</span></a></div></div></widget>
+<widget class="widget-wrapper toc multi" id="data-toc"><div class="widget-header cap dis-select"><span class="name">学习</span></div><div class="widget-body fs14"><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/AVDev/Container/MPEG.html#start"><span class="toc-text">MPEG</span></a><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#mpeg-2-ts"><span class="toc-text"> MPEG 2 TS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="toc-text"> 分析工具</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hls"><span class="toc-text"> HLS</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#csa"><span class="toc-text"> CSA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dvb"><span class="toc-text"> DVB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mp4"><span class="toc-text"> MP4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gpac"><span class="toc-text"> GPAC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bento4"><span class="toc-text"> Bento4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parser"><span class="toc-text"> parser</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#dump"><span class="toc-text"> dump</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#repair"><span class="toc-text"> Repair</span></a></li></ol></li></ol></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/AVDev/Container/Matroska.html"><span class="toc-text">Matroska</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/AVDev/Container/TS.html"><span class="toc-text">Transport Stream</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/AVDev/Container/FLV.html"><span class="toc-text">Flash Video</span></a></div></div></widget>
 
 
 
-
+<widget class="widget-wrapper related"><div class="widget-header cap theme dis-select"><span class="name">更多AVDev</span></div><div class="widget-body related-posts"><a class="item wiki" href="/wiki/AVDev/FFmpeg/index.html"><span class="title">FFmpeg 开发与学习</span><span class="excerpt">A complete, cross-platform solution to record, convert and stream audio and video.</span></a></div></widget>
 </div>
 
 
@@ -107,11 +107,39 @@
 
   
   
-<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">Wiki</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/AVDev/Container/MPEG.html">Container</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-02-11T14:17:05.683Z">2023-02-11</time></div></div>
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">Wiki</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/AVDev/Container/MPEG.html">Container,Protocol</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-02-12T11:46:54.146Z">2023-02-12</time></div></div>
 
   <article class='md-text content wiki'>
-  <h1 class="article-title"><span>ISOBMFF</span></h1>
-  <!----- more ----->
+  <h1 class="article-title"><span>MPEG</span></h1>
+  <p>关于 MPEG 制定的一些标准。</p>
+<!----- more ----->
+<h2 id="mpeg-2-ts"><a class="markdownIt-Anchor" href="#mpeg-2-ts"></a> MPEG 2 TS</h2>
+<h3 id="分析工具"><a class="markdownIt-Anchor" href="#分析工具"></a> 分析工具</h3>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://hls-js.netlify.app">https://hls-js.netlify.app</a></li>
+<li>TSDuck：<a target="_blank" rel="noopener" href="https://github.com/tsduck/tsduck">https://github.com/tsduck/tsduck</a></li>
+<li>EasyICE</li>
+</ol>
+<h4 id="hls"><a class="markdownIt-Anchor" href="#hls"></a> HLS</h4>
+<p>中文标准：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/e97f6555a070">https://www.jianshu.com/p/e97f6555a070</a></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.jongbel.com/manual-analysis/hls-analyzer/">https://www.jongbel.com/manual-analysis/hls-analyzer/</a></li>
+</ol>
+<h3 id="csa"><a class="markdownIt-Anchor" href="#csa"></a> CSA</h3>
+<p>Common Scrambling Algorithm (通用加扰系统)<br />
+标准 ISO 23001-9:2016<br />
+关键词：ECM、EMM、CA、PDK、SK</p>
+<p>解扰工具</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.videolan.org/developers/libdvbcsa.html">https://www.videolan.org/developers/libdvbcsa.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/nilaoda/TSDecrypt">https://github.com/nilaoda/TSDecrypt</a></li>
+</ol>
+<h2 id="dvb"><a class="markdownIt-Anchor" href="#dvb"></a> DVB</h2>
+<ol start="0">
+<li><a target="_blank" rel="noopener" href="https://www.videohelp.com/software/sections/digitaltv-dvb-hdtv">https://www.videohelp.com/software/sections/digitaltv-dvb-hdtv</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.dvbcontrol.com/dvbanalyzer">https://www.dvbcontrol.com/dvbanalyzer</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/EricBerendsen/dvbinspector">https://github.com/EricBerendsen/dvbinspector</a></li>
+</ol>
 <h2 id="mp4"><a class="markdownIt-Anchor" href="#mp4"></a> MP4</h2>
 <h3 id="gpac"><a class="markdownIt-Anchor" href="#gpac"></a> GPAC</h3>
 <p><a target="_blank" rel="noopener" href="https://github.com/gpac/gpac/wiki/">https://github.com/gpac/gpac/wiki/</a></p>
@@ -125,7 +153,7 @@
 <li>Bento4：<code>mp4dump --verbosity 0 --format json $FILE</code></li>
 <li>GPAC：<code>mp4box -info/-diso $FILE</code></li>
 <li>Mp4Box.js：<a target="_blank" rel="noopener" href="https://gpac.github.io/mp4box.js/">https://gpac.github.io/mp4box.js/</a></li>
-<li>GUI 工具：MP4 Inspector、MP4Info、MP4 Explorer</li>
+<li>GUI 工具：MP4 Inspector、MP4Info、MP4 Explorer、MP4Parser 等等</li>
 <li><a target="_blank" rel="noopener" href="https://www.jongbel.com/manual-analysis/atombox-studio/">AtomBox Studio</a></li>
 <li>Python：<a target="_blank" rel="noopener" href="https://github.com/beardypig/pymp4">pymp4</a>, <a target="_blank" rel="noopener" href="https://github.com/essential61/mp4analyser">mp4analyser</a></li>
 </ol>
@@ -145,7 +173,6 @@
 </ol>
 </li>
 </ol>
-<h3 id=""><a class="markdownIt-Anchor" href="#"></a> </h3>
 
   
 

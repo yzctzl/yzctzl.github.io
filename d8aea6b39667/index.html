@@ -23,55 +23,55 @@
   <title>FLV：不许动手动脚 - Yzctzl</title>
 
   
-    <meta name="description" content="本文将着重分析 &#96;FLV&#96; 容器的语法语义，结合我遇到的几个安卓平台的 &#96;FLV&#96; 加密进行分析，同时对这几个样本做解密还原。">
+    <meta name="description" content="本文将着重分析 FLV 容器的语法语义，结合我遇到的几个安卓平台的 FLV 加密进行分析，同时对这几个样本做解密还原。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="FLV：不许动手动脚">
-<meta property="og:url" content="https://yzctzl.github.io/decff57f50d2/index.html">
+<meta property="og:url" content="https://yzctzl.github.io/d8aea6b39667/index.html">
 <meta property="og:site_name" content="Yzctzl">
-<meta property="og:description" content="本文将着重分析 &#96;FLV&#96; 容器的语法语义，结合我遇到的几个安卓平台的 &#96;FLV&#96; 加密进行分析，同时对这几个样本做解密还原。">
+<meta property="og:description" content="本文将着重分析 FLV 容器的语法语义，结合我遇到的几个安卓平台的 FLV 加密进行分析，同时对这几个样本做解密还原。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/1.1.01.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/1.1.02.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/1.1.03.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/1.1.04.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/1.1.05.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/1.1.07.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/1.1.06.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/1.1.08.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/1.1.09.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/1.1.10.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/1.2.01.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/2.1.01.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/2.1.02.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/2.1.03.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/2.1.04.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/2.2.01.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/2.2.02.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/2.2.03.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/2.2.08.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/2.2.04.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/2.2.05.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/2.2.06.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/2.2.07.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/2.3.01.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/2.3.02.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/3.1.04.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/3.1.05.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/3.1.01.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/3.1.02.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/3.1.07.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/3.1.08.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/3.1.06.png">
-<meta property="og:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/3.1.09.png">
-<meta property="article:published_time" content="2023-02-10T03:22:03.571Z">
-<meta property="article:modified_time" content="2023-02-10T04:28:55.237Z">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/1.1.01.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/1.1.02.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/1.1.03.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/1.1.04.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/1.1.05.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/1.1.07.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/1.1.06.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/1.1.08.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/1.1.09.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/1.1.10.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/1.2.01.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/2.1.01.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/2.1.02.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/2.1.03.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/2.1.04.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/2.2.01.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/2.2.02.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/2.2.03.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/2.2.08.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/2.2.04.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/2.2.05.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/2.2.06.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/2.2.07.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/2.3.01.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/2.3.02.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/3.1.04.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/3.1.05.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/3.1.01.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/3.1.02.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/3.1.07.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/3.1.08.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/3.1.06.png">
+<meta property="og:image" content="https://yzctzl.github.io/img/ReFLV/3.1.09.png">
+<meta property="article:published_time" content="2022-11-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-02-12T15:21:54.102Z">
 <meta property="article:author" content="yzctzl">
 <meta property="article:tag" content="AV">
 <meta property="article:tag" content="FFmpeg">
 <meta property="article:tag" content="Live">
 <meta property="article:tag" content="FLV">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://yzctzl.github.io/decff57f50d2/ReFLV_img/1.1.01.png">
+<meta name="twitter:image" content="https://yzctzl.github.io/img/ReFLV/1.1.01.png">
   
   
 
@@ -87,7 +87,7 @@
   
 
   
-    <link rel="shortcut icon" href="/about/logo.png">
+    <link rel="shortcut icon" href="/img/meta/logo.png">
   
 
   
@@ -135,7 +135,7 @@
       
 
 
-<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/AV/">AV</a></div><div id="post-meta">发布于&nbsp;<time datetime="2023-02-10T03:22:03.571Z">2023-02-10</time></div></div>
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/AV/">AV</a></div><div id="post-meta">发布于&nbsp;<time datetime="2022-11-30T16:00:00.000Z">2022-12-01</time></div></div>
 
 <article class='md-text content post'>
 <h1 class="article-title"><span>FLV：不许动手动脚</span></h1>
@@ -150,18 +150,18 @@
 <p>本节我们看一下标准中 <code>FLV</code> 容器的语法，其中大部分都能用 <code>ReFLV</code><sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup> 解析。</p>
 <h3 id="flv-header"><a class="markdownIt-Anchor" href="#flv-header"></a> FLV header</h3>
 <p><code>FLV</code> 文件的前 <code>9</code> 个字节是文件头，其中有两个标志位分别表示是否包含音频和视频：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/1.1.01.png" alt="FLV header" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/1.1.01.png" alt="FLV header" /></p>
 <p>对这部分使用 <code>parse_flv_header</code> 来解析，对应的数据类是 <code>TAGheader</code>；如果无法解析一般考虑是否存在其他问题，比如是否缺失文件头或者是否已被完整加密，因为单独加密文件头意义不大。</p>
 <h3 id="flv-body"><a class="markdownIt-Anchor" href="#flv-body"></a> FLV body</h3>
 <p>文件头之后的就是一个接一个的 <code>Tag + TagSize</code> 直到 <code>EOF</code>：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/1.1.02.png" alt="FLV struct" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/1.1.02.png" alt="FLV struct" /></p>
 <p>为了方便，把 <code>PreviousTagSizeN</code> 看作 <code>TagN</code> 的一部分。一个 <code>Tag</code> 使用一个数据类 <code>Tag</code> 表示。</p>
 <p>在一帧一个 <code>Tag</code> 之前，最开始的第一个 <code>Tag</code> 封装的是 <code>onMetadata</code>，它表示了容器层面的音视频信息，也是 rtmpdump 的输出信息，大多数情况下无需处理，不过也有种特殊情况：如果多个视频共用一个直播链接，比如：开始播放时画面为 <code>720p</code> 横向，中间换了直播设备变成 <code>1080p</code> 竖向，整个过程链接不变就导致它们被下载到一个 <code>FLV</code> 文件中，这样的 <code>FLV</code> 仅能播放第一小段。</p>
 <p>在 <code>ReFLV</code> 中有个 <code>splite_out()</code> 函数可以将多段视频分成多个 <code>FLV</code> 文件，分隔规则为：视频使用 <code>onMetadata</code> 音频使用 <code>AAC header</code>，遇到这两种类型就写入下一个 <code>FLV</code> 中。</p>
 <p>接下来的 <code>Tag</code> 里面封装的是初始化信息 <code>SPS</code><sup class="footnote-ref"><a href="#fn2" id="fnref2:1">[2:1]</a></sup>、<code>PPS</code><sup class="footnote-ref"><a href="#fn3" id="fnref3:1">[3:1]</a></sup> 等，这些参数优先级最高也是最重要的，一旦丢失将无法解码，因为它提供解码器所必须的解码信息。</p>
 <h3 id="tag-header"><a class="markdownIt-Anchor" href="#tag-header"></a> Tag header</h3>
 <p><code>Tag</code> 可以分成两部分，前半部分是 <code>header：</code></p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/1.1.03.png" alt="Tag header" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/1.1.03.png" alt="Tag header" /></p>
 <p>把红框中的部分看作 <code>Tag header</code> 对应 <code>Tag</code> 数据类中的 <code>header</code>，使用数据类 <code>TAGheader</code> 表示。</p>
 <p>这其中黄色的部分是 <code>Tag header</code> 之后剩余部分的大小，也就是说：可以读 <code>11B</code>，解析之后就知道剩余的 <code>Tag</code> 大小了，使用 <code>next_tag</code> 来实现读取过程，<code>parse_tag_header</code> 来解析这 <code>11B</code> 的内容，若做出了修改就用 <code>build_tag_header</code> 重新生成新的 <code>Tag header</code>；同样当解密完成之后需要写入目标 <code>FLV</code> 时，有对应的 <code>write_tag</code>。</p>
 <p>另一个重要的部分是时间戳，一共 <code>4B</code>，又称<code>解码时间戳（DTS）</code>，直播开始后时间戳在从 0 开始递增，但绝大多是情况下我们都是从直播开始之后一段时间才能获取到直播流，因此得到的 <code>DTS</code> 并非从 0 时刻开始；还有些时候会因为连麦、推流网络问题等得到错乱的时间戳。</p>
@@ -169,23 +169,23 @@
 <p>另一方面，常用的 <code>ffmpeg</code> 是通过包含 <code>Video/Audio header</code> 的 <code>Tag</code> 解析结果来重置时间戳，而有时会遇到的 <code>header</code> 中时间戳也不正确；</p>
 <p>更好的方法应该是选择第一个关键帧所在 <code>Tag</code> 作为时间戳原点，然后对音频和视频的时间戳与该原点计算偏移作为新的时间戳；之所以选关键帧，因为它是需要解码的一帧完整的画面，这与其他包含编码参数的 <code>Tag</code> 的时间戳不同，它的时间戳是直接影响<code>显示时间 (PTS)</code>。</p>
 <p>修复时间戳对应的是 <code>reset_timestamp</code>。接下来的是音视频的 <code>header</code>。最后是包含码流的 <code>Data</code>：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/1.1.04.png" alt="Tag Data" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/1.1.04.png" alt="Tag Data" /></p>
 <p>这里的 <code>Data</code> 是最容易动手脚的地方，遇到的例子中都对这部分做了加密，后面再说。先看一下 <code>Video Tag header</code>：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/1.1.05.png" alt="Video Tag header" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/1.1.05.png" alt="Video Tag header" /></p>
 <p>包含了<code>帧类型、Codec、Data</code> 中码流类型以及<code>相对时间戳（CTS）</code>，一帧画面的显示时间是通过 <code>PTS = CTS + DTS</code> 来计算的，使用 <code>parse_video_header</code> 来解析，解密或者修改完之后使用 <code>build_video_header</code> 重新构建。</p>
 <p>跟在 <code>Video Tag header</code> 之后的 <code>Data</code> 是 <code>VideoPacket</code>：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/1.1.07.png" alt="Audio Tag header" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/1.1.07.png" alt="Audio Tag header" /></p>
 <p><code>Audio</code> 和 <code>Video</code> 类似：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/1.1.06.png" alt="AVCPacket" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/1.1.06.png" alt="AVCPacket" /></p>
 <p>包括音频编码器、几个参数，最后是 <code>Data</code> 中音频包的类型，使用 <code>parse_audio_header</code> 来解析，解密或者修改完之后使用 <code>build_audio_header</code> 重新构建。其后跟上 <code>AudioPacket</code>。</p>
 <h3 id="nalu"><a class="markdownIt-Anchor" href="#nalu"></a> NALU</h3>
 <p><code>NALU</code> 是网络抽象层单元缩写，顾名思义，这是为了适应网络传输和数据存储而做的码流分割，<code>H.264/H.265</code> 中都有它，<code>FLV</code> 使用的 <code>NALu</code> 码流语法在 <code>ISO/IEC 14496-15</code> 中，语法为：<code>单元长度（4B） + NALU header（AVC：1B，HEVC：2B） + payload(RBSP)</code>，其实就是把常见的<code>附录 B</code> 格式中 <code>StartCode（可以为 0x000001/0x00000001）</code> 替换成了 <code>单元长度（4B）</code>，其中：负载是喂给 <code>decoder</code> 解码的，<code>AVC NALU header</code> 语义如下：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/1.1.08.png" alt="NALU header" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/1.1.08.png" alt="NALU header" /></p>
 <p><code>f(x)</code> 和 <code>u(x)</code> 都是顺序读取 <code>x</code> 位，其中 <code>nal_unit_type</code> 决定负载的语法，其定义如下：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/1.1.09.png" alt="nal_unit_type" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/1.1.09.png" alt="nal_unit_type" /></p>
 <p>其中 <code>1</code> 表示 <code>IDR</code>，<code>5</code> 是最常见的 <code>I/P/B</code> 帧，<code>7、8</code> 分别表示 <code>SPS、PPS</code>。这部分使用 <code>parse_avc_nalu</code> 来解析，因为一个帧可以分割为多个 <code>NALu/slice</code> 所以这里需要根据最开始的 <code>4B</code> 单元长度判断每个 <code>nalu</code> 长度。</p>
 <p><code>HEVC NLAU header</code> 语法如下：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/1.1.10.png" alt="nal_unit_type" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/1.1.10.png" alt="nal_unit_type" /></p>
 <p>一共 <code>2B</code>，其中 <code>nal_unit_type(6bits)</code> 用来标识NAL单元类型，包括<code>参数集（VPS，PPS，SPS，SEI）</code>以及 <code>slice</code> 数据如 <code>IDR/I/B/P</code> 等。</p>
 <h3 id="小结"><a class="markdownIt-Anchor" href="#小结"></a> 小结</h3>
 <p>上面这些都在标准内，截取了部分常遇到的，详细了解可以阅读标准。了解语法语义之后可以用 <code>flvAnalyser</code><sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup> 或 010 Editor + <code>FLV.bt</code><sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup> 辅助分析，比如：某 FLV 音频正常却花屏，而上述这些分析后一切正常，那可以确定 VideoPacket 一定动手脚了。</p>
@@ -197,7 +197,7 @@
 <h3 id="hevc"><a class="markdownIt-Anchor" href="#hevc"></a> HEVC</h3>
 <p><code>FLV</code> 对新的 <code>h.265/hevc</code> 没有支持，新的编码标准压缩率更高，更加节省带宽，支持的分辨率也更高，已经逐渐成为主流，而我们要做的扩展主要是添加 <code>video codec id</code> 然后替换为对应编码的 <code>VIDEOPACKET</code>。</p>
 <p>目前对 <code>HEVC</code> 常用的 <code>video codec id</code> 是 <code>12</code>，扩展标准如下：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/1.2.01.png" alt="hevc+flv" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/1.2.01.png" alt="hevc+flv" /></p>
 <p>该扩展由金山云提出 <code>ksvc</code><sup class="footnote-ref"><a href="#fn8" id="fnref8">[8]</a></sup>，并做了 <code>FFmpeg</code> 的 patch，这是最常见的扩展。</p>
 <h3 id="av1opus"><a class="markdownIt-Anchor" href="#av1opus"></a> AV1/Opus</h3>
 <p>类似 <code>HEVC</code>，<code>AV1</code> 的扩展 <code>video codec id</code> 是 <code>13</code>，<code>AV1</code> 是 <code>AOM</code> 联盟开发的一种视频编码，该联盟由谷歌等大型公司主导，对标下一代视频编码 <code>h.266/VVC</code>，其编码复杂度相对较高，不过开源无专利费，很多云厂商都实现了该扩展，具体扩展可参考 <code>AV1patch</code><sup class="footnote-ref"><a href="#fn9" id="fnref9">[9]</a></sup>。</p>
@@ -219,19 +219,19 @@
 <li>与容器无关，FLV/MP4/MKV 等统统适用</li>
 </ol>
 <p>直接看调用结构图：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/2.1.01.png" alt="ffplay demux" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/2.1.01.png" alt="ffplay demux" /></p>
 <p><code>ffplay</code> 可类比在安卓客户端中常见的任一款基于 <code>ffmpeg</code> 的播放器。</p>
 <p><code>read_frame_internal()</code>：封装了完整的解复用过程（<code>demuxer</code>），也是最容易做手脚的地方，调用它就可以得到一帧。取帧时会从 <code>ff_read_packet()</code> 读取，这个函数负责与 <code>IO</code> 打交道，如果一切顺利会判断是否需要来进一步解析，如果需要交给 <code>parse_packet()</code>。</p>
 <p><code>flv_read_packet()</code>：负责读取读取和解析 <code>Tag header</code>、<code>Video Tag header</code>、<code>Audio Tag header</code>，并对 <code>H.264、AAC</code> 等做一些特殊处理；如果某魔改 FFmpeg 可以处理非标准 <code>FLV</code> 容器，那首先怀疑是否对该函数动了手脚。</p>
 <h3 id="实例-n"><a class="markdownIt-Anchor" href="#实例-n"></a> 实例 N</h3>
 <p>这是某收费直播系统的安卓平台，该系统的播放器基于 FFmpeg，用 C++ 开发，不开源，无混淆。抓个源下载一会，得到视频样本，试播放灰屏无声音，拖入 <code>010 Editor</code> 分析发现头都是完整的，符合标准未加密，推测更深层的 <code>payload(RBSP)</code> 加密了：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/2.1.02.png" alt="N sample" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/2.1.02.png" alt="N sample" /></p>
 <p>接下来用 <code>IDA</code> 打开 <code>N.so</code>，因为 FFmpeg 各版本差异很大，要首先判断 FFmpeg 版本号，搜字符串 <code>version</code> 找到版本号为 <code>4.1.4</code>，从 <code>videolan</code><sup class="footnote-ref"><a href="#fn13" id="fnref13">[13]</a></sup> 下载该版本源码后用 Source Insight 打开，方便对照查看。</p>
 <p>然后注意到导出表如下图：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/2.1.03.png" alt="NMC export" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/2.1.03.png" alt="NMC export" /></p>
 <p>里面包含许多种加密解密，根据分析，视频播放过程中可能存在某个解密函数被频繁调用，大胆猜测它就在导出表中，直接 <code>trace</code> 一下，轻易找到了它：<code>sm4_decrypt</code>。</p>
 <p>由此查看调用，马上就找到 <code>sm4_decrypt</code> 被 <code>read_frame_internal(AVFormatContext, AVPacket)</code> 调用，对照源码分析如下图：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/2.1.04.png" alt="all in one" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/2.1.04.png" alt="all in one" /></p>
 <p>红色横线是在源码中的插入位置，在 <code>ff_read_packet()</code> 之后交给其先解密再继续操作；</p>
 <p><code>FFmpeg</code> 有很多非常复杂的结构体，还原起来十分困难，到处都在取偏移，如果偏移比较小可以对照源码中的结构体数一下，如果很大，那只能试试可以对照着源码有没有其他位置来确定这个属性，比如：蓝色框中可以参考黑色框对应的伪代码来还原，详细内容见汇编的注释；</p>
 <p><code>v71</code> 是一个比较简单的结构体——<code>AVPacket</code>，可以适当修改后直接写入定义，该定义位于 <code>libavcodec/avcodec.h</code> 中，在 <code>Local Types</code> 中插入然后修改 <code>v71</code> 类型即可。</p>
@@ -246,7 +246,7 @@
 <p>但解复用器中也有对容器的解析，这部分也可以被称为解析器。如果解析器解析的是容器，那对应的是 demuxer 的一部分；如果解析的是 NALU header 或者 VPS/SPS/PPS 等参数集，那对应的是 parser，也就是本小节的内容。</p>
 <p>上面我们提到，读取完成之后会根据情况进行解析，解析的函数是：<code>parse_packet</code>，在调用的该函数的时候已经调用完 <code>read_packet</code> 拿到了完整的一帧数据，所以在此处既可以方便的解密整个帧，也可以在解析时针对某种 NALU 或者 NALU 的一部分做解密。</p>
 <p>我们来看一下 <code>parse_packet</code> 的调用结构图：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/2.2.01.png" alt="parser" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/2.2.01.png" alt="parser" /></p>
 <p>前半部分是调用，动手脚的可能相对小一点，后面的以 hevc 为例，对应的解析器源码在 <code>hevc_parse.c</code> 中，这其中真正用于解析的是 <code>hevc_parse</code> 这个函数，调用了解析各种参数集的函数。</p>
 <p>这些参数集对解码来说是必须的，如果其做了加密，必然导致无法解码。这里加密的有点是代价很小，因为这些参数集的大小相对加密 I/P/B 帧小到可以忽略。</p>
 <p>出了参数集加密，在这里已经读完了一个完整的帧，这里加密某一类 NALU 或者 NALU 的某一部分都非常方便。这样的加密往往都放在 <code>parse_nal_units</code> 中。</p>
@@ -271,21 +271,21 @@
 <h3 id="实例-f"><a class="markdownIt-Anchor" href="#实例-f"></a> 实例 F</h3>
 <p>这是个很喜欢动手动脚而且都改的乱七八糟的 App，播放器是基于 <code>ijkplayer.so</code> 魔改的 <code>F.so</code>，推流服务也是各种魔改，所以算是个孤例吧；该魔改 <code>F.so</code> 也实现了 FLV 的 <code>HEVC</code> 扩展，而且解密和 H264 类似，下面以 HEVC 解密为例。</p>
 <p>App 加了个梆梆免费版，脱修之后可以 hook，直接从 tcpdump/wireshark 中抓个源，下载个样本视频，播放有声音无画面，用 010 Editor 打开，如下图：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/2.2.02.png" alt="010 parse" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/2.2.02.png" alt="010 parse" /></p>
 <p>图中紫色部分包括 <code>Tag header，Video Tag header</code> 以及第一个 <code>NALU</code>，这些都是正常的，可以正常使用模板解析，但第二个 <code>NALU</code> 就出错了，问题应该出在这里。</p>
 <p>IDA 中拖入该 so，搜索字符串 ijk 确定版本号，下载 Bilibili 维护的对应版本 FFmpeg，在 Source Insight 中打开。</p>
 <p>根据导出表，有个 <code>decrypt()</code> 函数很可疑，hook 一下确定了该位置是用于 AVC 解密的，函数如下：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/2.2.03.png" alt="fun decrypt" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/2.2.03.png" alt="fun decrypt" /></p>
 <p>调用了 <code>OpenSSL</code> 来解密，猜测 <code>HEVC</code> 的解密也用到了这几个 <code>OpenSSL</code> 的函数，查找引用，找到了 <code>sub_F3FAC</code>，这个函数只有一个调用者：<code>sub_F4024</code>，根据其中的字符串在 Source Insight 中查找，基本可以判定该函数为：<code>hevc_parse()</code>，显然是对解析器动了手脚，插入位置在：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/2.2.08.png" alt="hevc_parse" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/2.2.08.png" alt="hevc_parse" /></p>
 <p>导入 <code>ijk.til</code>，下面还原 <code>hevc_parse</code> 的参数类型，代码的可读性就非常高了，如下图：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/2.2.04.png" alt="" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/2.2.04.png" alt="" /></p>
 <p>先寻找 <code>sign_hevc</code> 标志，在 <code>0,40,41,42,47</code> 位置上寻找，标志前的不做变动，然后在模式串上做一些乱七八糟的操作得到两个固定串，分别作为 <code>key,iv</code> 用来做第一次解密：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/2.2.05.png" alt="" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/2.2.05.png" alt="" /></p>
 <p>密文长度为 <code>0x13B</code>，解密后直接保存到密文的位置，解密出来的内容作为以后解密的参数，其前 <code>2B</code> 用作长度，表示未加密长度，中间 <code>1B</code> 无用，后 <code>16B</code> 用作第二次解密的密钥：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/2.2.06.png" alt="" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/2.2.06.png" alt="" /></p>
 <p>最后解密：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/2.2.07.png" alt="" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/2.2.07.png" alt="" /></p>
 <p>由上总结该加密的 NALU 语法为：<code>[reserved_data][sign_hevc(8B)][enc_header(0x13B)][unenc_data][enc_data]</code>。</p>
 <p>这样 <code>NALU</code> 的解密就可以写出来了，AVC 和 HEVC 类似，不赘述了，感兴趣直接看代码吧 <code>ReF</code><sup class="footnote-ref"><a href="#fn15" id="fnref15">[15]</a></sup>。</p>
 <h2 id="decoder"><a class="markdownIt-Anchor" href="#decoder"></a> Decoder</h2>
@@ -299,9 +299,9 @@
 <p>虽然没有样本，不过思路有了，根据思路我自己实现了一个，并对其进行了还原，在调用 <code>avcodec_send_frame()</code> 之前做打乱顺序的操作，核心部分如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 仅适用于 YUV420p，如果不是，可以加个 format 滤镜转一下</span></span><br><span class="line"><span class="type">uint8_t</span> *temp[<span class="number">8</span>] = &#123;&#125;;</span><br><span class="line"><span class="type">uint8_t</span> *tt = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">2</span>; j &gt;= <span class="number">0</span>; j--)&#123;</span><br><span class="line">    temp[j] = av_malloc(_size);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> m = j ? <span class="number">2</span> : <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> _size = result_frame-&gt;linesize[j] * result_frame-&gt;height / m;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> _slic = _size / <span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> _map[<span class="number">10</span>] = &#123;<span class="number">5</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">8</span>, <span class="number">0</span>&#125;;</span><br><span class="line">    <span class="comment">// int r_map[10] = &#123;9, 6, 1, 4, 7, 0, 3, 5, 8, 2&#125;;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>; i &lt; _size; i++)</span><br><span class="line">        temp[j][i] = result_frame-&gt;data[j][_map[i / _slic] * _slic + (i % _slic)];</span><br><span class="line">    </span><br><span class="line">    tt = result_frame-&gt;data[j]; result_frame-&gt;data[j] = temp[j]; av_free(tt);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>效果如下：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/2.3.01.png" alt="filter result" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/2.3.01.png" alt="filter result" /></p>
 <p>还原结果：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/2.3.02.png" alt="filter result" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/2.3.02.png" alt="filter result" /></p>
 <p>效果依旧带有很强的可辨识性，所以也可以实现一个更复杂的版本，比如：先对 YUV 分别做异或然后再分割为 16*8 个条带，这样就与灰屏差不多了。</p>
 <p>使用滤镜的缺点也不小，首先不可能得到源码需要重编码，必然导致客户端画质下降；其次因为分割的原因导致画面失去连贯性，这样编码器在边界处需要更复杂的计算、更多的比特来储存信息，于是编码器效率降低了；最后这种方式更容易辨识，进而还原。我个人认为这并非一种理想的方式。</p>
 <h2 id="codec"><a class="markdownIt-Anchor" href="#codec"></a> Codec</h2>
@@ -321,27 +321,27 @@
 <h2 id="实例-d"><a class="markdownIt-Anchor" href="#实例-d"></a> 实例 D</h2>
 <p>这是某公司开发的音视频直播 SDK，宣称全自研、跨平台、延迟极低。解码部分可用硬件解码器，其他部分全自研。我这个是安卓平台的 App，核心库为 <code>D.so</code>，其中包含两套接口，以较新的 <code>V2</code> 接口为例。</p>
 <p>hook 一下 <code>V2</code> 接口中的 <code>setUrl</code> 抓个源，然后下个样本，用 010 Editor 打开，解析一下容器：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/3.1.04.png" alt="D Sample" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/3.1.04.png" alt="D Sample" /></p>
 <p>整个文件所有视频帧全是 I 帧，这显然有问题，如何还原呢？接着看：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/3.1.05.png" alt="D Sample" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/3.1.05.png" alt="D Sample" /></p>
 <p>首先注意到整个容器除了 <code>v_frame_type</code> 恒等于 <code>1</code> 外一切正常；重要的：一个 <code>Tag</code> 中包含多个 <code>NALU</code>。</p>
 <p><code>Tag 116</code> 中包含 <code>6 个 NALU</code>，前两个是 <code>SPS(nal_unit_type == 7)、PPS(nal_unit_type == 8)</code>，后面四个是 <code>IDR(nal_unit_type == 5)</code> 帧的四个切片；<code>Tag 120</code> 中包含<code>四个非 IDR 切片(nal_unit_type == 1)</code>，可以是 <code>I/P/B</code> 的切片，都不是关键帧；基于此，我们可以把 <code>IDR</code> 帧所在 <code>Tag</code> 保持不变，其他修复为 <code>P/B frame(v_frame_type = 2)</code>。</p>
 <p>下面来刚 <a target="_blank" rel="noopener" href="http://D.so">D.so</a>，这里用的 <code>Ghidra</code>，感觉效果更好一点，流程比较复杂，要理清框架不容易，为了方便理解，我制作了一张调用结构图：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/3.1.01.png" alt="D.so" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/3.1.01.png" alt="D.so" /></p>
 <p>前面无关紧要就不扣细节了，有些符号可以猜测函数功能，感兴趣可以去看反汇编。下面先看 <code>FLV Parser</code> 部分：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/3.1.02.png" alt="Parser" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/3.1.02.png" alt="Parser" /></p>
 <p>是不是有种很熟悉的感觉，就是一层一层的脱掉 <code>header</code> 然后 parse，其间一边设置结构体一边根据值判断接下来的操作；大致过程为先处理 <code>FLV header</code>，然后循环 <code>ParserTag</code>：解析 <code>Tag header</code>、<code>Video Tag header/Audio Tag header</code>，最后音频码流直接就交给下一层，视频码流添加 <code>StartCode</code> 也交给下一层。这个过程和 <code>ReFLV</code> 类似，相当于 <code>FFmpeg</code> 中的 <code>flv_read_packet</code>。</p>
 <p>我们把精力集中到解密音视频的具体操作，看调用流程：无论音视频都是首先调用 <code>ParserHeader</code>，然后创建 <code>Decryptor</code> 并调用 <code>DecryptPacket</code> 来解密，该函数首先获取一个 <code>SkipPlainTextSize</code> 的长度，表示未加密长度，然后分别根据音频和视频调用对应解密函数，解密完成 <code>Attach</code> 到结果中。</p>
 <p>如果是音频，直接调用 <code>AES CBC Decrypt</code>；如果是视频，首先要 <code>NalUnEscape</code>，它有个逆函数是 <code>NalEscape</code> 负责把 <code>payload(RBSP)</code> 中的 <code>0x000001</code> 变为 <code>0x00000301</code>，来避免解码过程中遇到 <code>StartCode</code> 而产生错误，那么该函数则负责从 <code>0x00000301</code> 中去掉 <code>0x03</code>，还原真实负载之后再解密。</p>
 <p>首先是 <code>ParserHeader</code>，这个 <code>Header</code> 在哪里呢？看下面的例子：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/3.1.07.png" alt="enc header" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/3.1.07.png" alt="enc header" /></p>
 <p>这里红色的 <code>Enc header(13B)</code> 就是需要解析加密头，接下来直接看反汇编解析就行了，这里就不看了比较简单，直接根据上图的例子解析结果如下，名称是我根据功能随便起的：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/3.1.08.png" alt="parse header" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/3.1.08.png" alt="parse header" /></p>
 <p>接下来无论音频还是视频都去初始化 <code>Decryptor</code>，主要是初始化结构体 <code>EncryptBase</code>：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/3.1.06.png" alt="Parser" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/3.1.06.png" alt="Parser" /></p>
 <p>根据 EncryptBase 的构造器和 get 和 set 函数可以还原红框中的结构体，<code>PTR_FUN</code> 指向函数指针列表，后面解密会用到其中的 Decrypt 函数；这里有四种解密：<code>AES/AESFix/SM4/SM4Fix</code>，根据 <code>p3/p5</code> 来判断用哪种，下面以 <code>AES CBC</code> 为例。</p>
 <p>然后都调用 <code>DecryptPacket</code> 用来解密数据，如下图：</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="./ReFLV_img/3.1.09.png" alt="DecryptPacket" /></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/img/ReFLV/3.1.09.png" alt="DecryptPacket" /></p>
 <p>这个函数标注的比较清晰了，右下的绿框中是调用 <code>OpenSSLAESCBCEncrypt::Decrypt</code> 之前的最后一个函数，其具体操作为：</p>
 <ol>
 <li>做了一些检查是否满足解密条件</li>
@@ -409,11 +409,11 @@
 
 
 <div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
-</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://yzctzl.github.io/decff57f50d2/" /></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/b32ef3da1162a.svg"/></a><a class="social share-item telegram" target="_blank" rel="noopener" href="https://t.me/share?url=https://yzctzl.github.io/decff57f50d2/"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://static.cdnlogo.com/logos/t/39/telegram.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://yzctzl.github.io/decff57f50d2/&title=FLV：不许动手动脚 - Yzctzl&pics=/decff57f50d2//ReFLV_img/2.3.01.png&summary=本文将着重分析 `FLV` 容器的语法语义，结合我遇到的几个安卓平台的 `FLV` 加密进行分析，同时对这几个样本做解密还原。"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=FLV：不许动手动脚 - Yzctzl&amp;body=https://yzctzl.github.io/decff57f50d2/"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://yzctzl.github.io/decff57f50d2/index.html"/></div></div></section></div>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://yzctzl.github.io/d8aea6b39667/" /></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/b32ef3da1162a.svg"/></a><a class="social share-item telegram" target="_blank" rel="noopener" href="https://t.me/share?url=https://yzctzl.github.io/d8aea6b39667/"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://static.cdnlogo.com/logos/t/39/telegram.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://yzctzl.github.io/d8aea6b39667/&title=FLV：不许动手动脚 - Yzctzl&pics=/img/ReFLV/2.3.01.png&summary=本文将着重分析 FLV 容器的语法语义，结合我遇到的几个安卓平台的 FLV 加密进行分析，同时对这几个样本做解密还原。"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=FLV：不许动手动脚 - Yzctzl&amp;body=https://yzctzl.github.io/d8aea6b39667/"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://yzctzl.github.io/d8aea6b39667/index.html"/></div></div></section></div>
 
 </article>
 
-<div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/7ca37fa6f41a/">PlayGround</a></div></section></div>
+<div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/c3c6863add40/">k30pro 小计</a></div></section></div>
 
 
 

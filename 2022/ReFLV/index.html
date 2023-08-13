@@ -1,0 +1,3875 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,default">
+    <head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/#5.8.0'>
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta name="Volantis" content="5.8.0">
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+  <link rel="canonical" href="https://yzctzl.github.io/2022/reflv/"/>
+  <!-- 渲染优化 -->
+    <meta http-equiv='x-dns-prefetch-control' content='on' />
+      <link rel='dns-prefetch' href='https://unpkg.com'>
+      <link rel="preconnect" href="https://unpkg.com" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Content-Security-Policy" content=" default-src 'self' https:; block-all-mixed-content; base-uri 'self' https:; form-action 'self' https:; worker-src 'self' https:; connect-src 'self' https: *; img-src 'self' data: https: *; media-src 'self' https: *; font-src 'self' data: https: *; frame-src 'self' https: *; manifest-src 'self' https: *; child-src https:; script-src 'self' https: 'unsafe-inline' *; style-src 'self' https: 'unsafe-inline' *; ">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+  <meta content="telephone=no" name="format-detection">
+  <!-- import head_begin begin -->
+  <!-- import head_begin end -->
+  <!-- Custom Files headBegin begin-->
+  
+  <!-- Custom Files headBegin end-->
+  <!-- front-matter head_begin begin -->
+  <!-- front-matter head_begin end -->
+    <link rel="shortcut icon" type='image/x-icon' href="/img/meta/logo.png">
+  <link rel="preload" href="/css/style.css" as="style">
+  <link rel="preload" href="https://unpkg.com/volantis-static@0.0.1654736714924/media/fonts/VarelaRound/VarelaRound-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+<link rel="preload" href="https://unpkg.com/volantis-static@0.0.1654736714924/media/fonts/UbuntuMono/UbuntuMono-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <!-- feed -->
+      <link rel="alternate" href="/atom.xml" title="Yzctzl" type="application/atom+xml">
+  <!-- 页面元数据 -->
+  <title>FLV：不许动手动脚 - Yzctzl</title>
+  <meta name="keywords" content="AV,FFmpeg,Live,FLV,null">
+  <meta desc name="description" content="本文将着重分析 FLV 容器的语法语义，结合我遇到的几个安卓平台的 FLV 加密进行分析，同时对这几个样本做解密还原。 - yzctzl - Yzctzl">
+  
+<meta property="og:type" content="article">
+<meta property="og:title" content="FLV：不许动手动脚">
+<meta property="og:url" content="https://yzctzl.github.io/2022/ReFLV/index.html">
+<meta property="og:site_name" content="Yzctzl">
+<meta property="og:description" content="本文将着重分析 FLV 容器的语法语义，结合我遇到的几个安卓平台的 FLV 加密进行分析，同时对这几个样本做解密还原。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
+<meta property="article:published_time" content="2022-11-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-08-10T07:53:31.086Z">
+<meta property="article:author" content="yzctzl">
+<meta property="article:tag" content="AV">
+<meta property="article:tag" content="FFmpeg">
+<meta property="article:tag" content="Live">
+<meta property="article:tag" content="FLV">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
+  <style>
+    /* 首屏样式 */
+    #safearea {
+  display: none;
+}
+:root {
+  --color-site-body: #f4f4f4;
+  --color-site-bg: #f4f4f4;
+  --color-site-inner: #fff;
+  --color-site-footer: #666;
+  --color-card: #fff;
+  --color-text: #444;
+  --color-block: #f6f6f6;
+  --color-inlinecode: #d56d28;
+  --color-codeblock: #fff7ea;
+  --color-h1: #444;
+  --color-h2: #444;
+  --color-h3: #444;
+  --color-h4: #444;
+  --color-h5: #444;
+  --color-h6: #444;
+  --color-p: #444;
+  --color-list: #666;
+  --color-list-hl: #36ac91;
+  --color-meta: #888;
+  --color-read-bkg: #e0d8c8;
+  --color-read-post: #f8f1e2;
+  --color-copyright-bkg: #f5f5f5;
+}
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  padding: 0;
+}
+*::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+*::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: #44d7b6;
+  cursor: pointer;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: #ff5722;
+}
+html {
+  color: var(--color-text);
+  width: 100%;
+  height: 100%;
+  font-family: "LXGW WenKai Screen R", UbuntuMono, "Varela Round", "PingFang SC", "Microsoft YaHei", Helvetica, Arial, Menlo, Monaco, monospace, sans-serif;
+  font-size: 16px;
+}
+html >::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+html >::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+html >::-webkit-scrollbar-thumb {
+  background: #54b5a0 linear-gradient(45deg, rgba(255,255,255,0.4) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.4) 75%, transparent 75%, transparent);
+  cursor: pointer;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+html >::-webkit-scrollbar-thumb:hover {
+  background: #54b5a0 linear-gradient(45deg, rgba(255,255,255,0.4) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.4) 75%, transparent 75%, transparent);
+}
+body {
+  background-color: var(--color-site-body);
+  text-rendering: optimizelegibility;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+body.modal-active {
+  overflow: hidden;
+}
+@media screen and (max-width: 680px) {
+  body.modal-active {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
+a {
+  color: #2196f3;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+}
+a:hover {
+  color: #ff5722;
+}
+a:active,
+a:hover {
+  outline: 0;
+}
+ul,
+ol {
+  padding-left: 0;
+}
+ul li,
+ol li {
+  list-style: none;
+}
+header {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+}
+img {
+  border: 0;
+  background: none;
+  max-width: 100%;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  height: 0;
+  border: 0;
+  border-radius: 1px;
+  -webkit-border-radius: 1px;
+  border-bottom: 1px solid rgba(68,68,68,0.1);
+}
+button,
+input {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+button {
+  overflow: visible;
+  text-transform: none;
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+@supports (backdrop-filter: blur(20px)) {
+  .blur {
+    background: rgba(255,255,255,0.9) !important;
+    backdrop-filter: saturate(200%) blur(20px);
+  }
+}
+.shadow {
+  box-shadow: 0 1px 2px 0px rgba(0,0,0,0.1);
+  -webkit-box-shadow: 0 1px 2px 0px rgba(0,0,0,0.1);
+}
+.shadow.floatable {
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+}
+.shadow.floatable:hover {
+  box-shadow: 0 2px 4px 0px rgba(0,0,0,0.1), 0 4px 8px 0px rgba(0,0,0,0.1), 0 8px 16px 0px rgba(0,0,0,0.1);
+  -webkit-box-shadow: 0 2px 4px 0px rgba(0,0,0,0.1), 0 4px 8px 0px rgba(0,0,0,0.1), 0 8px 16px 0px rgba(0,0,0,0.1);
+}
+#l_cover {
+  min-height: 52px;
+}
+.cover-wrapper {
+  top: 0;
+  left: 0;
+  max-width: 100%;
+  height: 100vh;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  flex-wrap: nowrap;
+  -webkit-flex-wrap: nowrap;
+  -khtml-flex-wrap: nowrap;
+  -moz-flex-wrap: nowrap;
+  -o-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  align-content: center;
+  color: var(--color-site-inner);
+  padding: 0 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: -100px;
+}
+.cover-wrapper .cover-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+}
+.cover-wrapper .cover-bg.lazyload:not(.loaded) {
+  opacity: 0;
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+}
+.cover-wrapper .cover-bg.lazyload.loaded {
+  animation-delay: 0s;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
+  animation-name: fadeIn;
+}
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+    filter: blur(12px);
+    transform: scale(1.02);
+    -webkit-transform: scale(1.02);
+    -khtml-transform: scale(1.02);
+    -moz-transform: scale(1.02);
+    -o-transform: scale(1.02);
+    -ms-transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+    filter: blur(12px);
+    transform: scale(1.02);
+    -webkit-transform: scale(1.02);
+    -khtml-transform: scale(1.02);
+    -moz-transform: scale(1.02);
+    -o-transform: scale(1.02);
+    -ms-transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+    filter: blur(12px);
+    transform: scale(1.02);
+    -webkit-transform: scale(1.02);
+    -khtml-transform: scale(1.02);
+    -moz-transform: scale(1.02);
+    -o-transform: scale(1.02);
+    -ms-transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+    filter: blur(12px);
+    transform: scale(1.02);
+    -webkit-transform: scale(1.02);
+    -khtml-transform: scale(1.02);
+    -moz-transform: scale(1.02);
+    -o-transform: scale(1.02);
+    -ms-transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+.cover-wrapper .cover-body {
+  z-index: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.cover-wrapper#full {
+  height: calc(100vh + 100px);
+  padding-bottom: 100px;
+}
+.cover-wrapper#half {
+  max-height: 640px;
+  min-height: 400px;
+  height: calc(36vh - 52px + 200px);
+}
+.cover-wrapper #scroll-down {
+  width: 100%;
+  height: 64px;
+  position: absolute;
+  bottom: 100px;
+  text-align: center;
+  cursor: pointer;
+}
+.cover-wrapper #scroll-down .scroll-down-effects {
+  color: #fff;
+  font-size: 24px;
+  line-height: 64px;
+  position: absolute;
+  width: 24px;
+  left: calc(50% - 12px);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  animation: scroll-down-effect 1.5s infinite;
+  -webkit-animation: scroll-down-effect 1.5s infinite;
+  -khtml-animation: scroll-down-effect 1.5s infinite;
+  -moz-animation: scroll-down-effect 1.5s infinite;
+  -o-animation: scroll-down-effect 1.5s infinite;
+  -ms-animation: scroll-down-effect 1.5s infinite;
+}
+@-moz-keyframes scroll-down-effect {
+  0% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+  50% {
+    top: -16px;
+    opacity: 0.4;
+    -webkit-opacity: 0.4;
+    -moz-opacity: 0.4;
+  }
+  100% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@-webkit-keyframes scroll-down-effect {
+  0% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+  50% {
+    top: -16px;
+    opacity: 0.4;
+    -webkit-opacity: 0.4;
+    -moz-opacity: 0.4;
+  }
+  100% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@-o-keyframes scroll-down-effect {
+  0% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+  50% {
+    top: -16px;
+    opacity: 0.4;
+    -webkit-opacity: 0.4;
+    -moz-opacity: 0.4;
+  }
+  100% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@keyframes scroll-down-effect {
+  0% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+  50% {
+    top: -16px;
+    opacity: 0.4;
+    -webkit-opacity: 0.4;
+    -moz-opacity: 0.4;
+  }
+  100% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+.cover-wrapper .cover-body {
+  margin-top: 52px;
+  margin-bottom: 100px;
+}
+.cover-wrapper .cover-body,
+.cover-wrapper .cover-body .top,
+.cover-wrapper .cover-body .bottom {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -khtml-justify-content: center;
+  -moz-justify-content: center;
+  -o-justify-content: center;
+  -ms-justify-content: center;
+  max-width: 100%;
+}
+.cover-wrapper .cover-body .bottom {
+  margin-top: 32px;
+}
+.cover-wrapper .cover-body .title {
+  font-family: "LXGW WenKai Screen R", "Varela Round", "PingFang SC", "Microsoft YaHei", Helvetica, Arial, Helvetica, monospace;
+  font-size: 3.125rem;
+  line-height: 1.2;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+.cover-wrapper .cover-body .subtitle {
+  font-size: 20px;
+}
+.cover-wrapper .cover-body .logo {
+  max-height: 120px;
+  max-width: calc(100% - 4 * 16px);
+}
+@media screen and (min-height: 1024px) {
+  .cover-wrapper .cover-body .title {
+    font-size: 3rem;
+  }
+  .cover-wrapper .cover-body .subtitle {
+    font-size: 1.05rem;
+  }
+  .cover-wrapper .cover-body .logo {
+    max-height: 150px;
+  }
+}
+.cover-wrapper .cover-body .m_search {
+  position: relative;
+  max-width: calc(100% - 16px);
+  width: 320px;
+  vertical-align: middle;
+}
+.cover-wrapper .cover-body .m_search .form {
+  position: relative;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+  width: 100%;
+}
+.cover-wrapper .cover-body .m_search .icon,
+.cover-wrapper .cover-body .m_search .input {
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+}
+.cover-wrapper .cover-body .m_search .icon {
+  position: absolute;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+  line-height: 2.5rem;
+  width: 32px;
+  top: 0;
+  left: 5px;
+  color: rgba(68,68,68,0.75);
+}
+.cover-wrapper .cover-body .m_search .input {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+  height: 2.5rem;
+  width: 100%;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  font-size: 0.875rem;
+  -webkit-appearance: none;
+  padding-left: 36px;
+  border-radius: 1.4rem;
+  -webkit-border-radius: 1.4rem;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(10px);
+  border: none;
+  color: var(--color-text);
+}
+@media screen and (max-width: 500px) {
+  .cover-wrapper .cover-body .m_search .input {
+    padding-left: 36px;
+  }
+}
+.cover-wrapper .cover-body .m_search .input:hover {
+  background: rgba(255,255,255,0.8);
+}
+.cover-wrapper .cover-body .m_search .input:focus {
+  background: #fff;
+}
+.cover-wrapper .list-h {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -khtml-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  -o-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  align-items: stretch;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.cover-wrapper .list-h a {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1 0;
+  -ms-flex: 1 0;
+  flex: 1 0;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  font-weight: 600;
+}
+.cover-wrapper .list-h a img {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+  margin: 4px;
+  min-width: 40px;
+  max-width: 44px;
+}
+@media screen and (max-width: 768px) {
+  .cover-wrapper .list-h a img {
+    min-width: 36px;
+    max-width: 40px;
+  }
+}
+@media screen and (max-width: 500px) {
+  .cover-wrapper .list-h a img {
+    margin: 2px 4px;
+    min-width: 32px;
+    max-width: 36px;
+  }
+}
+@media screen and (max-width: 375px) {
+  .cover-wrapper .list-h a img {
+    min-width: 28px;
+    max-width: 32px;
+  }
+}
+.cover-wrapper {
+  max-width: 100%;
+}
+.cover-wrapper.search .bottom .menu {
+  margin-top: 16px;
+}
+.cover-wrapper.search .bottom .menu .list-h a {
+  white-space: nowrap;
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  align-items: baseline;
+  padding: 2px;
+  margin: 4px;
+  color: var(--color-site-inner);
+  opacity: 0.75;
+  -webkit-opacity: 0.75;
+  -moz-opacity: 0.75;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  border-bottom: 2px solid transparent;
+}
+.cover-wrapper.search .bottom .menu .list-h a i {
+  margin-right: 4px;
+}
+.cover-wrapper.search .bottom .menu .list-h a p {
+  font-size: 0.9375rem;
+}
+.cover-wrapper.search .bottom .menu .list-h a:hover,
+.cover-wrapper.search .bottom .menu .list-h a.active,
+.cover-wrapper.search .bottom .menu .list-h a:active {
+  opacity: 1;
+  -webkit-opacity: 1;
+  -moz-opacity: 1;
+  border-bottom: 2px solid var(--color-site-inner);
+}
+.cover-wrapper.dock .menu,
+.cover-wrapper.featured .menu,
+.cover-wrapper.focus .menu {
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+}
+.cover-wrapper.dock .menu .list-h a,
+.cover-wrapper.featured .menu .list-h a,
+.cover-wrapper.focus .menu .list-h a {
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  line-height: 24px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-bottom: none;
+  text-align: center;
+  align-content: flex-end;
+  color: rgba(68,68,68,0.7);
+  font-size: 1.5rem;
+}
+@media screen and (max-width: 500px) {
+  .cover-wrapper.dock .menu .list-h a,
+  .cover-wrapper.featured .menu .list-h a,
+  .cover-wrapper.focus .menu .list-h a {
+    padding: 12px 8px;
+  }
+}
+.cover-wrapper.dock .menu .list-h a i,
+.cover-wrapper.featured .menu .list-h a i,
+.cover-wrapper.focus .menu .list-h a i {
+  margin: 8px;
+}
+.cover-wrapper.dock .menu .list-h a p,
+.cover-wrapper.featured .menu .list-h a p,
+.cover-wrapper.focus .menu .list-h a p {
+  font-size: 0.875rem;
+}
+.cover-wrapper.dock .menu .list-h a.active,
+.cover-wrapper.featured .menu .list-h a.active,
+.cover-wrapper.focus .menu .list-h a.active {
+  background: var(--color-card);
+  backdrop-filter: none;
+}
+.cover-wrapper.dock .menu .list-h a.active i,
+.cover-wrapper.featured .menu .list-h a.active i,
+.cover-wrapper.focus .menu .list-h a.active i,
+.cover-wrapper.dock .menu .list-h a.active i+p,
+.cover-wrapper.featured .menu .list-h a.active i+p,
+.cover-wrapper.focus .menu .list-h a.active i+p {
+  color: #44d7b6;
+}
+.cover-wrapper.dock .menu .list-h a.active img+p,
+.cover-wrapper.featured .menu .list-h a.active img+p,
+.cover-wrapper.focus .menu .list-h a.active img+p {
+  color: var(--color-text);
+}
+.cover-wrapper.dock .menu .list-h a:hover,
+.cover-wrapper.featured .menu .list-h a:hover,
+.cover-wrapper.focus .menu .list-h a:hover {
+  background: var(--color-card);
+}
+.cover-wrapper.dock .top {
+  margin-bottom: 48px;
+}
+.cover-wrapper.dock .menu {
+  background: rgba(255,255,255,0.5);
+  position: absolute;
+  bottom: 0;
+  max-width: 100%;
+}
+.cover-wrapper.dock .menu .list-h {
+  flex-wrap: nowrap;
+  -webkit-flex-wrap: nowrap;
+  -khtml-flex-wrap: nowrap;
+  -moz-flex-wrap: nowrap;
+  -o-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  margin: 4px;
+}
+.cover-wrapper.dock .menu .list-h a+a {
+  margin-left: 4px;
+}
+@media screen and (max-width: 500px) {
+  .cover-wrapper.dock .menu .list-h {
+    overflow-x: scroll;
+  }
+  .cover-wrapper.dock .menu .list-h::-webkit-scrollbar {
+    height: 0;
+    width: 0;
+  }
+  .cover-wrapper.dock .menu .list-h::-webkit-scrollbar-track-piece {
+    background: transparent;
+  }
+  .cover-wrapper.dock .menu .list-h::-webkit-scrollbar-thumb {
+    background: #44d7b6;
+    cursor: pointer;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+  }
+  .cover-wrapper.dock .menu .list-h::-webkit-scrollbar-thumb:hover {
+    background: #ff5722;
+  }
+}
+@supports (backdrop-filter: blur(20px)) {
+  .cover-wrapper.dock .menu {
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: saturate(200%) blur(20px);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-mode: 'dark';
+  }
+  :root:not([color-scheme]) {
+    --color-site-body: #121212;
+    --color-read-bkg: #222;
+    --color-read-post: #444;
+    --color-site-bg: #222;
+    --color-site-inner: #eee;
+    --color-site-footer: #aaa;
+    --color-card: #444;
+    --color-text: #eee;
+    --color-block: #3a3a3a;
+    --color-codeblock: #1f1f1f;
+    --color-inlinecode: #d56d28;
+    --color-h1: #eee;
+    --color-h2: #eee;
+    --color-h3: #ddd;
+    --color-h4: #ddd;
+    --color-h5: #ddd;
+    --color-h6: #ddd;
+    --color-p: #bbb;
+    --color-list: #aaa;
+    --color-list-hl: #69dfc4;
+    --color-meta: #888;
+    --color-link: #888;
+    --color-copyright-bkg: #21252b;
+  }
+  :root:not([color-scheme]) img {
+    filter: brightness(70%) !important;
+  }
+  :root:not([color-scheme]) .blur {
+    background: rgba(34,34,34,0.9) !important;
+  }
+  :root:not([color-scheme]) .white-box.blur {
+    background: rgba(68,68,68,0.9) !important;
+  }
+  :root:not([color-scheme]) .nav-main .u-search-input {
+    background: var(--color-card) !important;
+  }
+  :root:not([color-scheme]) #l_main .article .prev-next>a {
+    background: var(--color-block) !important;
+  }
+  :root:not([color-scheme]) #l_main .article .prev-next>a:hover {
+    background: var(--color-site-bg) !important;
+  }
+  :root:not([color-scheme]) .article blockquote {
+    background: var(--color-block) !important;
+  }
+  :root:not([color-scheme]) .article-title a {
+    color: var(--color-h1) !important;
+  }
+  :root:not([color-scheme]) details>summary {
+    color: var(--color-p) !important;
+    background: var(--color-site-bg) !important;
+  }
+  :root:not([color-scheme]) details {
+    border: 1px solid var(--color-site-bg) !important;
+    background: var(--color-site-bg) !important;
+  }
+  :root:not([color-scheme]) #u-search .modal,
+  :root:not([color-scheme]) #u-search .modal-header,
+  :root:not([color-scheme]) #u-search .modal-body {
+    background: var(--color-card) !important;
+  }
+  :root:not([color-scheme]) #u-search .modal-body .modal-results .result:hover {
+    background: var(--color-block) !important;
+  }
+  :root:not([color-scheme]) .u-search-input:hover {
+    background: var(--color-block) !important;
+  }
+  :root:not([color-scheme]) .u-search-input:focus {
+    background: var(--color-site-body) !important;
+  }
+}
+[color-scheme='dark'] {
+  --color-site-body: #121212;
+  --color-read-bkg: #222;
+  --color-read-post: #444;
+  --color-site-bg: #222;
+  --color-site-inner: #eee;
+  --color-site-footer: #aaa;
+  --color-card: #444;
+  --color-text: #eee;
+  --color-block: #3a3a3a;
+  --color-codeblock: #1f1f1f;
+  --color-inlinecode: #d56d28;
+  --color-h1: #eee;
+  --color-h2: #eee;
+  --color-h3: #ddd;
+  --color-h4: #ddd;
+  --color-h5: #ddd;
+  --color-h6: #ddd;
+  --color-p: #bbb;
+  --color-list: #aaa;
+  --color-list-hl: #69dfc4;
+  --color-meta: #888;
+  --color-link: #888;
+  --color-copyright-bkg: #21252b;
+}
+[color-scheme='dark'] img {
+  filter: brightness(70%) !important;
+}
+[color-scheme='dark'] .blur {
+  background: rgba(34,34,34,0.9) !important;
+}
+[color-scheme='dark'] .white-box.blur {
+  background: rgba(68,68,68,0.9) !important;
+}
+[color-scheme='dark'] .nav-main .u-search-input {
+  background: var(--color-card) !important;
+}
+[color-scheme='dark'] #l_main .article .prev-next>a {
+  background: var(--color-block) !important;
+}
+[color-scheme='dark'] #l_main .article .prev-next>a:hover {
+  background: var(--color-site-bg) !important;
+}
+[color-scheme='dark'] .article blockquote {
+  background: var(--color-block) !important;
+}
+[color-scheme='dark'] .article-title a {
+  color: var(--color-h1) !important;
+}
+[color-scheme='dark'] details>summary {
+  color: var(--color-p) !important;
+  background: var(--color-site-bg) !important;
+}
+[color-scheme='dark'] details {
+  border: 1px solid var(--color-site-bg) !important;
+  background: var(--color-site-bg) !important;
+}
+[color-scheme='dark'] #u-search .modal,
+[color-scheme='dark'] #u-search .modal-header,
+[color-scheme='dark'] #u-search .modal-body {
+  background: var(--color-card) !important;
+}
+[color-scheme='dark'] #u-search .modal-body .modal-results .result:hover {
+  background: var(--color-block) !important;
+}
+[color-scheme='dark'] .u-search-input:hover {
+  background: var(--color-block) !important;
+}
+[color-scheme='dark'] .u-search-input:focus {
+  background: var(--color-site-body) !important;
+}
+@media screen and (max-width: 500px) {
+  [color-scheme='dark'] .l_header .m_search {
+    background: var(--color-site-bg) !important;
+  }
+}
+@font-face {
+  font-family: '"LXGW WenKai Screen R"';
+  src: url("https://unpkg.com/volantis-static@0.0.1654736714924/media/fonts/UbuntuMono/UbuntuMono-Regular.ttf");
+  font-weight: 'normal';
+  font-style: 'normal';
+  font-display: swap;
+}
+@font-face {
+  font-family: '"LXGW WenKai Screen R"';
+  src: url("https://unpkg.com/volantis-static@0.0.1654736714924/media/fonts/VarelaRound/VarelaRound-Regular.ttf");
+  font-weight: 'normal';
+  font-style: 'normal';
+  font-display: swap;
+}
+.l_header {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  width: 100%;
+  height: 52px;
+  background: var(--color-card);
+  box-shadow: 0 1px 2px 0px rgba(0,0,0,0.1);
+  -webkit-box-shadow: 0 1px 2px 0px rgba(0,0,0,0.1);
+}
+.l_header.auto {
+  transition: opacity 0.4s ease;
+  -webkit-transition: opacity 0.4s ease;
+  -khtml-transition: opacity 0.4s ease;
+  -moz-transition: opacity 0.4s ease;
+  -o-transition: opacity 0.4s ease;
+  -ms-transition: opacity 0.4s ease;
+  visibility: hidden;
+}
+.l_header.auto.show {
+  opacity: 1 !important;
+  -webkit-opacity: 1 !important;
+  -moz-opacity: 1 !important;
+  visibility: visible;
+}
+.l_header .container {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+.l_header #wrapper {
+  height: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.l_header #wrapper .nav-main,
+.l_header #wrapper .nav-sub {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  flex-wrap: nowrap;
+  -webkit-flex-wrap: nowrap;
+  -khtml-flex-wrap: nowrap;
+  -moz-flex-wrap: nowrap;
+  -o-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -khtml-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -o-justify-content: space-between;
+  -ms-justify-content: space-between;
+  align-items: center;
+}
+.l_header #wrapper .nav-main {
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+}
+.l_header #wrapper.sub .nav-main {
+  transform: translateY(-52px);
+  -webkit-transform: translateY(-52px);
+  -khtml-transform: translateY(-52px);
+  -moz-transform: translateY(-52px);
+  -o-transform: translateY(-52px);
+  -ms-transform: translateY(-52px);
+}
+.l_header #wrapper .nav-sub {
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+  opacity: 0;
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+  height: 52px;
+  width: calc(100% - 2 * 16px);
+  position: absolute;
+}
+.l_header #wrapper .nav-sub ::-webkit-scrollbar {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: none;
+}
+@media screen and (min-width: 2048px) {
+  .l_header #wrapper .nav-sub {
+    max-width: 55vw;
+    margin: auto;
+  }
+}
+.l_header #wrapper.sub .nav-sub {
+  opacity: 1;
+  -webkit-opacity: 1;
+  -moz-opacity: 1;
+}
+.l_header #wrapper .title {
+  position: relative;
+  color: var(--color-text);
+  padding-left: 24px;
+  max-height: 52px;
+}
+.l_header #wrapper .nav-main .title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+  line-height: 52px;
+  padding: 0 24px;
+  font-size: 1.25rem;
+  font-family: "LXGW WenKai Screen R", "Varela Round", "PingFang SC", "Microsoft YaHei", Helvetica, Arial, Helvetica, monospace;
+}
+.l_header #wrapper .nav-main .title img {
+  height: 52px;
+}
+.l_header .nav-sub {
+  max-width: 1200px;
+  margin: auto;
+}
+.l_header .nav-sub .title {
+  font-weight: bold;
+  font-family: "LXGW WenKai Screen R", UbuntuMono, "Varela Round", "PingFang SC", "Microsoft YaHei", Helvetica, Arial, Menlo, Monaco, monospace, sans-serif;
+  line-height: 1.2;
+  max-height: 52px;
+  white-space: normal;
+  flex-shrink: 1;
+}
+.l_header .switcher {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: none;
+  line-height: 52px;
+  align-items: center;
+}
+.l_header .switcher .s-toc {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: none;
+}
+@media screen and (max-width: 768px) {
+  .l_header .switcher .s-toc {
+    display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+    display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+    display: -ms-flexbox /* TWEENER - IE 10 */;
+    display: -webkit-flex /* NEW - Chrome */;
+    display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+    display: flex;
+  }
+}
+.l_header .switcher >li {
+  height: 36px;
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+  margin: 2px;
+}
+@media screen and (max-width: 500px) {
+  .l_header .switcher >li {
+    margin: 0 1px;
+    height: 36px;
+  }
+}
+.l_header .switcher >li >a {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -khtml-justify-content: center;
+  -moz-justify-content: center;
+  -o-justify-content: center;
+  -ms-justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0.85em 1.1em;
+  border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border: none;
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+  color: #44d7b6;
+}
+.l_header .switcher >li >a:hover {
+  border: none;
+}
+.l_header .switcher >li >a.active,
+.l_header .switcher >li >a:active {
+  border: none;
+  background: var(--color-site-bg);
+}
+@media screen and (max-width: 500px) {
+  .l_header .switcher >li >a {
+    width: 36px;
+    height: 36px;
+  }
+}
+.l_header .nav-sub .switcher {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+}
+.l_header .m_search {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  height: 52px;
+  width: 240px;
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+}
+@media screen and (max-width: 1024px) {
+  .l_header .m_search {
+    width: 44px;
+    min-width: 44px;
+  }
+  .l_header .m_search input::placeholder {
+    opacity: 0;
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+  }
+  .l_header .m_search:hover {
+    width: 240px;
+  }
+  .l_header .m_search:hover input::placeholder {
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@media screen and (min-width: 500px) {
+  .l_header .m_search:hover .input {
+    width: 100%;
+  }
+  .l_header .m_search:hover .input::placeholder {
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@media screen and (max-width: 500px) {
+  .l_header .m_search {
+    min-width: 0;
+  }
+  .l_header .m_search input::placeholder {
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+.l_header .m_search .form {
+  position: relative;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.l_header .m_search .icon {
+  position: absolute;
+  width: 36px;
+  left: 5px;
+  color: var(--color-meta);
+}
+@media screen and (max-width: 500px) {
+  .l_header .m_search .icon {
+    display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+    display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+    display: none;
+  }
+}
+.l_header .m_search .input {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  line-height: 1.3;
+  width: 100%;
+  color: var(--color-text);
+  background: #fafafa;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  padding-left: 40px;
+  font-size: 0.875rem;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  border: none;
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+}
+@media screen and (min-width: 500px) {
+  .l_header .m_search .input:focus {
+    box-shadow: 0 4px 8px 0px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0 4px 8px 0px rgba(0,0,0,0.1);
+  }
+}
+@media screen and (max-width: 500px) {
+  .l_header .m_search .input {
+    background: var(--color-block);
+    padding-left: 8px;
+    border: none;
+  }
+  .l_header .m_search .input:hover,
+  .l_header .m_search .input:focus {
+    border: none;
+  }
+}
+@media (max-width: 500px) {
+  .l_header .m_search {
+    left: 0;
+    width: 0;
+    overflow: hidden;
+    position: absolute;
+    background: #fff;
+    transition: all 0.28s ease;
+    -webkit-transition: all 0.28s ease;
+    -khtml-transition: all 0.28s ease;
+    -moz-transition: all 0.28s ease;
+    -o-transition: all 0.28s ease;
+    -ms-transition: all 0.28s ease;
+  }
+  .l_header .m_search .input {
+    border-radius: 26px;
+    -webkit-border-radius: 26px;
+    margin-left: 16px;
+    padding-left: 16px;
+  }
+  .l_header.z_search-open .m_search {
+    width: 100%;
+  }
+  .l_header.z_search-open .m_search .input {
+    width: calc(100% - 120px);
+  }
+}
+ul.m-pc >li>a {
+  color: inherit;
+  border-bottom: 2px solid transparent;
+}
+ul.m-pc >li>a:active,
+ul.m-pc >li>a.active {
+  border-bottom: 2px solid #44d7b6;
+}
+ul.m-pc li:hover >ul.list-v,
+ul.list-v li:hover >ul.list-v {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+}
+ul.nav-list-h {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  align-items: stretch;
+}
+ul.nav-list-h>li {
+  position: relative;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -khtml-justify-content: center;
+  -moz-justify-content: center;
+  -o-justify-content: center;
+  -ms-justify-content: center;
+  height: 100%;
+  line-height: 2.4;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+}
+ul.nav-list-h>li >a {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 600;
+}
+ul.list-v {
+  z-index: 1;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: none;
+  position: absolute;
+  background: var(--color-card);
+  box-shadow: 0 2px 4px 0px rgba(0,0,0,0.08), 0 4px 8px 0px rgba(0,0,0,0.08), 0 8px 16px 0px rgba(0,0,0,0.08);
+  -webkit-box-shadow: 0 2px 4px 0px rgba(0,0,0,0.08), 0 4px 8px 0px rgba(0,0,0,0.08), 0 8px 16px 0px rgba(0,0,0,0.08);
+  margin-top: -6px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  padding: 8px 0;
+}
+ul.list-v.show {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+}
+ul.list-v hr {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+ul.list-v >li {
+  white-space: nowrap;
+  word-break: keep-all;
+}
+ul.list-v >li.header {
+  font-size: 0.78125rem;
+  font-weight: bold;
+  line-height: 2em;
+  color: var(--color-meta);
+  margin: 8px 16px 4px;
+}
+ul.list-v >li.header i {
+  margin-right: 8px;
+}
+ul.list-v >li ul {
+  margin-left: 0;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: none;
+  margin-top: -40px;
+}
+ul.list-v .aplayer-container {
+  min-height: 64px;
+  padding: 6px 16px;
+}
+ul.list-v >li>a {
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+  color: var(--color-list);
+  font-size: 0.875rem;
+  font-weight: bold;
+  line-height: 36px;
+  padding: 0 20px 0 16px;
+  text-overflow: ellipsis;
+  margin: 0 4px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+}
+@media screen and (max-width: 1024px) {
+  ul.list-v >li>a {
+    line-height: 40px;
+  }
+}
+ul.list-v >li>a >i {
+  margin-right: 8px;
+}
+ul.list-v >li>a:active,
+ul.list-v >li>a.active {
+  color: var(--color-list-hl);
+}
+ul.list-v >li>a:hover {
+  color: var(--color-list-hl);
+  background: var(--color-site-bg);
+}
+.l_header .menu >ul>li>a {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+  padding: 0 8px;
+}
+.l_header .menu >ul>li>a >i {
+  margin-right: 4px;
+}
+.l_header ul.nav-list-h>li {
+  color: var(--color-list);
+  line-height: 52px;
+}
+.l_header ul.nav-list-h>li >a {
+  max-height: 52px;
+  overflow: hidden;
+  color: inherit;
+}
+.l_header ul.nav-list-h>li >a:active,
+.l_header ul.nav-list-h>li >a.active {
+  color: #44d7b6;
+}
+.l_header ul.nav-list-h>li:hover>a {
+  color: var(--color-list-hl);
+}
+.l_header ul.nav-list-h>li i.music {
+  animation: rotate-effect 1.5s linear infinite;
+  -webkit-animation: rotate-effect 1.5s linear infinite;
+  -khtml-animation: rotate-effect 1.5s linear infinite;
+  -moz-animation: rotate-effect 1.5s linear infinite;
+  -o-animation: rotate-effect 1.5s linear infinite;
+  -ms-animation: rotate-effect 1.5s linear infinite;
+}
+@-moz-keyframes rotate-effect {
+  0% {
+    transform: rotate(0);
+    -webkit-transform: rotate(0);
+    -khtml-transform: rotate(0);
+    -moz-transform: rotate(0);
+    -o-transform: rotate(0);
+    -ms-transform: rotate(0);
+  }
+  25% {
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -khtml-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -khtml-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -khtml-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -khtml-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes rotate-effect {
+  0% {
+    transform: rotate(0);
+    -webkit-transform: rotate(0);
+    -khtml-transform: rotate(0);
+    -moz-transform: rotate(0);
+    -o-transform: rotate(0);
+    -ms-transform: rotate(0);
+  }
+  25% {
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -khtml-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -khtml-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -khtml-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -khtml-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+  }
+}
+@-o-keyframes rotate-effect {
+  0% {
+    transform: rotate(0);
+    -webkit-transform: rotate(0);
+    -khtml-transform: rotate(0);
+    -moz-transform: rotate(0);
+    -o-transform: rotate(0);
+    -ms-transform: rotate(0);
+  }
+  25% {
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -khtml-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -khtml-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -khtml-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -khtml-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+  }
+}
+@keyframes rotate-effect {
+  0% {
+    transform: rotate(0);
+    -webkit-transform: rotate(0);
+    -khtml-transform: rotate(0);
+    -moz-transform: rotate(0);
+    -o-transform: rotate(0);
+    -ms-transform: rotate(0);
+  }
+  25% {
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -khtml-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -khtml-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -khtml-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -khtml-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+  }
+}
+.menu-phone li ul.list-v {
+  right: calc(100% - 0.5 * 16px);
+}
+.menu-phone li ul.list-v ul {
+  right: calc(100% - 0.5 * 16px);
+}
+#wrapper {
+  max-width: 1200px;
+  margin: auto;
+}
+@media screen and (min-width: 2048px) {
+  #wrapper {
+    max-width: 55vw;
+  }
+}
+#wrapper .menu {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1 1;
+  -ms-flex: 1 1;
+  flex: 1 1;
+  margin: 0 16px 0 0;
+}
+#wrapper .menu .list-v ul {
+  left: calc(100% - 0.5 * 16px);
+}
+.menu-phone {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: none;
+  margin-top: 16px;
+  right: 8px;
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+}
+.menu-phone ul {
+  right: calc(100% - 0.5 * 16px);
+}
+@media screen and (max-width: 500px) {
+  .menu-phone {
+    display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+    display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+    display: block;
+  }
+}
+.l_header {
+  max-width: 65vw;
+  left: calc((100% - 65vw) * 0.5);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+@media screen and (max-width: 2048px) {
+  .l_header {
+    max-width: 1232px;
+    left: calc((100% - 1232px) * 0.5);
+  }
+}
+@media screen and (max-width: 1232px) {
+  .l_header {
+    left: 0;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    max-width: 100%;
+  }
+}
+@media screen and (max-width: 500px) {
+  .l_header .container {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .l_header #wrapper .nav-main .title {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .l_header #wrapper .nav-sub {
+    width: 100%;
+  }
+  .l_header #wrapper .nav-sub .title {
+    overflow-y: scroll;
+    margin-top: 2px;
+    padding: 8px 16px;
+  }
+  .l_header #wrapper .switcher {
+    display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+    display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+    display: -ms-flexbox /* TWEENER - IE 10 */;
+    display: -webkit-flex /* NEW - Chrome */;
+    display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+    display: flex;
+    margin-right: 8px;
+  }
+  .l_header .menu {
+    display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+    display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+    display: none;
+  }
+}
+@media screen and (max-width: 500px) {
+  .list-v li {
+    max-width: 270px;
+  }
+}
+#u-search {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 60px 20px;
+  z-index: 1001;
+}
+@media screen and (max-width: 680px) {
+  #u-search {
+    padding: 0px;
+  }
+}
+@media screen and (prefers-color-scheme: dark) and (max-width: 500px) {
+  .l_header .m_search {
+    background: var(--color-site-bg) !important;
+  }
+}
+
+  </style>
+  <link rel="stylesheet" href="/css/style.css" media="print" onload="this.media='all';this.onload=null">
+  <noscript><link rel="stylesheet" href="/css/style.css"></noscript>
+    <script>
+      let userColorScheme=localStorage.getItem("color-scheme")
+      if(userColorScheme){
+        document.documentElement.setAttribute("color-scheme", userColorScheme);
+      }
+    </script>
+  
+<script>
+if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode))
+    document.write(
+	'<style>'+
+		'html{'+
+			'overflow-x: hidden !important;'+
+			'overflow-y: hidden !important;'+
+		'}'+
+		'.kill-ie{'+
+			'text-align:center;'+
+			'height: 100%;'+
+			'margin-top: 15%;'+
+			'margin-bottom: 5500%;'+
+		'}'+
+    '.kill-t{'+
+      'font-size: 2rem;'+
+    '}'+
+    '.kill-c{'+
+      'font-size: 1.2rem;'+
+    '}'+
+		'#l_header,#l_body{'+
+			'display: none;'+
+		'}'+
+	'</style>'+
+    '<div class="kill-ie">'+
+        `<span class="kill-t"><b>抱歉，您的浏览器无法访问本站</b></span><br/>`+
+        `<span class="kill-c">微软已经于2016年终止了对 Internet Explorer (IE) 10 及更早版本的支持，<br/>继续使用存在极大的安全隐患，请使用当代主流的浏览器进行访问。</span><br/>`+
+        `<a target="_blank" rel="noopener" href="https://blogs.windows.com/windowsexperience/2021/05/19/the-future-of-internet-explorer-on-windows-10-is-in-microsoft-edge/"><strong>了解详情 ></strong></a>`+
+    '</div>');
+</script>
+
+
+<noscript>
+	<style>
+		html{
+			overflow-x: hidden !important;
+			overflow-y: hidden !important;
+		}
+		.kill-noscript{
+			text-align:center;
+			height: 100%;
+			margin-top: 15%;
+			margin-bottom: 5500%;
+		}
+    .kill-t{
+      font-size: 2rem;
+    }
+    .kill-c{
+      font-size: 1.2rem;
+    }
+		#l_header,#l_body{
+			display: none;
+		}
+	</style>
+    <div class="kill-noscript">
+        <span class="kill-t"><b>抱歉，您的浏览器无法访问本站</b></span><br/>
+        <span class="kill-c">本页面需要浏览器支持（启用）JavaScript</span><br/>
+        <a target="_blank" rel="noopener" href="https://www.baidu.com/s?wd=启用JavaScript"><strong>了解详情 ></strong></a>
+    </div>
+</noscript>
+
+
+  <script>
+  /************这个文件存放不需要重载的全局变量和全局函数*********/
+  window.volantis = {}; // volantis 全局变量
+  volantis.debug = "env"; // 调试模式
+  volantis.dom = {}; // 页面Dom see: /source/js/app.js etc.
+
+  volantis.GLOBAL_CONFIG ={
+    debug: "env",
+    cdn: {"js":{"app":"/js/app.js","parallax":"/js/plugins/parallax.js","rightMenu":"/js/plugins/rightMenu.js","rightMenus":"/js/plugins/rightMenus.js","sites":"/js/plugins/tags/sites.js","friends":"/js/plugins/tags/friends.js","contributors":"/js/plugins/tags/contributors.js","search":"/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
+    default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
+    lastupdate: new Date(1691894849743),
+    sidebar: {
+      for_page: ["blogger","category","tagcloud","webinfo"],
+      for_post: ["toc"],
+      webinfo: {
+        lastupd: {
+          enable: true,
+          friendlyShow: true
+        },
+        runtime: {
+          data: "2020/01/01",
+          unit: "天"
+        }
+      }
+    },
+    plugins: {
+      message: {"enable":true,"css":"https://unpkg.com/volantis-static@0.0.1654736714924/libs/izitoast/dist/css/iziToast.min.css","js":"https://unpkg.com/volantis-static@0.0.1654736714924/libs/izitoast/dist/js/iziToast.min.js","icon":{"default":"fa-solid fa-info-circle light-blue","quection":"fa-solid fa-question-circle light-blue"},"time":{"default":5000,"quection":20000},"position":"topRight","transitionIn":"bounceInLeft","transitionOut":"fadeOutRight","titleColor":"var(--color-text)","messageColor":"var(--color-text)","backgroundColor":"var(--color-card)","zindex":2147483647,"copyright":{"enable":true,"title":"知识共享许可协议","message":"请遵守 CC BY-NC-SA 4.0 协议。","icon":"far fa-copyright light-blue"},"aplayer":{"enable":true,"play":"fa-solid fa-play","pause":"fa-solid fa-pause"},"rightmenu":{"enable":true,"notice":true}},
+      fancybox: {"css":"https://unpkg.com/volantis-static@0.0.1654736714924/libs/@fancyapps/ui/dist/fancybox.css","js":"https://unpkg.com/volantis-static@0.0.1654736714924/libs/@fancyapps/ui/dist/fancybox.umd.js"},
+      
+      
+      
+    }
+  }
+
+  /******************** volantis.EventListener ********************************/
+  // 事件监听器 see: /source/js/app.js
+  volantis.EventListener = {}
+  // 这里存放pjax切换页面时将被移除的事件监听器
+  volantis.EventListener.list = []
+  //构造方法
+  function volantisEventListener(type, f, ele) {
+    this.type = type
+    this.f = f
+    this.ele = ele
+  }
+  // 移除事件监听器
+  volantis.EventListener.remove = () => {
+    volantis.EventListener.list.forEach(function (i) {
+      i.ele.removeEventListener(i.type, i.f, false)
+    })
+    volantis.EventListener.list = []
+  }
+  /******************** volantis.dom.$ ********************************/
+  // 注：这里没有选择器，也没有forEach一次只处理一个dom，这里重新封装主题常用的dom方法，返回的是dom对象，对象包含了以下方法，同时保留dom的原生API
+  function volantisDom(ele) {
+    if (!ele) ele = document.createElement("div")
+    this.ele = ele;
+    // ==============================================================
+    this.ele.find = (c) => {
+      let q = this.ele.querySelector(c)
+      if (q)
+        return new volantisDom(q)
+    }
+    // ==============================================================
+    this.ele.hasClass = (c) => {
+      return this.ele.className.match(new RegExp('(\\s|^)' + c + '(\\s|$)'));
+    }
+    this.ele.addClass = (c) => {
+      this.ele.classList.add(c);
+      return this.ele
+    }
+    this.ele.removeClass = (c) => {
+      this.ele.classList.remove(c);
+      return this.ele
+    }
+    this.ele.toggleClass = (c) => {
+      if (this.ele.hasClass(c)) {
+        this.ele.removeClass(c)
+      } else {
+        this.ele.addClass(c)
+      }
+      return this.ele
+    }
+    // ==============================================================
+    // 参数 r 为 true 表示pjax切换页面时事件监听器将被移除，false不移除
+    this.ele.on = (c, f, r = 1) => {
+      this.ele.addEventListener(c, f, false)
+      if (r) {
+        volantis.EventListener.list.push(new volantisEventListener(c, f, this.ele))
+      }
+      return this.ele
+    }
+    this.ele.click = (f, r) => {
+      this.ele.on("click", f, r)
+      return this.ele
+    }
+    this.ele.scroll = (f, r) => {
+      this.ele.on("scroll", f, r)
+      return this.ele
+    }
+    // ==============================================================
+    this.ele.html = (c) => {
+      // if(c=== undefined){
+      //   return this.ele.innerHTML
+      // }else{
+      this.ele.innerHTML = c
+      return this.ele
+      // }
+    }
+    // ==============================================================
+    this.ele.hide = (c) => {
+      this.ele.style.display = "none"
+      return this.ele
+    }
+    this.ele.show = (c) => {
+      this.ele.style.display = "block"
+      return this.ele
+    }
+    // ==============================================================
+    return this.ele
+  }
+  volantis.dom.$ = (ele) => {
+    return !!ele ? new volantisDom(ele) : null;
+  }
+  /******************** RunItem ********************************/
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = ()=>{
+          volantis.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) =>{
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index,1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+  /******************** Pjax ********************************/
+  // /layout/_plugins/pjax/index.ejs
+  // volantis.pjax.send(callBack[,"callBackName"]) 传入pjax:send回调函数
+  // volantis.pjax.push(callBack[,"callBackName"]) 传入pjax:complete回调函数
+  // volantis.pjax.error(callBack[,"callBackName"]) 传入pjax:error回调函数
+  volantis.pjax = {};
+  volantis.pjax.method = {
+    complete: new RunItem(),
+    error: new RunItem(),
+    send: new RunItem(),
+  };
+  volantis.pjax = Object.assign(volantis.pjax, {
+    push: volantis.pjax.method.complete.push,
+    error: volantis.pjax.method.error.push,
+    send: volantis.pjax.method.send.push,
+  });
+  /******************** RightMenu ********************************/
+  // volantis.rightmenu.handle(callBack[,"callBackName"]) 外部菜单项控制
+  // 可在 volantis.mouseEvent 处获取右键事件
+  volantis.rightmenu = {};
+  volantis.rightmenu.method = {
+    handle: new RunItem(),
+  }
+  volantis.rightmenu = Object.assign(volantis.rightmenu, {
+    handle: volantis.rightmenu.method.handle.push,
+  });
+  /********************  Dark Mode  ********************************/
+  // /layout/_partial/scripts/darkmode.ejs
+  // volantis.dark.mode 当前模式 dark or light
+  // volantis.dark.toggle() 暗黑模式触发器
+  // volantis.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  volantis.dark = {};
+  volantis.dark.method = {
+    toggle: new RunItem(),
+  };
+  volantis.dark = Object.assign(volantis.dark, {
+    push: volantis.dark.method.toggle.push,
+  });
+  /********************  Message  ********************************/
+  // VolantisApp.message
+  /********************  isMobile  ********************************/
+  // /source/js/app.js
+  // volantis.isMobile
+  // volantis.isMobileOld
+  /********************脚本动态加载函数********************************/
+  // volantis.js(src, cb)  cb 可以传入onload回调函数 或者 JSON对象 例如: volantis.js("src", ()=>{}) 或 volantis.js("src", {defer:true,onload:()=>{}})
+  // volantis.css(src)
+
+  // 返回Promise对象，如下方法同步加载资源，这利于处理文件资源之间的依赖关系，例如：APlayer 需要在 MetingJS 之前加载
+  // (async () => {
+  //     await volantis.js("...theme.plugins.aplayer.js.aplayer...")
+  //     await volantis.js("...theme.plugins.aplayer.js.meting...")
+  // })();
+
+  // 已经加入了setTimeout
+  volantis.js = (src, cb) => {
+    return new Promise(resolve => {
+      setTimeout(function () {
+        var HEAD = document.getElementsByTagName("head")[0] || document.documentElement;
+        var script = document.createElement("script");
+        script.setAttribute("type", "text/javascript");
+        if (cb) {
+          if (JSON.stringify(cb)) {
+            for (let p in cb) {
+              if (p == "onload") {
+                script[p] = () => {
+                  cb[p]()
+                  resolve()
+                }
+              } else {
+                script[p] = cb[p]
+                script.onload = resolve
+              }
+            }
+          } else {
+            script.onload = () => {
+              cb()
+              resolve()
+            };
+          }
+        } else {
+          script.onload = resolve
+        }
+        script.setAttribute("src", src);
+        HEAD.appendChild(script);
+      });
+    });
+  }
+  volantis.css = (src) => {
+    return new Promise(resolve => {
+      setTimeout(function () {
+        var link = document.createElement('link');
+        link.rel = "stylesheet";
+        link.href = src;
+        link.onload = resolve;
+        document.getElementsByTagName("head")[0].appendChild(link);
+      });
+    });
+  }
+  /********************按需加载的插件********************************/
+  // volantis.import.jQuery().then(()=>{})
+  volantis.import = {
+    jQuery: () => {
+      if (typeof jQuery == "undefined") {
+        return volantis.js("https://unpkg.com/volantis-static@0.0.1654736714924/libs/jquery/dist/jquery.min.js")
+      } else {
+        return new Promise(resolve => {
+          resolve()
+        });
+      }
+    }
+  }
+  /********************** requestAnimationFrame ********************************/
+  // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+  // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+  volantis.requestAnimationFrame = (fn)=>{
+    if (!window.requestAnimationFrame) {
+      window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+    }
+    window.requestAnimationFrame(fn)
+  }
+  /************************ layoutHelper *****************************************/
+  volantis.layoutHelper = (helper, html, opt)=>{
+    opt = Object.assign({clean:false, pjax:true}, opt)
+    function myhelper(helper, html, clean) {
+      volantis.tempDiv = document.createElement("div");
+      volantis.tempDiv.innerHTML = html;
+      let layoutHelper = document.querySelector("#layoutHelper-"+helper)
+      if (layoutHelper) {
+        if (clean) {
+          layoutHelper.innerHTML = ""
+        }
+        layoutHelper.append(volantis.tempDiv);
+      }
+    }
+    myhelper(helper, html, opt.clean)
+    if (opt.pjax) {
+      volantis.pjax.push(()=>{
+        myhelper(helper, html, opt.clean)
+      },"layoutHelper-"+helper)
+    }
+  }
+  /****************************** 滚动事件处理 ****************************************/
+  volantis.scroll = {
+    engine: new RunItem(),
+    unengine: new RunItem(),
+  };
+  volantis.scroll = Object.assign(volantis.scroll, {
+    push: volantis.scroll.engine.push,
+  });
+  // 滚动条距离顶部的距离
+  volantis.scroll.getScrollTop = () =>{
+    let scrollPos;
+    if (window.pageYOffset) {
+      scrollPos = window.pageYOffset;
+    } else if (document.compatMode && document.compatMode != 'BackCompat') {
+      scrollPos = document.documentElement.scrollTop;
+    } else if (document.body) {
+      scrollPos = document.body.scrollTop;
+    }
+    return scrollPos;
+  }
+  // 使用 requestAnimationFrame 处理滚动事件
+  // `volantis.scroll.del` 中存储了一个数值, 该数值检测一定时间间隔内滚动条滚动的位移, 数值的检测频率是浏览器的刷新频率. 数值为正数时, 表示向下滚动. 数值为负数时, 表示向上滚动.
+  volantis.scroll.handleScrollEvents = () => {
+    volantis.scroll.lastScrollTop = volantis.scroll.getScrollTop()
+    function loop() {
+      const scrollTop = volantis.scroll.getScrollTop();
+      if (volantis.scroll.lastScrollTop !== scrollTop) {
+        volantis.scroll.del = scrollTop - volantis.scroll.lastScrollTop;
+        volantis.scroll.lastScrollTop = scrollTop;
+        // if (volantis.scroll.del > 0) {
+        //   console.log("向下滚动");
+        // } else {
+        //   console.log("向上滚动");
+        // }
+        // 注销过期的unengine未滚动事件
+        volantis.scroll.unengine.list=[]
+        volantis.scroll.engine.start();
+      }else{
+        volantis.scroll.unengine.start();
+      }
+      volantis.requestAnimationFrame(loop)
+    }
+    volantis.requestAnimationFrame(loop)
+  }
+  volantis.scroll.handleScrollEvents()
+  volantis.scroll.ele = null;
+  // 触发页面滚动至目标元素位置
+  volantis.scroll.to = (ele, option = {}) => {
+    if (!ele) return;
+    volantis.scroll.ele = ele;
+    // 默认配置
+    opt = {
+      top: ele.getBoundingClientRect().top + document.documentElement.scrollTop,
+      behavior: "smooth"
+    }
+    // 定义配置
+    if ("top" in option) {
+      opt.top = option.top
+    }
+    if ("behavior" in option) {
+      opt.behavior = option.behavior
+    }
+    if ("addTop" in option) {
+      opt.top += option.addTop
+    }
+    if (!("observerDic" in option)) {
+      option.observerDic = 100
+    }
+    // 滚动
+    window.scrollTo(opt);
+    // 监视器
+    // 监视并矫正元素滚动到指定位置
+    // 用于处理 lazyload 引起的 cls 导致的定位失败问题
+    // option.observer = false
+    if (option.observer) {
+      setTimeout(() => {
+        if (volantis.scroll.ele != ele) {
+          return
+        }
+        volantis.scroll.unengine.push(() => {
+          let me = ele.getBoundingClientRect().top
+          if(!(me >= -option.observerDic && me <= option.observerDic)){
+            volantis.scroll.to(ele, option)
+          }
+          volantis.scroll.unengine.remove("unengineObserver")
+        },"unengineObserver")
+      },1000)
+    }
+  }
+  /********************** Content Visibility ********************************/
+  // 见 source/css/first.styl 如果遇到任何问题 删除 .post-story 即可
+  // 一个元素被声明 content-visibility 属性后 如果元素不在 viewport 中 浏览器不会计算其后代元素样式和属性 从而节省 Style & Layout 耗时
+  // content-visibility 的副作用: 锚点失效 等等(实验初期 暂不明确), 使用此方法清除样式
+  volantis.cleanContentVisibility = ()=>{
+    if (document.querySelector(".post-story")) {
+      console.log("cleanContentVisibility");
+      document.querySelectorAll(".post-story").forEach(e=>{
+        e.classList.remove("post-story")
+      })
+    }
+  }
+  /******************************************************************************/
+  /******************************************************************************/
+  /******************************************************************************/
+  //图像加载出错时的处理
+  function errorImgAvatar(img) {
+    img.src = "https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg";
+    img.onerror = null;
+  }
+  function errorImgCover(img) {
+    img.src = "https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg";
+    img.onerror = null;
+  }
+  /******************************************************************************/
+</script>
+
+  <!-- import head_end begin -->
+  <!-- import head_end end -->
+  <!-- Custom Files headEnd begin-->
+  
+  <!-- Custom Files headEnd end-->
+  <!-- front-matter head_end begin -->
+  <!-- front-matter head_end end -->
+</head>
+  <body itemscope itemtype="http://schema.org/WebPage">
+    <!-- import body_begin begin-->
+    <!-- import body_begin end-->
+    <!-- Custom Files bodyBegin begin-->
+    
+    <!-- Custom Files bodyBegin end-->
+    <!-- front-matter body_begin begin -->
+    <!-- front-matter body_begin end -->
+    <header itemscope itemtype="http://schema.org/WPHeader" id="l_header" class="l_header auto shadow show" style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fa-solid fa-comments fa-fw" target="_self"  href="/" onclick="return false;" title="comment"></a></li>
+        
+          <li><a id="s-toc" class="s-toc fa-solid fa-list fa-fw" target="_self"  href="/" onclick="return false;" title="toc"></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='/img/meta/logo.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover"
+                href="/" title="博客"
+                  
+                  
+                  
+                    active-action="action-home"
+                  >
+                  <i class='fa-solid fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover"
+                href="/archives/" title="归档"
+                  
+                  
+                  
+                    active-action="action-archives"
+                  >
+                  <i class='fa-solid fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box header toggle-mode-btn">
+                  <i class='fa-solid fa-moon fa-fw'></i>
+                </a>
+              <li>
+            
+          
+          
+				</ul>
+			</div>
+      
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fa-solid fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+      
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fa-solid fa-search fa-fw" target="_self" href="/" onclick="return false;" title="search"></a></li>
+				
+				<li>
+          <a class="s-menu fa-solid fa-bars fa-fw" target="_self" href="/" onclick="return false;" title="menu"></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover"
+                href="/" title="博客"
+                  
+                  
+                  
+                    active-action="action-home"
+                  >
+                  <i class='fa-solid fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover"
+                href="/archives/" title="归档"
+                  
+                  
+                  
+                    active-action="action-archives"
+                  >
+                  <i class='fa-solid fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box header toggle-mode-btn">
+                  <i class='fa-solid fa-moon fa-fw'></i>
+                </a>
+              <li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+
+      <!-- Custom Files header begin -->
+      
+      <!-- Custom Files header end -->
+		</div>
+	</div>
+  </div>
+</header>
+
+    <div id="l_body">
+      <div id="l_cover">
+  
+    
+      <!-- see: /layout/_partial/scripts/_ctrl/coverCtrl.ejs -->
+      <div id="none" class='cover-wrapper post dock' style="display: none;">
+        
+  <div class='cover-bg lazyload placeholder' data-bg="https://gcore.jsdelivr.net/gh/MHG-LAB/cron@gh-pages/bing/bing.jpg"></div>
+
+<div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Volantis</p>
+    
+    
+  </div>
+  <div class='bottom'>
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a href="/v4/getting-started/"
+              
+              
+              active-action="action-v4getting-started">
+              <img src='https://unpkg.com/volantis-static@0.0.1654736714924/media/twemoji/assets/svg/1f5c3.svg'><p>文档</p>
+            </a>
+          
+            <a href="/faqs/"
+              
+              
+              active-action="action-faqs">
+              <img src='https://unpkg.com/volantis-static@0.0.1654736714924/media/twemoji/assets/svg/1f516.svg'><p>帮助</p>
+            </a>
+          
+            <a href="/examples/"
+              
+              
+              active-action="action-examples">
+              <img src='https://unpkg.com/volantis-static@0.0.1654736714924/media/twemoji/assets/svg/1f396.svg'><p>示例</p>
+            </a>
+          
+            <a href="/contributors/"
+              
+              
+              active-action="action-contributors">
+              <img src='https://unpkg.com/volantis-static@0.0.1654736714924/media/twemoji/assets/svg/1f389.svg'><p>社区</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              active-action="action-archives">
+              <img src='https://unpkg.com/volantis-static@0.0.1654736714924/media/twemoji/assets/svg/1f4f0.svg'><p>博客</p>
+            </a>
+          
+            <a target="_blank" rel="noopener" href="https://github.com/volantis-x/hexo-theme-volantis/"
+              
+              
+              active-action="action-https:githubcomvolantis-xhexo-theme-volantis">
+              <img src='https://unpkg.com/volantis-static@0.0.1654736714924/media/twemoji/assets/svg/1f9ec.svg'><p>源码</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+        <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+      </div>
+    
+  
+</div>
+
+      <div id="safearea">
+        <div class="body-wrapper">
+          
+<div id="l_main" class=''>
+  <article itemscope itemtype="http://schema.org/Article" class="article post white-box reveal md shadow floatable blur article-type-post" id="post" itemscope itemprop="blogPost">
+  <link itemprop="mainEntityOfPage" href="https://yzctzl.github.io/2022/ReFLV/">
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Yzctzl">
+  </span>
+  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
+    <meta itemprop="name" content="Yzctzl">
+    <meta itemprop="description" content="奇迹">
+  </span>
+  
+
+
+  
+    <div class='headimg-div'>
+      <a class='headimg-a'>
+        <img itemprop="image" class='headimg' src='/img/2022/ReFLV/2.3.01.png'/>
+      </a>
+    </div>
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title" itemprop="name headline">
+        FLV：不许动手动脚
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author' itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a itemprop="url" class='author' href="/" rel="nofollow">
+    <img itemprop="image" src="/img/meta/logo.png" class="lazyload" data-srcset="/img/meta/logo.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+    <p itemprop="name">yzctzl</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class='new-meta-item category'>
+    <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+    <a class="category-link" href="/categories/AV/">AV</a>
+    
+      <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <a href="/categories/AV/" itemprop="url"><span itemprop="name">AV</span></a>
+      </span>
+    
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date" itemprop="dateCreated datePublished" datetime="2022-12-01T00:00:00+08:00">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2022年12月1日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+
+
+<div class="new-meta-item browse">
+  <a class='notlink'>
+    <p>
+      <i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+      
+      <span id="busuanzi_value_page_pv"><i class="fa-solid fa-loader fa-spin fa-fw" aria-hidden="true"></i></span>
+      
+      <span>次浏览</span>
+    </p>
+  </a>
+</div>
+
+
+          
+        
+        <!-- Custom Files topMeta begin-->
+        
+        <!-- Custom Files topMeta end-->
+      </div>
+    
+  </div>
+
+
+  <div id="layoutHelper-page-plugins"></div>
+  <div id="post-body" itemprop="articleBody">
+    <p>本文将着重分析 <code>FLV</code> 容器的语法语义，结合我遇到的几个安卓平台的 <code>FLV</code> 加密进行分析，同时对这几个样本做解密还原。</p>
+<p><strong>由于许多内容是对学习的记录，所以并非一次编辑而成，可能有些逻辑问题。加上我对音视频多数内容一知半解，可能存在一些错误，欢迎大佬指出，感谢！</strong></p>
+<h2 id="FLV"><a href="#FLV" class="headerlink" title="FLV"></a>FLV</h2><p>尽管绝大多数情况下加密方案都不会修改 <code>FLV</code> 容器，但了解容器的语法语义能帮助我们定位加密位置，所以这是后面的基础。</p>
+<p><code>FLV</code> 容器标准可以在 <code>spec</code><a target="_blank" rel="noopener" href="https://download.macromedia.com/f4v/video_file_format_spec_v10_1.pdf">^01</a> 的 <code>Annex.E</code> 中找到，若已经熟悉 <code>FLV</code> 容器可以跳过这部分。</p>
+<p>与其他容器相比，<code>FLV</code> 中视频的特点是以一个完整的帧为单位的，无论这个帧是何类型或者是否包含多个 <code>NALu/slice</code>，一个基本单位是对一个帧的封装，当然仅有帧是无法解码的，编码参数（<code>SPS</code><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/knlIStZqa7EJSdDczqE63w">^07</a>、<code>PPS</code><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/0tUWQX8uodizv-LdQLhXlA">^08</a> 等）也要有，它们都在第一个帧之前；而音频可能是一到几个帧为一个单位。<code>FLV</code> 中的这个基本单位被称为 <code>Tag</code>。</p>
+<h3 id="容器标准"><a href="#容器标准" class="headerlink" title="容器标准"></a>容器标准</h3><p>本节我们看一下标准中 <code>FLV</code> 容器的语法，其中大部分都能用 <code>ReFLV</code><a target="_blank" rel="noopener" href="https://github.com/yzctzl/ReFLV">^13</a> 解析。</p>
+<h4 id="FLV-header"><a href="#FLV-header" class="headerlink" title="FLV header"></a>FLV header</h4><p><code>FLV</code> 文件的前 <code>9</code> 个字节是文件头，其中有两个标志位分别表示是否包含音频和视频：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/1.1.01.png' data-fancybox='default' data-caption='FLV header'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/1.1.01.png" class="lazyload" data-srcset="/img/2022/ReFLV/1.1.01.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="FLV header"></a><span class='image-caption'>FLV header</span></div></div>
+
+<p>对这部分使用 <code>parse_flv_header</code> 来解析，对应的数据类是 <code>TAGheader</code>；如果无法解析一般考虑是否存在其他问题，比如是否缺失文件头或者是否已被完整加密，因为单独加密文件头意义不大。</p>
+<h4 id="FLV-body"><a href="#FLV-body" class="headerlink" title="FLV body"></a>FLV body</h4><p>文件头之后的就是一个接一个的 <code>Tag + TagSize</code> 直到 <code>EOF</code>：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/1.1.02.png' data-fancybox='default' data-caption='FLV struct'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/1.1.02.png" class="lazyload" data-srcset="/img/2022/ReFLV/1.1.02.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="FLV struct"></a><span class='image-caption'>FLV struct</span></div></div>
+
+<p>为了方便，把 <code>PreviousTagSizeN</code> 看作 <code>TagN</code> 的一部分。一个 <code>Tag</code> 使用一个数据类 <code>Tag</code> 表示。</p>
+<p>在一帧一个 <code>Tag</code> 之前，最开始的第一个 <code>Tag</code> 封装的是 <code>onMetadata</code>，它表示了容器层面的音视频信息，也是 rtmpdump 的输出信息，大多数情况下无需处理，不过也有种特殊情况：如果多个视频共用一个直播链接，比如：开始播放时画面为 <code>720p</code> 横向，中间换了直播设备变成 <code>1080p</code> 竖向，整个过程链接不变就导致它们被下载到一个 <code>FLV</code> 文件中，这样的 <code>FLV</code> 仅能播放第一小段。</p>
+<p>在 <code>ReFLV</code> 中有个 <code>splite_out()</code> 函数可以将多段视频分成多个 <code>FLV</code> 文件，分隔规则为：视频使用 <code>onMetadata</code> 音频使用 <code>AAC header</code>，遇到这两种类型就写入下一个 <code>FLV</code> 中。</p>
+<p>接下来的 <code>Tag</code> 里面封装的是初始化信息 <code>SPS</code><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/knlIStZqa7EJSdDczqE63w">^07</a>、<code>PPS</code><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/0tUWQX8uodizv-LdQLhXlA">^08</a> 等，这些参数优先级最高也是最重要的，一旦丢失将无法解码，因为它提供解码器所必须的解码信息。</p>
+<h4 id="Tag-header"><a href="#Tag-header" class="headerlink" title="Tag header"></a>Tag header</h4><p><code>Tag</code> 可以分成两部分，前半部分是 <code>header：</code></p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/1.1.03.png' data-fancybox='default' data-caption='Tag header'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/1.1.03.png" class="lazyload" data-srcset="/img/2022/ReFLV/1.1.03.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Tag header"></a><span class='image-caption'>Tag header</span></div></div>
+
+<p>把红框中的部分看作 <code>Tag header</code> 对应 <code>Tag</code> 数据类中的 <code>header</code>，使用数据类 <code>TAGheader</code> 表示。</p>
+<p>这其中黄色的部分是 <code>Tag header</code> 之后剩余部分的大小，也就是说：可以读 <code>11B</code>，解析之后就知道剩余的 <code>Tag</code> 大小了，使用 <code>next_tag</code> 来实现读取过程，<code>parse_tag_header</code> 来解析这 <code>11B</code> 的内容，若做出了修改就用 <code>build_tag_header</code> 重新生成新的 <code>Tag header</code>；同样当解密完成之后需要写入目标 <code>FLV</code> 时，有对应的 <code>write_tag</code>。</p>
+<p>另一个重要的部分是时间戳，一共 <code>4B</code>，又称<code>解码时间戳（DTS）</code>，直播开始后时间戳在从 0 开始递增，但绝大多是情况下我们都是从直播开始之后一段时间才能获取到直播流，因此得到的 <code>DTS</code> 并非从 0 时刻开始；还有些时候会因为连麦、推流网络问题等得到错乱的时间戳。</p>
+<p>时间戳错误会导致许多离谱的问题，比如会导致音画不同步，严重一点的造成无法播放，时间戳重叠时甚至可以隐藏一段视频，这是因为播放器会把小于当前时间戳的帧忽略，这在直播中有利于减少丢包造成的延迟累积，但 <code>FLV</code> 中显然会造成非预期效果；</p>
+<p>另一方面，常用的 <code>ffmpeg</code> 是通过包含 <code>Video/Audio header</code> 的 <code>Tag</code> 解析结果来重置时间戳，而有时会遇到的 <code>header</code> 中时间戳也不正确；</p>
+<p>更好的方法应该是选择第一个关键帧所在 <code>Tag</code> 作为时间戳原点，然后对音频和视频的时间戳与该原点计算偏移作为新的时间戳；之所以选关键帧，因为它是需要解码的一帧完整的画面，这与其他包含编码参数的 <code>Tag</code> 的时间戳不同，它的时间戳是直接影响<code>显示时间 (PTS)</code>。</p>
+<p>修复时间戳对应的是 <code>reset_timestamp</code>。接下来的是音视频的 <code>header</code>。最后是包含码流的 <code>Data</code>：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/1.1.04.png' data-fancybox='default' data-caption='Tag Data'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/1.1.04.png" class="lazyload" data-srcset="/img/2022/ReFLV/1.1.04.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Tag Data"></a><span class='image-caption'>Tag Data</span></div></div>
+
+<p>这里的 <code>Data</code> 是最容易动手脚的地方，遇到的例子中都对这部分做了加密，后面再说。先看一下 <code>Video Tag header</code>：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/1.1.05.png' data-fancybox='default' data-caption='Video Tag header'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/1.1.05.png" class="lazyload" data-srcset="/img/2022/ReFLV/1.1.05.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Video Tag header"></a><span class='image-caption'>Video Tag header</span></div></div>
+
+<p>包含了<code>帧类型、Codec、Data</code> 中码流类型以及<code>相对时间戳（CTS）</code>，一帧画面的显示时间是通过 <code>PTS = CTS + DTS</code> 来计算的，使用 <code>parse_video_header</code> 来解析，解密或者修改完之后使用 <code>build_video_header</code> 重新构建。</p>
+<p>跟在 <code>Video Tag header</code> 之后的 <code>Data</code> 是 <code>VideoPacket</code>：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/1.1.07.png' data-fancybox='default' data-caption='Audio Tag header'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/1.1.07.png" class="lazyload" data-srcset="/img/2022/ReFLV/1.1.07.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Audio Tag header"></a><span class='image-caption'>Audio Tag header</span></div></div>
+
+<p><code>Audio</code> 和 <code>Video</code> 类似：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/1.1.06.png' data-fancybox='default' data-caption='AVCPacket'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/1.1.06.png" class="lazyload" data-srcset="/img/2022/ReFLV/1.1.06.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="AVCPacket"></a><span class='image-caption'>AVCPacket</span></div></div>
+
+<p>包括音频编码器、几个参数，最后是 <code>Data</code> 中音频包的类型，使用 <code>parse_audio_header</code> 来解析，解密或者修改完之后使用 <code>build_audio_header</code> 重新构建。其后跟上 <code>AudioPacket</code>。</p>
+<h4 id="NALU"><a href="#NALU" class="headerlink" title="NALU"></a>NALU</h4><p><code>NALU</code> 是网络抽象层单元缩写，顾名思义，这是为了适应网络传输和数据存储而做的码流分割，<code>H.264/H.265</code> 中都有它，<code>FLV</code> 使用的 <code>NALu</code> 码流语法在 <code>ISO/IEC 14496-15</code> 中，语法为：<code>单元长度（4B） + NALU header（AVC：1B，HEVC：2B） + payload(RBSP)</code>，其实就是把常见的<code>附录 B</code> 格式中 <code>StartCode（可以为 0x000001/0x00000001）</code> 替换成了 <code>单元长度（4B）</code>，其中：负载是喂给 <code>decoder</code> 解码的，<code>AVC NALU header</code> 语义如下：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/1.1.08.png' data-fancybox='default' data-caption='NALU header'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/1.1.08.png" class="lazyload" data-srcset="/img/2022/ReFLV/1.1.08.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="NALU header"></a><span class='image-caption'>NALU header</span></div></div>
+
+<p><code>f(x)</code> 和 <code>u(x)</code> 都是顺序读取 <code>x</code> 位，其中 <code>nal_unit_type</code> 决定负载的语法，其定义如下：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/1.1.09.png' data-fancybox='default' data-caption='nal_unit_type'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/1.1.09.png" class="lazyload" data-srcset="/img/2022/ReFLV/1.1.09.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="nal_unit_type"></a><span class='image-caption'>nal_unit_type</span></div></div>
+
+<p>其中 <code>1</code> 表示 <code>IDR</code>，<code>5</code> 是最常见的 <code>I/P/B</code> 帧，<code>7、8</code> 分别表示 <code>SPS、PPS</code>。这部分使用 <code>parse_avc_nalu</code> 来解析，因为一个帧可以分割为多个 <code>NALu/slice</code> 所以这里需要根据最开始的 <code>4B</code> 单元长度判断每个 <code>nalu</code> 长度。</p>
+<p><code>HEVC NLAU header</code> 语法如下：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/1.1.10.png' data-fancybox='default' data-caption='nal_unit_type'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/1.1.10.png" class="lazyload" data-srcset="/img/2022/ReFLV/1.1.10.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="nal_unit_type"></a><span class='image-caption'>nal_unit_type</span></div></div>
+
+<p>一共 <code>2B</code>，其中 <code>nal_unit_type(6bits)</code> 用来标识NAL单元类型，包括<code>参数集（VPS，PPS，SPS，SEI）</code>以及 <code>slice</code> 数据如 <code>IDR/I/B/P</code> 等。</p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>上面这些都在标准内，截取了部分常遇到的，详细了解可以阅读标准。了解语法语义之后可以用 <code>flvAnalyser</code><a target="_blank" rel="noopener" href="https://github.com/zymill/flvAnalyser">^06</a> 或 010 Editor + <code>FLV.bt</code><a target="_blank" rel="noopener" href="https://www.sweetscape.com/010editor/repository/templates/file_info.php?file=FLV.bt">^10</a> 辅助分析，比如：某 FLV 音频正常却花屏，而上述这些分析后一切正常，那可以确定 VideoPacket 一定动手脚了。</p>
+<h4 id="Annex-F"><a href="#Annex-F" class="headerlink" title="Annex.F"></a>Annex.F</h4><p>标准附录 F 中可以看到 FLV 的加密方案，在 <code>Adobe Primetime SDK</code><a target="_blank" rel="noopener" href="https://experienceleague.adobe.com/docs/primetime/drm/home.html?lang=zh-Hans">^09</a> 中的 <code>DRM</code> 部分也可以找到对应的接口。它的 <code>key</code> 需要 <code>Adobe</code> 自家的 <code>DRM</code> —— <code>Adobe Access</code> 来分发，由于我比较菜，这种我还从未遇到过，所以就先略过该部分了。</p>
+<h3 id="扩展编码"><a href="#扩展编码" class="headerlink" title="扩展编码"></a>扩展编码</h3><p><code>FLV</code> 自 Adobe 在 2003 年发布以来，历经 20 年的发展，已经进入耄耋之年。虽与主流的 <code>mp4/mkv</code> 容器比起来，<code>FLV</code> 并不能算古老，但它却实实在在地是一种老气横秋的容器，主因是 Adobe 不愿继续维护该标准了。但 FLV 简单轻量，而且它的头是完备无依赖的，又有良好的 Web 服务器支持，延迟更是可以做到 100ms，使其在直播场景中仍然常见。</p>
+<p>可如今 <code>FLV</code> 本身支持的编码已经逐渐无法满足需求了，为了延续其生命周期，需要扩展标准来添加对新一代视频编码的支持。</p>
+<h4 id="HEVC"><a href="#HEVC" class="headerlink" title="HEVC"></a>HEVC</h4><p><code>FLV</code> 对新的 <code>h.265/hevc</code> 没有支持，新的编码标准压缩率更高，更加节省带宽，支持的分辨率也更高，已经逐渐成为主流，而我们要做的扩展主要是添加 <code>video codec id</code> 然后替换为对应编码的 <code>VIDEOPACKET</code>。</p>
+<p>目前对 <code>HEVC</code> 常用的 <code>video codec id</code> 是 <code>12</code>，扩展标准如下：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/1.2.01.png' data-fancybox='default' data-caption='hevc+flv'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/1.2.01.png" class="lazyload" data-srcset="/img/2022/ReFLV/1.2.01.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="hevc+flv"></a><span class='image-caption'>hevc+flv</span></div></div>
+
+<p>该扩展由金山云提出 <code>ksvc</code><a target="_blank" rel="noopener" href="https://github.com/ksvc/FFmpeg/wiki">^02</a>，并做了 <code>FFmpeg</code> 的 patch，这是最常见的扩展。</p>
+<h4 id="AV1-Opus"><a href="#AV1-Opus" class="headerlink" title="AV1&#x2F;Opus"></a>AV1&#x2F;Opus</h4><p>类似 <code>HEVC</code>，<code>AV1</code> 的扩展 <code>video codec id</code> 是 <code>13</code>，<code>AV1</code> 是 <code>AOM</code> 联盟开发的一种视频编码，该联盟由谷歌等大型公司主导，对标下一代视频编码 <code>h.266/VVC</code>，其编码复杂度相对较高，不过开源无专利费，很多云厂商都实现了该扩展，具体扩展可参考 <code>AV1patch</code><a target="_blank" rel="noopener" href="https://github.com/tencentyun/AV1">^03</a>。</p>
+<p><code>Opus</code> 扩展的 <code>audio codec id</code> 为 <code>9</code> 或 <code>13</code>；<code>Opus</code> 在人声上有不俗的表现，但通用场景中，其在低码率下和 <code>HE-AAC</code> 相比优势并不明显，中高码率的表现又不及标准的 <code>AAC-LC</code>，虽然开源免费但处境尴尬，因此该扩展用的相对较少。</p>
+<h4 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h4><p><code>HEVC/AV1</code> 的扩展在 <code>flvAnalyser</code><a target="_blank" rel="noopener" href="https://github.com/zymill/flvAnalyser">^06</a> 中有不错的支持，不过它遇到加密无法解析时会崩溃。相对而言 <code>010 Editor</code> 可以 Debug 模板，更容易定位问题，我对官方仓库的 <code>FLV</code> 模板添加了 <code>HEVC/AV1/Opus</code> 的支持，该模板也放在了 <code>ReFLV</code><a target="_blank" rel="noopener" href="https://github.com/yzctzl/ReFLV">^13</a> 仓库中。</p>
+<p>针对 HEVC 扩展，我 patch 了最新的 <code>FFmpeg v5.1</code> 版，又用 <code>GitHub Action</code> 编译了 <code>Windows/Linux/MacOS</code> 三个平台上的成品 <code>minibuild</code><a target="_blank" rel="noopener" href="https://github.com/yzctzl/ffmpeg-minibuild/releases/tag/v5.1.1-beta.1">^04</a>，可以直接下载使用。此外应用 <code>AV1patch</code><a target="_blank" rel="noopener" href="https://github.com/tencentyun/AV1">^03</a> 来支持 <code>HEVC/AV1/Opus</code> 三种扩展，但 AV1 需要 dav1d 库，需要自己在所需平台编译。</p>
+<p><code>ffplay</code> 毕竟过于简陋，有没有其他现成的播放器支持 <code>HEVC</code> 扩展呢，我尝试了很多款，发现 <code>Aplayer</code><a target="_blank" rel="noopener" href="http://aplayer.open.xunlei.com/">^05</a> 对 <code>FLV + HEVC</code> 有较好的支持，这款 <code>SDK</code> 对 <code>FLV</code> 容错性比主流播放器做的好很多，推荐选择一款基于该 <code>SDK</code> 的播放器。</p>
+<h2 id="FFmpeg"><a href="#FFmpeg" class="headerlink" title="FFmpeg"></a>FFmpeg</h2><p>音视频开发中一个绕不开的工具就是 <code>FFmpeg</code>，俗话讲：掌握了 <code>FFmpeg</code> 就掌握了音视频开发的半壁江山。安卓音视频开发中更是如此，比如常见的 <code>ijkplayer</code> 就是基于 <code>FFmpeg 3.4</code> 版本的。</p>
+<p>在对 <code>FLV</code> 的加解密中最常见的也是使用动过手脚的 <code>FFmpeg</code> 或者基于 <code>FFmpeg</code> 开发的工具。</p>
+<p>下面关于 <code>FFmpeg</code> 的介绍具体可以参考 <code>雷神</code><a target="_blank" rel="noopener" href="https://blog.csdn.net/leixiaohua1020">^11</a> 的博客中 <code>FFmpeg 专栏</code>，雷神千古，向雷神致敬！</p>
+<h3 id="Demuxer"><a href="#Demuxer" class="headerlink" title="Demuxer"></a>Demuxer</h3><p>要魔改 FFmpeg 实现加密和解密音视频帧，最直接的方法是：写入时加密，读取时解密。</p>
+<p>这样做的好处主要是：</p>
+<ol>
+<li>避免深入，改起来简单</li>
+<li>H.264&#x2F;H.265 编码可以通用</li>
+<li>与容器无关，FLV&#x2F;MP4&#x2F;MKV 等统统适用</li>
+</ol>
+<p>直接看调用结构图：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/2.1.01.png' data-fancybox='default' data-caption='ffplay demux'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/2.1.01.png" class="lazyload" data-srcset="/img/2022/ReFLV/2.1.01.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="ffplay demux"></a><span class='image-caption'>ffplay demux</span></div></div>
+
+<p><code>ffplay</code> 可类比在安卓客户端中常见的任一款基于 <code>ffmpeg</code> 的播放器。</p>
+<p><code>read_frame_internal()</code>：封装了完整的解复用过程（<code>demuxer</code>），也是最容易做手脚的地方，调用它就可以得到一帧。取帧时会从 <code>ff_read_packet()</code> 读取，这个函数负责与 <code>IO</code> 打交道，如果一切顺利会判断是否需要来进一步解析，如果需要交给 <code>parse_packet()</code>。</p>
+<p><code>flv_read_packet()</code>：负责读取读取和解析 <code>Tag header</code>、<code>Video Tag header</code>、<code>Audio Tag header</code>，并对 <code>H.264、AAC</code> 等做一些特殊处理；如果某魔改 FFmpeg 可以处理非标准 <code>FLV</code> 容器，那首先怀疑是否对该函数动了手脚。</p>
+<h4 id="实例-N"><a href="#实例-N" class="headerlink" title="实例 N"></a>实例 N</h4><p>这是某收费直播系统的安卓平台，该系统的播放器基于 FFmpeg，用 C++ 开发，不开源，无混淆。抓个源下载一会，得到视频样本，试播放灰屏无声音，拖入 <code>010 Editor</code> 分析发现头都是完整的，符合标准未加密，推测更深层的 <code>payload(RBSP)</code> 加密了：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/2.1.02.png' data-fancybox='default' data-caption='N sample'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/2.1.02.png" class="lazyload" data-srcset="/img/2022/ReFLV/2.1.02.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="N sample"></a><span class='image-caption'>N sample</span></div></div>
+
+<p>接下来用 <code>IDA</code> 打开 <code>N.so</code>，因为 FFmpeg 各版本差异很大，要首先判断 FFmpeg 版本号，搜字符串 <code>version</code> 找到版本号为 <code>4.1.4</code>，从 <code>videolan</code><a target="_blank" rel="noopener" href="https://www.videohelp.com/software/ffmpeg/old-versions">^12</a> 下载该版本源码后用 Source Insight 打开，方便对照查看。</p>
+<p>然后注意到导出表如下图：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/2.1.03.png' data-fancybox='default' data-caption='NMC export'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/2.1.03.png" class="lazyload" data-srcset="/img/2022/ReFLV/2.1.03.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="NMC export"></a><span class='image-caption'>NMC export</span></div></div>
+
+<p>里面包含许多种加密解密，根据分析，视频播放过程中可能存在某个解密函数被频繁调用，大胆猜测它就在导出表中，直接 <code>trace</code> 一下，轻易找到了它：<code>sm4_decrypt</code>。</p>
+<p>由此查看调用，马上就找到 <code>sm4_decrypt</code> 被 <code>read_frame_internal(AVFormatContext, AVPacket)</code> 调用，对照源码分析如下图：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/2.1.04.png' data-fancybox='default' data-caption='all in one'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/2.1.04.png" class="lazyload" data-srcset="/img/2022/ReFLV/2.1.04.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="all in one"></a><span class='image-caption'>all in one</span></div></div>
+
+<p>红色横线是在源码中的插入位置，在 <code>ff_read_packet()</code> 之后交给其先解密再继续操作；</p>
+<p><code>FFmpeg</code> 有很多非常复杂的结构体，还原起来十分困难，到处都在取偏移，如果偏移比较小可以对照源码中的结构体数一下，如果很大，那只能试试可以对照着源码有没有其他位置来确定这个属性，比如：蓝色框中可以参考黑色框对应的伪代码来还原，详细内容见汇编的注释；</p>
+<p><code>v71</code> 是一个比较简单的结构体——<code>AVPacket</code>，可以适当修改后直接写入定义，该定义位于 <code>libavcodec/avcodec.h</code> 中，在 <code>Local Types</code> 中插入然后修改 <code>v71</code> 类型即可。</p>
+<p>为了搞清楚左侧伪代码到底做了什么事情，首先分割为三部分，如图中深红线分割；</p>
+<p>第一部分是 <code>v5 == 0x15002</code>，此时为 <code>AAC</code>，解密方式：跳过 <code>7B</code>，剩余的以 <code>16B</code> 为单位解密，最后 <code>&lt;= 16B</code> 的部分保持不变；</p>
+<p>第二、三部分都是 <code>H264</code>，第二部分是解密 <code>FLV</code> 的 <code>NALU</code> 码流的，第三部分解密标准中的 <code>NALU</code> 码流，这里只看第二部分即可；</p>
+<p>先判断长度，然后计算 <code>v8</code>，<code>v8</code> 是 <code>NALU header + payload</code>，<code>v9</code> 是 <code>v8</code> 再加上 <code>4（单元长度）</code> 也就是 <code>NALU</code> 的长度，如果 <code>v9</code> 和 <code>size</code> 相同表示是 <code>FLV</code> 封装否则是标准封装的 <code>NALU</code>，之后是从 <code>NALU</code> 跳过 <code>5B（单元长度 + NALU header）</code>的位置开始解密，以 <code>16B</code> 为单位，最后 <code>&lt;= 16B</code> 部分保持不变。</p>
+<p>还有个问题 sm4 解密用的 key 在哪，这部分在 Java 层，略过。</p>
+<p>通过继承可以方便的实现解密，代码：<code>ReN</code><a target="_blank" rel="noopener" href="https://github.com/yzctzl/ReFLV/blob/master/ReFLV/ReN.py">^14</a></p>
+<h3 id="Parser"><a href="#Parser" class="headerlink" title="Parser"></a>Parser</h3><p>首先有两个名字需要区分一下：demuxer 和 parser，前者是解复用器，后者被称为解析器。解复用器的作用是从容器中把音视频流和字幕流分离出来，然后分别处理，解析器在 FFmpeg 中更多的指对 AVC&#x2F;HEVC&#x2F;AAC 等编码参数集的解析。</p>
+<p>但解复用器中也有对容器的解析，这部分也可以被称为解析器。如果解析器解析的是容器，那对应的是 demuxer 的一部分；如果解析的是 NALU header 或者 VPS&#x2F;SPS&#x2F;PPS 等参数集，那对应的是 parser，也就是本小节的内容。</p>
+<p>上面我们提到，读取完成之后会根据情况进行解析，解析的函数是：<code>parse_packet</code>，在调用的该函数的时候已经调用完 <code>read_packet</code> 拿到了完整的一帧数据，所以在此处既可以方便的解密整个帧，也可以在解析时针对某种 NALU 或者 NALU 的一部分做解密。</p>
+<p>我们来看一下 <code>parse_packet</code> 的调用结构图：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/2.2.01.png' data-fancybox='default' data-caption='parser'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/2.2.01.png" class="lazyload" data-srcset="/img/2022/ReFLV/2.2.01.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="parser"></a><span class='image-caption'>parser</span></div></div>
+
+<p>前半部分是调用，动手脚的可能相对小一点，后面的以 hevc 为例，对应的解析器源码在 <code>hevc_parse.c</code> 中，这其中真正用于解析的是 <code>hevc_parse</code> 这个函数，调用了解析各种参数集的函数。</p>
+<p>这些参数集对解码来说是必须的，如果其做了加密，必然导致无法解码。这里加密的有点是代价很小，因为这些参数集的大小相对加密 I&#x2F;P&#x2F;B 帧小到可以忽略。</p>
+<p>出了参数集加密，在这里已经读完了一个完整的帧，这里加密某一类 NALU 或者 NALU 的某一部分都非常方便。这样的加密往往都放在 <code>parse_nal_units</code> 中。</p>
+<h4 id="还原"><a href="#还原" class="headerlink" title="还原"></a>还原</h4><p>在搞实例 F 之前，先来考虑一个问题：如何还原 FFmpeg 中的结构体？实例 N 中可以看到结构体对分析至关重要，而 FFmpeg 中结构体非常复杂且分散，那如何才能更方便的还原结构体呢？</p>
+<p>先来看一下 IDA 中创建结构体的方式：</p>
+<ol>
+<li>直接在 LocalTypes&#x2F;structs&#x2F;enums 中创建结构体和枚举</li>
+<li>导入头文件，要求导入的头文件无依赖</li>
+<li>导入 Type Libraries，使用其中的结构体</li>
+</ol>
+<p>若是使用有限几个结构体成员或结构体很简单，比如 N 中用到的 AVPacket，那直接使用第一种方法新建一个即可；若是遇到修改了 FFmpeg 结构体而产生错位，可以用占位符替代，然后一点点分析确定成员。</p>
+<p>如果遇到的修改很多，可以考虑第二和第三种方式，但第二种方式并不适用 FFmpeg，因为其中的头文件一堆 #include，几乎无法导入成功。第三种要制作 Type Library，这需要用到 Tilib 工具，该工具在 IDA SDK 中，FFmpeg 的头文件相对容易处理一些，.&#x2F;configure 生成 config.h 之后问题就不大了，但在处理标准库依赖的时候难倒我了，Tilib 几乎无法处理 NDK 的 C 标准库，各种报错而且错误棘手难以找到原因，更不用谈修复了。</p>
+<p>这时候一种思路是：能否自己编译一个带符号的版本，然后由此制作 til 呢？根据《IDA Pro Book》 8.6.2 节，有三种方法：</p>
+<ol>
+<li>复制有符号的 til 然后导入到另一个</li>
+<li>导出 typeinfo 为一段 IDC 脚本，在另一个中导入</li>
+<li>导出 typeinfo 为 .h 头文件，用 Tilib 制作 til</li>
+</ol>
+<p>这里采用第三种，使用 Tilib 工具的好处是可以修改头文件也可以指定编译器信息，更加灵活。IDA 导出的头文件很可能无法直接给 Tilib 使用，需要自己修改一下，常见的问题：去掉重复 typedef，声明一些结构体等等，通过报错可准确定位。</p>
+<p>为了后续方便，我制作了 ijkplayer v0.8.8 armv7a 的符号库：ijk.til，因为 F 中已经确定魔改自 armv7a 所以可以直接导入，如果不是基于 ijkplayer 或者 armv7a 可能会导致 long 尺寸、对齐方式、结构体不同，需要 Tilib 指定编译器信息或者重新编译制作类型库。</p>
+<h4 id="实例-F"><a href="#实例-F" class="headerlink" title="实例 F"></a>实例 F</h4><p>这是个很喜欢动手动脚而且都改的乱七八糟的 App，播放器是基于 <code>ijkplayer.so</code> 魔改的 <code>F.so</code>，推流服务也是各种魔改，所以算是个孤例吧；该魔改 <code>F.so</code> 也实现了 FLV 的 <code>HEVC</code> 扩展，而且解密和 H264 类似，下面以 HEVC 解密为例。</p>
+<p>App 加了个梆梆免费版，脱修之后可以 hook，直接从 tcpdump&#x2F;wireshark 中抓个源，下载个样本视频，播放有声音无画面，用 010 Editor 打开，如下图：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/2.2.02.png' data-fancybox='default' data-caption='010 parse'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/2.2.02.png" class="lazyload" data-srcset="/img/2022/ReFLV/2.2.02.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="010 parse"></a><span class='image-caption'>010 parse</span></div></div>
+
+<p>图中紫色部分包括 <code>Tag header，Video Tag header</code> 以及第一个 <code>NALU</code>，这些都是正常的，可以正常使用模板解析，但第二个 <code>NALU</code> 就出错了，问题应该出在这里。</p>
+<p>IDA 中拖入该 so，搜索字符串 ijk 确定版本号，下载 Bilibili 维护的对应版本 FFmpeg，在 Source Insight 中打开。</p>
+<p>根据导出表，有个 <code>decrypt()</code> 函数很可疑，hook 一下确定了该位置是用于 AVC 解密的，函数如下：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/2.2.03.png' data-fancybox='default' data-caption='fun decrypt'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/2.2.03.png" class="lazyload" data-srcset="/img/2022/ReFLV/2.2.03.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="fun decrypt"></a><span class='image-caption'>fun decrypt</span></div></div>
+
+<p>调用了 <code>OpenSSL</code> 来解密，猜测 <code>HEVC</code> 的解密也用到了这几个 <code>OpenSSL</code> 的函数，查找引用，找到了 <code>sub_F3FAC</code>，这个函数只有一个调用者：<code>sub_F4024</code>，根据其中的字符串在 Source Insight 中查找，基本可以判定该函数为：<code>hevc_parse()</code>，显然是对解析器动了手脚，插入位置在：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/2.2.08.png' data-fancybox='default' data-caption='hevc_parse'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/2.2.08.png" class="lazyload" data-srcset="/img/2022/ReFLV/2.2.08.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="hevc_parse"></a><span class='image-caption'>hevc_parse</span></div></div>
+
+<p>导入 <code>ijk.til</code>，下面还原 <code>hevc_parse</code> 的参数类型，代码的可读性就非常高了，如下图：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/2.2.04.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/2.2.04.png" class="lazyload" data-srcset="/img/2022/ReFLV/2.2.04.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>先寻找 <code>sign_hevc</code> 标志，在 <code>0,40,41,42,47</code> 位置上寻找，标志前的不做变动，然后在模式串上做一些乱七八糟的操作得到两个固定串，分别作为 <code>key,iv</code> 用来做第一次解密：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/2.2.05.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/2.2.05.png" class="lazyload" data-srcset="/img/2022/ReFLV/2.2.05.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>密文长度为 <code>0x13B</code>，解密后直接保存到密文的位置，解密出来的内容作为以后解密的参数，其前 <code>2B</code> 用作长度，表示未加密长度，中间 <code>1B</code> 无用，后 <code>16B</code> 用作第二次解密的密钥：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/2.2.06.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/2.2.06.png" class="lazyload" data-srcset="/img/2022/ReFLV/2.2.06.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>最后解密：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/2.2.07.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/2.2.07.png" class="lazyload" data-srcset="/img/2022/ReFLV/2.2.07.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>由上总结该加密的 NALU 语法为：<code>[reserved_data][sign_hevc(8B)][enc_header(0x13B)][unenc_data][enc_data]</code>。</p>
+<p>这样 <code>NALU</code> 的解密就可以写出来了，AVC 和 HEVC 类似，不赘述了，感兴趣直接看代码吧 <code>ReF</code><a target="_blank" rel="noopener" href="https://github.com/yzctzl/ReFLV/blob/master/ReFLV/ReF.py">^15</a>。</p>
+<h3 id="Decoder"><a href="#Decoder" class="headerlink" title="Decoder"></a>Decoder</h3><p>TODO: 需要样本</p>
+<h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><p>为了描述方便，这里的滤镜含义包括 FFmpeg 提供的和自定义的所有直接对 <code>AVFrame(可用来存放 YUV)</code> 的操作。</p>
+<p>与其他类型的加密不同，如果应用了某种滤镜，那首先要解码拿到 <code>AVFrame</code>，然后还原，再送去编码封装才能还原画面，也就是说需要重新编码，只能拿到 <code>rip</code>。</p>
+<p>另外添加滤镜的画面也可能与原画面之间存在某种联系，比如：亮度变化明显的区域在添加滤镜之后可能依旧会出现类似变化。因为滤镜作用的是 <code>AVFrame</code>，应用滤镜之后的 <code>AVFrame</code> 会发送给 <code>encoder</code> 编码，而编码是有损的！因此不能对 <code>AVFrame</code> 加密，这就导致只能对其做一些简单的映射然后播放时还原，这会使其编码后的视频保留有原视频的一些特征。</p>
+<p>我看过一个平台，但很可惜目前其已停止运行，<code>so</code> 也找不到了，它可能采用了这样的方式：大致为：把 <code>YUV</code> 分成等宽的 10 个条带，对这其打乱顺序，这部分对解码后 <code>YUV</code> 进行操作；编码之后的画面自然也是乱序的，在播放器的实现中，解码拿到 <code>YUV</code> 之后将它们的顺序恢复。</p>
+<h4 id="实测"><a href="#实测" class="headerlink" title="实测"></a>实测</h4><p>虽然没有样本，不过思路有了，根据思路我自己实现了一个，并对其进行了还原，在调用 <code>avcodec_send_frame()</code> 之前做打乱顺序的操作，核心部分如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 仅适用于 YUV420p，如果不是，可以加个 format 滤镜转一下</span></span><br><span class="line"><span class="type">uint8_t</span> *temp[<span class="number">8</span>] = &#123;&#125;;</span><br><span class="line"><span class="type">uint8_t</span> *tt = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">2</span>; j &gt;= <span class="number">0</span>; j--)&#123;</span><br><span class="line">    temp[j] = av_malloc(_size);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> m = j ? <span class="number">2</span> : <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> _size = result_frame-&gt;linesize[j] * result_frame-&gt;height / m;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> _slic = _size / <span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> _map[<span class="number">10</span>] = &#123;<span class="number">5</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">8</span>, <span class="number">0</span>&#125;;</span><br><span class="line">    <span class="comment">// int r_map[10] = &#123;9, 6, 1, 4, 7, 0, 3, 5, 8, 2&#125;;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>; i &lt; _size; i++)</span><br><span class="line">        temp[j][i] = result_frame-&gt;data[j][_map[i / _slic] * _slic + (i % _slic)];</span><br><span class="line">    </span><br><span class="line">    tt = result_frame-&gt;data[j]; result_frame-&gt;data[j] = temp[j]; av_free(tt);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/2.3.01.png' data-fancybox='default' data-caption='filter result'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/2.3.01.png" class="lazyload" data-srcset="/img/2022/ReFLV/2.3.01.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="filter result"></a><span class='image-caption'>filter result</span></div></div>
+
+<p>还原结果：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/2.3.02.png' data-fancybox='default' data-caption='filter result'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/2.3.02.png" class="lazyload" data-srcset="/img/2022/ReFLV/2.3.02.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="filter result"></a><span class='image-caption'>filter result</span></div></div>
+
+<p>效果依旧带有很强的可辨识性，所以也可以实现一个更复杂的版本，比如：先对 YUV 分别做异或然后再分割为 16*8 个条带，这样就与灰屏差不多了。</p>
+<p>使用滤镜的缺点也不小，首先不可能得到源码需要重编码，必然导致客户端画质下降；其次因为分割的原因导致画面失去连贯性，这样编码器在边界处需要更复杂的计算、更多的比特来储存信息，于是编码器效率降低了；最后这种方式更容易辨识，进而还原。我个人认为这并非一种理想的方式。</p>
+<h3 id="Codec"><a href="#Codec" class="headerlink" title="Codec"></a>Codec</h3><p>FFmpeg 自带的解码器效率一般，<code>H264/H265</code> 最常用的解码器是 <code>x264/x265</code>，尽管它们并未完整地实现标准，不过其对编解码过程做了很多优化，效率很好，所以应用最广。</p>
+<p>解码器目前我还从未见过魔改的，可能是因为这部分足够复杂，我对此了解有限，下面介绍一种确定视频是否存在 <code>Codec</code> 魔改的方法：</p>
+<ol>
+<li>首先排除掉读取和解析过程中做了魔改，若已魔改先对其修复</li>
+<li>然后使用码流分析工具，比如：<code>Elecard StreamEye</code> 查看画面是否正常</li>
+<li>如果正常或部分正常，那大概率没有魔改，更可能是解码之前的步骤没处理干净</li>
+<li>如果所有宏块或一类尺寸的宏块全都报错显示不正常，那应该是 <code>Codec</code> 做了魔改</li>
+</ol>
+<p>对第一步，有个判断解码之前是否存在魔改的思路：hook 函数 <code>avcodec_send_packet()</code> 其中的 <code>AVPacket</code> 结构体，输出其 data 属性的数据，然后对比下载的 FLV，如果能找到相同的数据估计没魔改，反之是做了魔改。</p>
+<h3 id="注"><a href="#注" class="headerlink" title="注"></a>注</h3><p>本节中介绍 FFmpeg 部分只是帮助理解实例所动的手脚，所介绍的可能只占 FFmpeg 的九牛一毛，如果想了解更多细节，可以阅读 雷神<a target="_blank" rel="noopener" href="https://blog.csdn.net/leixiaohua1020">^11</a> 的博客与 《FFmpeg 从入门到精通》 一书。</p>
+<h2 id="自定义实现"><a href="#自定义实现" class="headerlink" title="自定义实现"></a>自定义实现</h2><p>上一节分析了 FFmpeg 中的各个环节中容易动手脚的地方，可 FFmpeg 毕竟只占半壁江山，也会遇到不用 FFmpeg 的大佬去手撸 IO 交互、流媒体协议或者解析器的情况。比如下面这个例子。</p>
+<h3 id="实例-D"><a href="#实例-D" class="headerlink" title="实例 D"></a>实例 D</h3><p>这是某公司开发的音视频直播 SDK，宣称全自研、跨平台、延迟极低。解码部分可用硬件解码器，其他部分全自研。我这个是安卓平台的 App，核心库为 <code>D.so</code>，其中包含两套接口，以较新的 <code>V2</code> 接口为例。</p>
+<p>hook 一下 <code>V2</code> 接口中的 <code>setUrl</code> 抓个源，然后下个样本，用 010 Editor 打开，解析一下容器：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/3.1.04.png' data-fancybox='default' data-caption='D Sample'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/3.1.04.png" class="lazyload" data-srcset="/img/2022/ReFLV/3.1.04.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="D Sample"></a><span class='image-caption'>D Sample</span></div></div>
+
+<p>整个文件所有视频帧全是 I 帧，这显然有问题，如何还原呢？接着看：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/3.1.05.png' data-fancybox='default' data-caption='D Sample'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/3.1.05.png" class="lazyload" data-srcset="/img/2022/ReFLV/3.1.05.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="D Sample"></a><span class='image-caption'>D Sample</span></div></div>
+
+<p>首先注意到整个容器除了 <code>v_frame_type</code> 恒等于 <code>1</code> 外一切正常；重要的：一个 <code>Tag</code> 中包含多个 <code>NALU</code>。</p>
+<p><code>Tag 116</code> 中包含 <code>6 个 NALU</code>，前两个是 <code>SPS(nal_unit_type == 7)、PPS(nal_unit_type == 8)</code>，后面四个是 <code>IDR(nal_unit_type == 5)</code> 帧的四个切片；<code>Tag 120</code> 中包含<code>四个非 IDR 切片(nal_unit_type == 1)</code>，可以是 <code>I/P/B</code> 的切片，都不是关键帧；基于此，我们可以把 <code>IDR</code> 帧所在 <code>Tag</code> 保持不变，其他修复为 <code>P/B frame(v_frame_type = 2)</code>。</p>
+<p>下面来刚 D.so，这里用的 <code>Ghidra</code>，感觉效果更好一点，流程比较复杂，要理清框架不容易，为了方便理解，我制作了一张调用结构图：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/3.1.01.png' data-fancybox='default' data-caption='D.so'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/3.1.01.png" class="lazyload" data-srcset="/img/2022/ReFLV/3.1.01.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="D.so"></a><span class='image-caption'>D.so</span></div></div>
+
+<p>前面无关紧要就不扣细节了，有些符号可以猜测函数功能，感兴趣可以去看反汇编。下面先看 <code>FLV Parser</code> 部分：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/3.1.02.png' data-fancybox='default' data-caption='Parser'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/3.1.02.png" class="lazyload" data-srcset="/img/2022/ReFLV/3.1.02.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Parser"></a><span class='image-caption'>Parser</span></div></div>
+
+<p>是不是有种很熟悉的感觉，就是一层一层的脱掉 <code>header</code> 然后 parse，其间一边设置结构体一边根据值判断接下来的操作；大致过程为先处理 <code>FLV header</code>，然后循环 <code>ParserTag</code>：解析 <code>Tag header</code>、<code>Video Tag header/Audio Tag header</code>，最后音频码流直接就交给下一层，视频码流添加 <code>StartCode</code> 也交给下一层。这个过程和 <code>ReFLV</code> 类似，相当于 <code>FFmpeg</code> 中的 <code>flv_read_packet</code>。</p>
+<p>我们把精力集中到解密音视频的具体操作，看调用流程：无论音视频都是首先调用 <code>ParserHeader</code>，然后创建 <code>Decryptor</code> 并调用 <code>DecryptPacket</code> 来解密，该函数首先获取一个 <code>SkipPlainTextSize</code> 的长度，表示未加密长度，然后分别根据音频和视频调用对应解密函数，解密完成 <code>Attach</code> 到结果中。</p>
+<p>如果是音频，直接调用 <code>AES CBC Decrypt</code>；如果是视频，首先要 <code>NalUnEscape</code>，它有个逆函数是 <code>NalEscape</code> 负责把 <code>payload(RBSP)</code> 中的 <code>0x000001</code> 变为 <code>0x00000301</code>，来避免解码过程中遇到 <code>StartCode</code> 而产生错误，那么该函数则负责从 <code>0x00000301</code> 中去掉 <code>0x03</code>，还原真实负载之后再解密。</p>
+<p>首先是 <code>ParserHeader</code>，这个 <code>Header</code> 在哪里呢？看下面的例子：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/3.1.07.png' data-fancybox='default' data-caption='enc header'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/3.1.07.png" class="lazyload" data-srcset="/img/2022/ReFLV/3.1.07.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="enc header"></a><span class='image-caption'>enc header</span></div></div>
+
+<p>这里红色的 <code>Enc header(13B)</code> 就是需要解析加密头，接下来直接看反汇编解析就行了，这里就不看了比较简单，直接根据上图的例子解析结果如下，名称是我根据功能随便起的：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/3.1.08.png' data-fancybox='default' data-caption='parse header'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/3.1.08.png" class="lazyload" data-srcset="/img/2022/ReFLV/3.1.08.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="parse header"></a><span class='image-caption'>parse header</span></div></div>
+
+<p>接下来无论音频还是视频都去初始化 <code>Decryptor</code>，主要是初始化结构体 <code>EncryptBase</code>：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/3.1.06.png' data-fancybox='default' data-caption='Parser'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/3.1.06.png" class="lazyload" data-srcset="/img/2022/ReFLV/3.1.06.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Parser"></a><span class='image-caption'>Parser</span></div></div>
+
+<p>根据 EncryptBase 的构造器和 get 和 set 函数可以还原红框中的结构体，<code>PTR_FUN</code> 指向函数指针列表，后面解密会用到其中的 Decrypt 函数；这里有四种解密：<code>AES/AESFix/SM4/SM4Fix</code>，根据 <code>p3/p5</code> 来判断用哪种，下面以 <code>AES CBC</code> 为例。</p>
+<p>然后都调用 <code>DecryptPacket</code> 用来解密数据，如下图：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2022/ReFLV/3.1.09.png' data-fancybox='default' data-caption='DecryptPacket'><img fancybox itemprop="contentUrl" src="/img/2022/ReFLV/3.1.09.png" class="lazyload" data-srcset="/img/2022/ReFLV/3.1.09.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="DecryptPacket"></a><span class='image-caption'>DecryptPacket</span></div></div>
+
+<p>这个函数标注的比较清晰了，右下的绿框中是调用 <code>OpenSSLAESCBCEncrypt::Decrypt</code> 之前的最后一个函数，其具体操作为：</p>
+<ol>
+<li>做了一些检查是否满足解密条件</li>
+<li>视频的话需要首先处理 startcode，将 0x000003 &#x3D;&gt; 0x0000</li>
+<li>根据上上图中 PTR_FUN 的赋值，调用 AES CBC 解密函数</li>
+<li>解密完成后根据 p6 判断解密数据中是否带 crc32 校验，位于最后 4B</li>
+<li>如果带那计算 crc32 判断和最后 4B 是否相同</li>
+</ol>
+<p>至此，流程就搞清楚了，key 和 iv 是固定的很简单，就不赘述了。</p>
+<p>实现细节见：<code>ReD</code><a target="_blank" rel="noopener" href="https://github.com/yzctzl/ReFLV/blob/master/ReFLV/ReD.py">^16</a></p>
+<h4 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h4><p>不像 FFmpeg 可以对照源码，确定函数作用的码流范围是件头疼的事情，可以考虑以下方式：</p>
+<ol>
+<li>hook 解密函数获取密文和明文，与此同时下载视频，然后对照获取密文偏移，从而倒推 header</li>
+<li>找具有标志性的数值比如：TagType 和 CodecID 等，然后细心追踪查看内部调用的偏移</li>
+<li>本例用到了一串固定字符用来标示 header，可据此确定偏移</li>
+</ol>
+<h3 id="实例-L"><a href="#实例-L" class="headerlink" title="实例 L"></a>实例 L</h3><p>这是某云厂商的短视频配套 SDK，包括协议和音视频全自研，跨平台，支持 FLV 加密。但有趣的是其并未为其云上客户提供该接口，而是自家产品用上了。</p>
+<p>首先确定做加密的位置，目标 app 中有 160 个 so，和音视频相关的有十几个，和 ffmpeg 相关的几个库 trace 了 AVFrame 相关的函数，无果，剩下的几个拖到 IDA 里看看有没有 rtmp&#x2F;FLV&#x2F;AES 等关键词，然后根据偏移 trace，最后找到其与 FLV 加解密相关的库是 <code>L.so</code>，其中实现了被称为 F1VAESC0dec 的伪编解码器来做加解密。</p>
+<p><code>L.so</code> 中没有符号，分析起来比较困难，刚不动，账号还差点被封了，吓个半死。于是转过头分析 iOS 平台，发现反汇编代码中是有这部分加密的，只是没有提供接口和说明。</p>
+<p>SDK 中是静态库，看起来太麻烦，我就自己编译了一个带符号的 Demo 分析了一下。下面直接看一下调用流程：</p>
+<p>TODO：分析 + 流程图 + 代码</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>第一次搞 FLV 视频的加密与解密到现在大概有一年了，当时遇到了实例 F，但是困扰了很久，断断续续地估计搞了大半个月才搞定了大部分，其实主要是看音视频相关内容，这期间也有了这篇文章的轮廓，最开始文章是概述性的，最近我又翻出来，制作了很多新图，修改了很多内容变成了现在这种讲解性的。第一次搞定之后还是非常有成就感的，不过也搁置了很长一段时间，之后陆陆续续又遇到了其他例子，本文的内容也逐渐多了点。</p>
+<p>有时候感觉自己集中精力搞明白一件事情之后下次总想着捡现成的，结果很久之后发现其实从来都没搞明白过。音视频不必说自然是博大精深，常学常新，而逆向总给我一种好像搞明白一件事情的幻觉，可很多时候自己基础并不扎实，那就只是空中楼阁。</p>
+<p>期间遇到了非常多问题，感谢网络各路音视频开发大佬，也感谢给我提供样本的哥们。</p>
+
+  </div>
+  
+  
+    
+    <div class='footer'>
+       <!-- 参考资料、相关资料等 -->
+      
+       <!-- 相关文章 -->
+      
+      <!-- 版权声明组件 -->
+      
+      <!-- 打赏组件 -->
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/AV/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>AV</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/FFmpeg/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>FFmpeg</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Live/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Live</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/FLV/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>FLV</p></a></div>
+  <span hidden itemprop="keywords">AV FFmpeg Live FLV</span>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://yzctzl.github.io/2022/ReFLV/&title=FLV：不许动手动脚 - Yzctzl&summary="
+          
+          >
+          
+            <img src="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://yzctzl.github.io/2022/ReFLV/&title=FLV：不许动手动脚 - Yzctzl&summary="
+          
+          >
+          
+            <img src="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+      
+        
+        <div class='hoverbox'>
+          <a class='share'><img src="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/wechat.png" class="lazyload" data-srcset="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/wechat.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a>
+          <div class='target'>
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAEYCAAAAACi5bZQAAAC8ElEQVR42u3aSXLDMAwEQP//08k9SwkbXYbUvMXRQrYuUwBeX9af64UADBgwYMCAWQPzKq5fD/zxe/S+7vXR50TPAwYMGDBgwIDZBxMOQMnrowfPwl19kOp5wIABAwYMGDB7YbIHiG6kG/DCAa17HjBgwIABAwbM42CyG68WpMCAAQMGDBgwYE4FvKkgVg2MYMCAAQMGDJjnwqQbVM1gdwVyqnAGBgwYMGDAgLkPTHZlA9+7/y6fBwwYMGDAgAGzBqa7qoEqWmiqvqd8HjBgwIABAwbMGph3FZSyha3uh6q+BwwYMGDAgAGzD+byhkMDQ13gaIAEAwYMGDBgwNwPpruhLGj29+xAUvZ5YMCAAQMGDJj9MNXGWnbD0w26auHqXzgwYMCAAQMGzHqY7gDP9IBQtZCW/UBgwIABAwYMmPvAZCGqGz4NGA6gYMCAAQMGDJh1MNlC0xRcNxhmB57LnUgwYMCAAQMGzMfBTDfGugWm7AfIQrQnw8GAAQMGDBgwHwMz1SirAlYHjy4HgJKBDwwYMGDAgAFzX5hugaga6LoFq2wDEQwYMGDAgAFzH5ju4E826E0VxMY6kWDAgAEDBgyYj4WpNtyi13cPcuoDggEDBgwYMGD2w7yrQVZt7FULUNlGGxgwYMCAAQNmH0z5AcmGXDfgTb0vPDgEBgwYMGDAgFkDM9UYi/6/OyB0rHEHBgwYMGDAgFkLU22ETQNWG2zpQBcNeGDAgAEDBgyYNTDVDUytakDMBkcwYMCAAQMGzF6Y7po68FQhq13oAgMGDBgwYMCsgTkVmKqFqu6gUXvACAwYMGDAgAGzDiYb6KYbdt0AOdaoAwMGDBgwYMCshak23KYOVP19rFAGBgwYMGDAgHkcTLXxlYXqwl0+HwwYMGDAgAHzWJhuQSoLUt332wMeGDBgwIABA+Y4TPYA0UA1XYCaDpJgwIABAwYMmL0w1cZV92Dd92XBL+8DAwYMGDBgwKyBscCAAQMGDBgwy9Y37kBg2W908FEAAAAASUVORK5CYII=">
+          </div>
+        </div>
+      
+    
+      
+        <a class="-mob-share-telegram" title="" rel="external nofollow noopener noreferrer noopener"
+          
+            target="_blank" href="https://t.me/share/url?url=https://yzctzl.github.io/2022/ReFLV/&text=FLV：不许动手动脚 - Yzctzl"
+          
+          >
+          
+            <img src="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/telegram.png" class="lazyload" data-srcset="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/telegram.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+    <!-- Custom Files bottomMeta begin -->
+    
+    <!-- Custom Files bottomMeta end -->
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2023/360t7/'>
+          <p class='title'><i class="fa-solid fa-chevron-left" aria-hidden="true"></i>360 T7 刷 OpenWRT 小记</p>
+          <p class='content'>背景家里原来用的是运营商给的 吉比特GS3101，这款是光猫路由器二合一，虽然只有 2.4G，但因主用网线，一直没动力更换。
+最近看到 恩山 很多人在玩 360T7，一百出头，用来替换使用频率不...</p>
+        </a>
+      
+      
+        <a class='next' href='/2022/FFmpeg/'>
+          <p class='title'>FFmpeg 编解码基础<i class="fa-solid fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>VideoHEVC二压12ffmpeg -y -i input -c:v libx265 -b:v 1300k -x265-params pass=1 -an -f null /dev/null...</p>
+        </a>
+      
+    </div>
+  
+  <!-- Custom Files postEnd begin-->
+  
+  <!-- Custom Files postEnd end-->
+</article>
+
+
+  
+
+
+  <article class="post white-box shadow floatable blur" id="comments">
+    <span hidden>
+      <meta itemprop="discussionUrl" content="/2022/ReFLV/index.html#comments">
+    </span>
+    <p ct><i class='fa-solid fa-comments'></i> 评论</p>
+    
+
+    <div id="layoutHelper-comments"></div>
+
+  </article>
+
+
+
+
+
+
+</div>
+<aside id='l_side' itemscope itemtype="http://schema.org/WPSideBar">
+  
+
+  
+    
+    
+      
+    
+  
+
+
+<div class="widget-sticky pjax">
+
+  
+  
+
+
+  <section class="widget toc-wrapper desktop mobile " id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#FLV"><span class="toc-text">FLV</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E6%A0%87%E5%87%86"><span class="toc-text">容器标准</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#FLV-header"><span class="toc-text">FLV header</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#FLV-body"><span class="toc-text">FLV body</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Tag-header"><span class="toc-text">Tag header</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NALU"><span class="toc-text">NALU</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Annex-F"><span class="toc-text">Annex.F</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E7%BC%96%E7%A0%81"><span class="toc-text">扩展编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HEVC"><span class="toc-text">HEVC</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AV1-Opus"><span class="toc-text">AV1&#x2F;Opus</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-text">工具</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FFmpeg"><span class="toc-text">FFmpeg</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Demuxer"><span class="toc-text">Demuxer</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B-N"><span class="toc-text">实例 N</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Parser"><span class="toc-text">Parser</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%98%E5%8E%9F"><span class="toc-text">还原</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B-F"><span class="toc-text">实例 F</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Decoder"><span class="toc-text">Decoder</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Filter"><span class="toc-text">Filter</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E6%B5%8B"><span class="toc-text">实测</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Codec"><span class="toc-text">Codec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8"><span class="toc-text">注</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AE%9E%E7%8E%B0"><span class="toc-text">自定义实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B-D"><span class="toc-text">实例 D</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93-1"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B-L"><span class="toc-text">实例 L</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </section>
+
+  
+
+</div>
+
+
+<!-- 没有 pjax 占位会报错 万恶的 pjax -->
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <!-- Custom Files side begin -->
+  
+  <!-- Custom Files side end -->
+</aside>
+
+
+
+          <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<pjax>
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+  pdata.commentConfig={};
+  //  see: /layout/_partial/scripts/_ctrl/coverCtrl.ejs
+  
+    // header
+    var l_header=document.getElementById("l_header");
+    
+    l_header.classList.add("show");
+    
+    
+      // cover
+      var cover_wrapper=document.querySelector('#l_cover .cover-wrapper');
+      var scroll_down=document.getElementById('scroll-down');
+      cover_wrapper.id="none";
+      cover_wrapper.style.display="none";
+      scroll_down.style.display="none";
+    
+  
+</script>
+</pjax>
+        </div>
+        
+  
+  <footer class="footer clearfix"  itemscope itemtype="http://schema.org/WPFooter">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper" itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          
+            
+              <a href="/atom.xml"
+                class="social fas fa-rss flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer" itemprop="url">
+                
+              </a>
+            
+          
+            
+              <a href="mailto:yzctzl@gmail.com"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer" itemprop="url">
+                
+              </a>
+            
+          
+            
+              <a href="https://github.com/yzctzl"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer" itemprop="url">
+                
+              </a>
+            
+          
+            
+              <a href="https://t.me/tgMrZ"
+                class="social fa-brands fa-telegram flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer" itemprop="url">
+                
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/#5.8.0" target="_blank" class="codename">Volantis</a>
+        作为主题，总访问量为
+          <span id="busuanzi_value_site_pv"><i class="fa-solid fa-loader fa-spin fa-fw" aria-hidden="true"></i></span>
+          次
+        
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2019-2023 YZCTZL All Rights Reserved</a></p>
+
+        </div>
+      
+    
+    <!-- Custom Files footer begin-->
+    
+    <!-- Custom Files footer end-->
+  </footer>
+
+
+        <a id="s-top" class="fa-solid fa-arrow-up fa-fw" href="/" onclick="return false;" title="top"></a>
+      </div>
+    </div>
+    <div>
+      <script>
+  /******************** volantis.dom ********************************/
+  // 页面选择器 将dom对象缓存起来 see: /source/js/app.js etc.
+  volantis.dom.bodyAnchor = volantis.dom.$(document.getElementById("safearea")); // 页面主体
+  volantis.dom.topBtn = volantis.dom.$(document.getElementById('s-top')); // 向上
+  volantis.dom.wrapper = volantis.dom.$(document.getElementById('wrapper')); // 整个导航栏
+  volantis.dom.coverAnchor = volantis.dom.$(document.querySelector('#l_cover .cover-wrapper')); // 1个
+  volantis.dom.switcher = volantis.dom.$(document.querySelector('#l_header .switcher .s-search')); // 搜索按钮   移动端 1个
+  volantis.dom.header = volantis.dom.$(document.getElementById('l_header')); // 移动端导航栏
+  volantis.dom.search = volantis.dom.$(document.querySelector('#l_header .m_search')); // 搜索框 桌面端 移动端 1个
+  volantis.dom.mPhoneList = volantis.dom.$(document.querySelectorAll('#l_header .m-phone .list-v')); //  手机端 子菜单 多个
+</script>
+
+<script>
+  
+  volantis.css("https://unpkg.com/volantis-static@0.0.1654736714924/libs/@fortawesome/fontawesome-free/css/all.min.css");
+  
+  
+  
+</script>
+
+<!-- required -->
+
+
+<!-- internal -->
+
+<script src="/js/app.js"></script>
+
+
+
+
+
+
+<!-- rightmenu要在darkmode之前（ToggleButton） darkmode要在comments之前（volantis.dark.push）-->
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "color-scheme";
+const rootElementDarkModeAttributeName = "color-scheme";
+const setLS = (k, v) => {
+    localStorage.setItem(k, v);
+};
+const removeLS = (k) => {
+    localStorage.removeItem(k);
+};
+const getLS = (k) => {
+    return localStorage.getItem(k);
+};
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+  getCustomDarkMode();
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+/**
+ * get target mode
+ */
+ const getCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  if(currentSetting=="dark"){
+    volantis.dark.mode="light";
+  }else{
+    volantis.dark.mode="dark";
+  }
+  // console.log(volantis.dark.mode)
+};
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+/**
+ * 暗黑模式触发器
+ */
+volantis.dark.toggle=()=>{
+  const mode = toggleCustomDarkMode();
+  applyCustomDarkModeSettings(mode);
+  // 使用 volantis.dark.push 方法传入volantis.dark.toggle回调函数 参见layout/_partial/scripts/global.ejs
+  volantis.dark.method.toggle.start();
+}
+/**
+ * bind event for toggle button
+ */
+
+function bindToggleButton() {
+  var btn= document.querySelectorAll("#wrapper .toggle-mode-btn,#rightmenu-wrapper .toggle-mode-btn")
+  btn.forEach(function (e) {
+    volantis.dom.$(e).on('click',volantis.dark.toggle);
+  })
+}
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", ()=>{
+  volantis.requestAnimationFrame(bindToggleButton)
+});
+volantis.pjax.push(bindToggleButton);
+
+const darkModelListeners={
+  dark:(mediaQueryList )=>{
+    if(mediaQueryList.matches){
+      volantis.dark.mode = "dark";
+    }
+    volantis.dark.method.toggle.start();
+  },
+  light:(mediaQueryList)=>{
+    if(mediaQueryList.matches){
+      volantis.dark.mode = "light";
+    }
+    volantis.dark.method.toggle.start();
+  }
+}
+window.matchMedia('(prefers-color-scheme: dark)').addListener(darkModelListeners.dark)
+window.matchMedia('(prefers-color-scheme: light)').addListener(darkModelListeners.light)
+</script>
+
+
+
+
+<script>
+  function loadIssuesJS() {
+    
+      const sites_api = document.getElementById('sites-api');
+      if (sites_api != undefined && typeof SitesJS === 'undefined') {
+        volantis.js("/js/plugins/tags/sites.js")
+      }
+    
+    
+      const friends_api = document.getElementById('friends-api');
+      if (friends_api != undefined && typeof FriendsJS === 'undefined') {
+        volantis.js("/js/plugins/tags/friends.js")
+      }
+    
+    
+      const contributors_api = document.getElementById('contributors-api');
+      if (contributors_api != undefined && typeof ContributorsJS === 'undefined') {
+        volantis.js("/js/plugins/tags/contributors.js")
+      }
+    
+  };
+  loadIssuesJS()
+  volantis.pjax.push(()=>{
+    loadIssuesJS();
+  })
+
+</script>
+
+
+
+
+  <script defer src="https://unpkg.com/volantis-static@0.0.1654736714924/libs/vanilla-lazyload/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+
+<script>
+  window.FPConfig = {
+	delay: 0,
+	ignoreKeywords: ["#"],
+	maxRPS: 6,
+	hoverDelay: 0
+  };
+</script>
+<script defer src="https://unpkg.com/volantis-static@0.0.1654736714924/libs/flying-pages/flying-pages.min.js"></script>
+
+
+
+
+
+
+
+
+
+      <script>
+  volantis.layoutHelper("comments",`<div id="giscus_container"></div>`)
+
+  volantis.giscus = {};
+
+  function check_giscus() {
+    if (volantis.dark.mode === "dark") {
+      volantis.giscus.Theme = 'dark';
+    } else {
+      volantis.giscus.Theme = 'light';
+    }
+
+    return document.getElementById("giscus_container");
+  }
+
+  function pjax_giscus() {
+    const HEAD = check_giscus();
+    if (!HEAD) return;
+    let cfg = Object.assign({"theme":{"light":"light","dark":"dark"},"repo":"yzctzl/yzctzl.github.io","repo-id":"R_kgDOIt5aTA","category":"Announcements","category-id":"DIC_kwDOIt5aTM4CUCBD","mapping":"pathname","reactions-enabled":"1","emit-metadata":"0","lang":"zh-CN"},pdata.commentConfig)
+    const script = document.createElement('script');
+    script.setAttribute('src', 'https://giscus.app/client.js');
+    Object.keys(cfg).forEach(k=>{
+      if (k != "theme") {
+        script.setAttribute('data-'+k, cfg[k]);
+      }
+    })
+    script.setAttribute('data-theme', volantis.giscus.Theme);
+    script.setAttribute('crossorigin', "anonymous");
+    HEAD.appendChild(script);
+  }
+
+  function dark_giscus() {
+    const HEAD = check_giscus();
+    if (!HEAD) return;
+
+    const message = {
+      setConfig: {
+        theme: volantis.giscus.Theme
+      }
+    };
+    const giscusIframe = document.querySelector('iframe.giscus-frame');
+    giscusIframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+  }
+  pjax_giscus();
+  volantis.pjax.push(pjax_giscus);
+  volantis.dark.push(dark_giscus);
+</script>
+
+    
+
+
+
+
+  <script defer src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" data-pjax></script>
+
+
+<!-- optional -->
+
+  <script>
+  const SearchServiceDataPathRoot = ("/" || "/").endsWith("/") ?
+    "/" || "/" :
+    "//" || "/";
+  const SearchServiceDataPath = SearchServiceDataPathRoot + "content.json";
+
+  function loadSearchScript() {
+    // see: layout/_partial/scripts/_ctrl/cdnCtrl.ejs
+    return volantis.js("/js/search/hexo.js");
+  }
+
+  function loadSearchService() {
+    loadSearchScript();
+    document.querySelectorAll(".input.u-search-input").forEach((e) => {
+      e.removeEventListener("focus", loadSearchService, false);
+    });
+
+    document.querySelectorAll(".u-search-form").forEach((e) => {
+      e.addEventListener("submit", (event) => {
+        event.preventDefault();
+      }, false);
+    });
+  }
+
+  // 打开并搜索 字符串 s
+  function OpenSearch(s) {
+    if (typeof SearchService === 'undefined')
+      loadSearchScript().then(() => {
+        SearchService.setQueryText(s);
+        SearchService.search();
+      });
+    else {
+      SearchService.setQueryText(s);
+      SearchService.search();
+    }
+  }
+
+  // 访问含有 ?s=xxx  的链接时打开搜索 // 与搜索引擎 structured data 相关: /scripts/helpers/structured-data/lib/config.js
+  if (window.location.search && /^\?s=/g.test(window.location.search)) {
+    let queryText = decodeURI(window.location.search)
+      .replace(/\ /g, "-")
+      .replace(/^\?s=/g, "");
+    OpenSearch(queryText);
+  }
+
+  // 搜索输入框获取焦点时加载搜索
+  document.querySelectorAll(".input.u-search-input").forEach((e) => {
+    e.addEventListener("focus", loadSearchService, false);
+  });
+</script>
+
+
+
+
+
+
+
+  <script>
+
+
+
+  function pjax_highlightjs_copyCode(){
+    if (!(document.querySelector(".highlight .code pre") ||
+      document.querySelector(".article pre code"))) {
+      return;
+    }
+    VolantisApp.utilCopyCode(".highlight .code pre, .article pre code")
+  }
+  volantis.requestAnimationFrame(pjax_highlightjs_copyCode)
+  volantis.pjax.push(pjax_highlightjs_copyCode)
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+  function load_swiper() {
+    if (!document.querySelectorAll(".swiper-container")[0]) return;
+    volantis.css("https://unpkg.com/volantis-static@0.0.1654736714924/libs/swiper/swiper-bundle.min.css");
+    volantis.js("https://unpkg.com/volantis-static@0.0.1654736714924/libs/swiper/swiper-bundle.min.js").then(() => {
+      pjax_swiper();
+    });
+  }
+
+  load_swiper();
+
+  function pjax_swiper() {
+    volantis.swiper = new Swiper('.swiper-container', {
+      slidesPerView: 'auto',
+      spaceBetween: 8,
+      centeredSlides: true,
+      loop: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+  }
+
+  volantis.pjax.push(() => {
+    if (!document.querySelectorAll(".swiper-container")[0]) return;
+    if (typeof volantis.swiper === "undefined") {
+      load_swiper();
+    } else {
+      pjax_swiper();
+    }
+  });
+</script>
+
+
+<!-- pjax 标签必须存在于所有页面 否则 pjax error -->
+<pjax>
+
+</pjax>
+
+<script>
+  function listennSidebarTOC() {
+    const navItems = document.querySelectorAll(".toc li");
+    if (!navItems.length) return;
+    let targets = []
+    const sections = [...navItems].map((element) => {
+      const link = element.querySelector(".toc-link");
+      const target = document.getElementById(
+        decodeURI(link.getAttribute("href")).replace("#", "")
+      );
+      targets.push(target)
+      // 解除 a 标签 href 的 锚点定位, a 标签 href 的 锚点定位 会随机启用?? 产生错位???
+      link.setAttribute("onclick","return false;")
+      link.setAttribute("toc-action","toc-"+decodeURI(link.getAttribute("href")).replace("#", ""))
+      link.setAttribute("href","/")
+      // 配置 点击 触发新的锚点定位
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        // 这里的 addTop 是通过错位使得 toc 自动展开.
+        volantis.scroll.to(target,{addTop: 5, observer:true})
+        // Anchor id
+        history.pushState(null, document.title, "#" + target.id);
+      });
+      return target;
+    });
+
+    function activateNavByIndex(target) {
+      if (target.classList.contains("active-current")) return;
+
+      document.querySelectorAll(".toc .active").forEach((element) => {
+        element.classList.remove("active", "active-current");
+      });
+      target.classList.add("active", "active-current");
+      let parent = target.parentNode;
+      while (!parent.matches(".toc")) {
+        if (parent.matches("li")) parent.classList.add("active");
+        parent = parent.parentNode;
+      }
+    }
+
+    // 方案一：
+    volantis.activateNavIndex=0
+    activateNavByIndex(navItems[volantis.activateNavIndex])
+    volantis.scroll.push(()=>{
+      if (targets[0].getBoundingClientRect().top >= 0) {
+        volantis.activateNavIndex = 0
+      }else if (targets[targets.length-1].getBoundingClientRect().top < 0) {
+        volantis.activateNavIndex = targets.length-1
+      } else {
+        for (let index = 0; index < targets.length; index++) {
+          const target0 = targets[index];
+          const target1 = targets[(index+1)%targets.length];
+          if (target0.getBoundingClientRect().top < 0&&target1.getBoundingClientRect().top >= 0) {
+            volantis.activateNavIndex=index
+            break;
+          }
+        }
+      }
+      activateNavByIndex(navItems[volantis.activateNavIndex])
+    })
+
+    // 方案二：
+    // IntersectionObserver 不是完美精确到像素级别 也不是低延时性的
+    // function findIndex(entries) {
+    //   let index = 0;
+    //   let entry = entries[index];
+    //   if (entry.boundingClientRect.top > 0) {
+    //     index = sections.indexOf(entry.target);
+    //     return index === 0 ? 0 : index - 1;
+    //   }
+    //   for (; index < entries.length; index++) {
+    //     if (entries[index].boundingClientRect.top <= 0) {
+    //       entry = entries[index];
+    //     } else {
+    //       return sections.indexOf(entry.target);
+    //     }
+    //   }
+    //   return sections.indexOf(entry.target);
+    // }
+    // function createIntersectionObserver(marginTop) {
+    //   marginTop = Math.floor(marginTop + 10000);
+    //   let intersectionObserver = new IntersectionObserver(
+    //     (entries, observe) => {
+    //       let scrollHeight = document.documentElement.scrollHeight;
+    //       if (scrollHeight > marginTop) {
+    //         observe.disconnect();
+    //         createIntersectionObserver(scrollHeight);
+    //         return;
+    //       }
+    //       let index = findIndex(entries);
+    //       activateNavByIndex(navItems[index]);
+    //     }, {
+    //       rootMargin: marginTop + "px 0px -100% 0px",
+    //       threshold: 0,
+    //     }
+    //   );
+    //   sections.forEach((element) => {
+    //     element && intersectionObserver.observe(element);
+    //   });
+    // }
+    // createIntersectionObserver(document.documentElement.scrollHeight);
+  }
+
+  document.addEventListener("DOMContentLoaded", ()=>{
+    volantis.requestAnimationFrame(listennSidebarTOC)
+  });
+  document.addEventListener("pjax:success", ()=>{
+    volantis.requestAnimationFrame(listennSidebarTOC)
+  });
+</script>
+
+
+
+<script>
+  document.onreadystatechange = function () {
+    if (document.readyState == 'complete') {
+      // 页面加载完毕 样式加载失败，或是当前网速慢，或是开启了省流模式
+      const { saveData, effectiveType } = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {}
+      if (getComputedStyle(document.querySelector("#safearea"), null)["display"] == "none" || saveData || /2g/.test(effectiveType)) {
+        document.querySelectorAll(".reveal").forEach(function (e) {
+          e.style["opacity"] = "1";
+        });
+        document.querySelector("#safearea").style["display"] = "block";
+      }
+    }
+  }
+</script>
+
+
+  <script type="application/ld+json">[{"@context":"http://schema.org","@type":"Organization","name":"Yzctzl","url":"https://yzctzl.github.io/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},{"@context":"http://schema.org","@type":"Person","name":"yzctzl","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://yzctzl.github.io/","sameAs":["https://github.com/volantis-x"],"description":"奇迹"},{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https://yzctzl.github.io/","name":"Yzctzl"}},{"@type":"ListItem","position":2,"item":{"@id":"https://yzctzl.github.io/categories/AV/","name":"AV"}},{"@type":"ListItem","position":3,"item":{"@id":"https://yzctzl.github.io/2022/ReFLV/","name":"FLV：不许动手动脚"}}]},{"@context":"http://schema.org","@type":"WebSite","name":"Yzctzl","url":"https://yzctzl.github.io/","keywords":null,"description":"奇迹","author":{"@type":"Person","name":"yzctzl","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://yzctzl.github.io/","description":"奇迹"},"publisher":{"@type":"Organization","name":"Yzctzl","url":"https://yzctzl.github.io/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"potentialAction":{"@type":"SearchAction","name":"Site Search","target":{"@type":"EntryPoint","urlTemplate":"https://yzctzl.github.io?s={search_term_string}"},"query-input":"required name=search_term_string"}},{"@context":"http://schema.org","@type":"BlogPosting","headline":"FLV：不许动手动脚","description":"本文将着重分析 FLV 容器的语法语义，结合我遇到的几个安卓平台的 FLV 加密进行分析，同时对这几个样本做解密还原。","inLanguage":["zh-CN","en","default"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://yzctzl.github.io/2022/ReFLV/"},"author":{"@type":"Person","name":"yzctzl","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://yzctzl.github.io/"},"publisher":{"@type":"Organization","name":"Yzctzl","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"url":"https://yzctzl.github.io/2022/ReFLV/","wordCount":0,"datePublished":"2022-11-30T16:00:00.000Z","dateModified":"2023-08-10T07:53:31.086Z","articleSection":"AV","keywords":"AV,FFmpeg,Live,FLV","image":{"@type":"ImageObject","url":"/img/2022/ReFLV/2.3.01.png","width":1024,"height":768}}]</script>
+
+
+
+      
+        <!--
+  pjax重载区域接口：
+  1.  <pjax></pjax> 标签 pjax 标签必须存在于所有页面 否则 pjax error
+  2.  script[data-pjax]
+  3.  .pjax-reload script
+  4.  .pjax
+-->
+
+
+
+<script src="https://unpkg.com/volantis-static@0.0.1654736714924/libs/pjax/pjax.min.js"></script>
+
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox]):not([onclick="return false;"]):not([onclick="return!1"]):not([target="_blank"]):not([target="view_window"]):not([href$=".xml"])',
+        selectors: [
+          "head title",
+          "head meta[name=keywords]",
+          "head meta[name=description]",
+          
+          "#l_main",
+          "#pjax-header-nav-list",
+          ".pjax",
+          "pjax", // <pjax></pjax> 标签
+          "script[data-pjax], .pjax-reload script" // script标签添加data-pjax 或 script标签外层添加.pjax-reload 的script代码段重载
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000,
+        
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      // 使用 volantis.pjax.send 方法传入pjax:send回调函数 参见layout/_partial/scripts/global.ejs
+      volantis.pjax.method.send.start();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 使用 volantis.pjax.push 方法传入重载函数 参见layout/_partial/scripts/global.ejs
+      volantis.pjax.method.complete.start();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      if(volantis.debug) {
+        console.error(e);
+        console.log('pjax error: \n' + JSON.stringify(e));
+      }else{
+        // 使用 volantis.pjax.error 方法传入pjax:error回调函数 参见layout/_partial/scripts/global.ejs
+        volantis.pjax.method.error.start();
+        window.location.href = e.triggerElement.href;
+      }
+    });
+</script>
+
+      
+    </div>
+    <!-- import body_end begin-->
+    <!-- import body_end end-->
+    <!-- Custom Files bodyEnd begin-->
+    
+    <!-- Custom Files bodyEnd end-->
+    <!-- front-matter body_end begin -->
+    <!-- front-matter body_end end -->
+  </body>
+</html>

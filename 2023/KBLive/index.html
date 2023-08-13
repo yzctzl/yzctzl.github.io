@@ -1,0 +1,3840 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,default">
+    <head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/#5.8.0'>
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta name="Volantis" content="5.8.0">
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+  <link rel="canonical" href="https://yzctzl.github.io/2023/kblive/"/>
+  <!-- 渲染优化 -->
+    <meta http-equiv='x-dns-prefetch-control' content='on' />
+      <link rel='dns-prefetch' href='https://unpkg.com'>
+      <link rel="preconnect" href="https://unpkg.com" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Content-Security-Policy" content=" default-src 'self' https:; block-all-mixed-content; base-uri 'self' https:; form-action 'self' https:; worker-src 'self' https:; connect-src 'self' https: *; img-src 'self' data: https: *; media-src 'self' https: *; font-src 'self' data: https: *; frame-src 'self' https: *; manifest-src 'self' https: *; child-src https:; script-src 'self' https: 'unsafe-inline' *; style-src 'self' https: 'unsafe-inline' *; ">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+  <meta content="telephone=no" name="format-detection">
+  <!-- import head_begin begin -->
+  <!-- import head_begin end -->
+  <!-- Custom Files headBegin begin-->
+  
+  <!-- Custom Files headBegin end-->
+  <!-- front-matter head_begin begin -->
+  <!-- front-matter head_begin end -->
+    <link rel="shortcut icon" type='image/x-icon' href="/img/meta/logo.png">
+  <link rel="preload" href="/css/style.css" as="style">
+  <link rel="preload" href="https://unpkg.com/volantis-static@0.0.1654736714924/media/fonts/VarelaRound/VarelaRound-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+<link rel="preload" href="https://unpkg.com/volantis-static@0.0.1654736714924/media/fonts/UbuntuMono/UbuntuMono-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <!-- feed -->
+      <link rel="alternate" href="/atom.xml" title="Yzctzl" type="application/atom+xml">
+  <!-- 页面元数据 -->
+  <title>尝试逆个简单的 Flutter App —— 𝘚 - Yzctzl</title>
+  <meta name="keywords" content="Android,Flutter,Dart,Reverse,IDA,null">
+  <meta desc name="description" content="记录 𝘚 逆向的完整过程：很简单但 Flutter - yzctzl - Yzctzl">
+  
+<meta property="og:type" content="article">
+<meta property="og:title" content="尝试逆个简单的 Flutter App —— 𝘚">
+<meta property="og:url" content="https://yzctzl.github.io/2023/KBLive/index.html">
+<meta property="og:site_name" content="Yzctzl">
+<meta property="og:description" content="记录 𝘚 逆向的完整过程：很简单但 Flutter">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
+<meta property="article:published_time" content="2023-04-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-08-11T10:51:21.976Z">
+<meta property="article:author" content="yzctzl">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="Flutter">
+<meta property="article:tag" content="Dart">
+<meta property="article:tag" content="Reverse">
+<meta property="article:tag" content="IDA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
+  <style>
+    /* 首屏样式 */
+    #safearea {
+  display: none;
+}
+:root {
+  --color-site-body: #f4f4f4;
+  --color-site-bg: #f4f4f4;
+  --color-site-inner: #fff;
+  --color-site-footer: #666;
+  --color-card: #fff;
+  --color-text: #444;
+  --color-block: #f6f6f6;
+  --color-inlinecode: #d56d28;
+  --color-codeblock: #fff7ea;
+  --color-h1: #444;
+  --color-h2: #444;
+  --color-h3: #444;
+  --color-h4: #444;
+  --color-h5: #444;
+  --color-h6: #444;
+  --color-p: #444;
+  --color-list: #666;
+  --color-list-hl: #36ac91;
+  --color-meta: #888;
+  --color-read-bkg: #e0d8c8;
+  --color-read-post: #f8f1e2;
+  --color-copyright-bkg: #f5f5f5;
+}
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  padding: 0;
+}
+*::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+*::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: #44d7b6;
+  cursor: pointer;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: #ff5722;
+}
+html {
+  color: var(--color-text);
+  width: 100%;
+  height: 100%;
+  font-family: "LXGW WenKai Screen R", UbuntuMono, "Varela Round", "PingFang SC", "Microsoft YaHei", Helvetica, Arial, Menlo, Monaco, monospace, sans-serif;
+  font-size: 16px;
+}
+html >::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+html >::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+html >::-webkit-scrollbar-thumb {
+  background: #54b5a0 linear-gradient(45deg, rgba(255,255,255,0.4) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.4) 75%, transparent 75%, transparent);
+  cursor: pointer;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+html >::-webkit-scrollbar-thumb:hover {
+  background: #54b5a0 linear-gradient(45deg, rgba(255,255,255,0.4) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.4) 75%, transparent 75%, transparent);
+}
+body {
+  background-color: var(--color-site-body);
+  text-rendering: optimizelegibility;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+body.modal-active {
+  overflow: hidden;
+}
+@media screen and (max-width: 680px) {
+  body.modal-active {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
+a {
+  color: #2196f3;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+}
+a:hover {
+  color: #ff5722;
+}
+a:active,
+a:hover {
+  outline: 0;
+}
+ul,
+ol {
+  padding-left: 0;
+}
+ul li,
+ol li {
+  list-style: none;
+}
+header {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+}
+img {
+  border: 0;
+  background: none;
+  max-width: 100%;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  height: 0;
+  border: 0;
+  border-radius: 1px;
+  -webkit-border-radius: 1px;
+  border-bottom: 1px solid rgba(68,68,68,0.1);
+}
+button,
+input {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+button {
+  overflow: visible;
+  text-transform: none;
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+@supports (backdrop-filter: blur(20px)) {
+  .blur {
+    background: rgba(255,255,255,0.9) !important;
+    backdrop-filter: saturate(200%) blur(20px);
+  }
+}
+.shadow {
+  box-shadow: 0 1px 2px 0px rgba(0,0,0,0.1);
+  -webkit-box-shadow: 0 1px 2px 0px rgba(0,0,0,0.1);
+}
+.shadow.floatable {
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+}
+.shadow.floatable:hover {
+  box-shadow: 0 2px 4px 0px rgba(0,0,0,0.1), 0 4px 8px 0px rgba(0,0,0,0.1), 0 8px 16px 0px rgba(0,0,0,0.1);
+  -webkit-box-shadow: 0 2px 4px 0px rgba(0,0,0,0.1), 0 4px 8px 0px rgba(0,0,0,0.1), 0 8px 16px 0px rgba(0,0,0,0.1);
+}
+#l_cover {
+  min-height: 52px;
+}
+.cover-wrapper {
+  top: 0;
+  left: 0;
+  max-width: 100%;
+  height: 100vh;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  flex-wrap: nowrap;
+  -webkit-flex-wrap: nowrap;
+  -khtml-flex-wrap: nowrap;
+  -moz-flex-wrap: nowrap;
+  -o-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  align-content: center;
+  color: var(--color-site-inner);
+  padding: 0 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: -100px;
+}
+.cover-wrapper .cover-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+}
+.cover-wrapper .cover-bg.lazyload:not(.loaded) {
+  opacity: 0;
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+}
+.cover-wrapper .cover-bg.lazyload.loaded {
+  animation-delay: 0s;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
+  animation-name: fadeIn;
+}
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+    filter: blur(12px);
+    transform: scale(1.02);
+    -webkit-transform: scale(1.02);
+    -khtml-transform: scale(1.02);
+    -moz-transform: scale(1.02);
+    -o-transform: scale(1.02);
+    -ms-transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+    filter: blur(12px);
+    transform: scale(1.02);
+    -webkit-transform: scale(1.02);
+    -khtml-transform: scale(1.02);
+    -moz-transform: scale(1.02);
+    -o-transform: scale(1.02);
+    -ms-transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+    filter: blur(12px);
+    transform: scale(1.02);
+    -webkit-transform: scale(1.02);
+    -khtml-transform: scale(1.02);
+    -moz-transform: scale(1.02);
+    -o-transform: scale(1.02);
+    -ms-transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+    filter: blur(12px);
+    transform: scale(1.02);
+    -webkit-transform: scale(1.02);
+    -khtml-transform: scale(1.02);
+    -moz-transform: scale(1.02);
+    -o-transform: scale(1.02);
+    -ms-transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+.cover-wrapper .cover-body {
+  z-index: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.cover-wrapper#full {
+  height: calc(100vh + 100px);
+  padding-bottom: 100px;
+}
+.cover-wrapper#half {
+  max-height: 640px;
+  min-height: 400px;
+  height: calc(36vh - 52px + 200px);
+}
+.cover-wrapper #scroll-down {
+  width: 100%;
+  height: 64px;
+  position: absolute;
+  bottom: 100px;
+  text-align: center;
+  cursor: pointer;
+}
+.cover-wrapper #scroll-down .scroll-down-effects {
+  color: #fff;
+  font-size: 24px;
+  line-height: 64px;
+  position: absolute;
+  width: 24px;
+  left: calc(50% - 12px);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  animation: scroll-down-effect 1.5s infinite;
+  -webkit-animation: scroll-down-effect 1.5s infinite;
+  -khtml-animation: scroll-down-effect 1.5s infinite;
+  -moz-animation: scroll-down-effect 1.5s infinite;
+  -o-animation: scroll-down-effect 1.5s infinite;
+  -ms-animation: scroll-down-effect 1.5s infinite;
+}
+@-moz-keyframes scroll-down-effect {
+  0% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+  50% {
+    top: -16px;
+    opacity: 0.4;
+    -webkit-opacity: 0.4;
+    -moz-opacity: 0.4;
+  }
+  100% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@-webkit-keyframes scroll-down-effect {
+  0% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+  50% {
+    top: -16px;
+    opacity: 0.4;
+    -webkit-opacity: 0.4;
+    -moz-opacity: 0.4;
+  }
+  100% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@-o-keyframes scroll-down-effect {
+  0% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+  50% {
+    top: -16px;
+    opacity: 0.4;
+    -webkit-opacity: 0.4;
+    -moz-opacity: 0.4;
+  }
+  100% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@keyframes scroll-down-effect {
+  0% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+  50% {
+    top: -16px;
+    opacity: 0.4;
+    -webkit-opacity: 0.4;
+    -moz-opacity: 0.4;
+  }
+  100% {
+    top: 0;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+.cover-wrapper .cover-body {
+  margin-top: 52px;
+  margin-bottom: 100px;
+}
+.cover-wrapper .cover-body,
+.cover-wrapper .cover-body .top,
+.cover-wrapper .cover-body .bottom {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -khtml-justify-content: center;
+  -moz-justify-content: center;
+  -o-justify-content: center;
+  -ms-justify-content: center;
+  max-width: 100%;
+}
+.cover-wrapper .cover-body .bottom {
+  margin-top: 32px;
+}
+.cover-wrapper .cover-body .title {
+  font-family: "LXGW WenKai Screen R", "Varela Round", "PingFang SC", "Microsoft YaHei", Helvetica, Arial, Helvetica, monospace;
+  font-size: 3.125rem;
+  line-height: 1.2;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+.cover-wrapper .cover-body .subtitle {
+  font-size: 20px;
+}
+.cover-wrapper .cover-body .logo {
+  max-height: 120px;
+  max-width: calc(100% - 4 * 16px);
+}
+@media screen and (min-height: 1024px) {
+  .cover-wrapper .cover-body .title {
+    font-size: 3rem;
+  }
+  .cover-wrapper .cover-body .subtitle {
+    font-size: 1.05rem;
+  }
+  .cover-wrapper .cover-body .logo {
+    max-height: 150px;
+  }
+}
+.cover-wrapper .cover-body .m_search {
+  position: relative;
+  max-width: calc(100% - 16px);
+  width: 320px;
+  vertical-align: middle;
+}
+.cover-wrapper .cover-body .m_search .form {
+  position: relative;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+  width: 100%;
+}
+.cover-wrapper .cover-body .m_search .icon,
+.cover-wrapper .cover-body .m_search .input {
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+}
+.cover-wrapper .cover-body .m_search .icon {
+  position: absolute;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+  line-height: 2.5rem;
+  width: 32px;
+  top: 0;
+  left: 5px;
+  color: rgba(68,68,68,0.75);
+}
+.cover-wrapper .cover-body .m_search .input {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+  height: 2.5rem;
+  width: 100%;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  font-size: 0.875rem;
+  -webkit-appearance: none;
+  padding-left: 36px;
+  border-radius: 1.4rem;
+  -webkit-border-radius: 1.4rem;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(10px);
+  border: none;
+  color: var(--color-text);
+}
+@media screen and (max-width: 500px) {
+  .cover-wrapper .cover-body .m_search .input {
+    padding-left: 36px;
+  }
+}
+.cover-wrapper .cover-body .m_search .input:hover {
+  background: rgba(255,255,255,0.8);
+}
+.cover-wrapper .cover-body .m_search .input:focus {
+  background: #fff;
+}
+.cover-wrapper .list-h {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -khtml-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  -o-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  align-items: stretch;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.cover-wrapper .list-h a {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1 0;
+  -ms-flex: 1 0;
+  flex: 1 0;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  font-weight: 600;
+}
+.cover-wrapper .list-h a img {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+  margin: 4px;
+  min-width: 40px;
+  max-width: 44px;
+}
+@media screen and (max-width: 768px) {
+  .cover-wrapper .list-h a img {
+    min-width: 36px;
+    max-width: 40px;
+  }
+}
+@media screen and (max-width: 500px) {
+  .cover-wrapper .list-h a img {
+    margin: 2px 4px;
+    min-width: 32px;
+    max-width: 36px;
+  }
+}
+@media screen and (max-width: 375px) {
+  .cover-wrapper .list-h a img {
+    min-width: 28px;
+    max-width: 32px;
+  }
+}
+.cover-wrapper {
+  max-width: 100%;
+}
+.cover-wrapper.search .bottom .menu {
+  margin-top: 16px;
+}
+.cover-wrapper.search .bottom .menu .list-h a {
+  white-space: nowrap;
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  align-items: baseline;
+  padding: 2px;
+  margin: 4px;
+  color: var(--color-site-inner);
+  opacity: 0.75;
+  -webkit-opacity: 0.75;
+  -moz-opacity: 0.75;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  border-bottom: 2px solid transparent;
+}
+.cover-wrapper.search .bottom .menu .list-h a i {
+  margin-right: 4px;
+}
+.cover-wrapper.search .bottom .menu .list-h a p {
+  font-size: 0.9375rem;
+}
+.cover-wrapper.search .bottom .menu .list-h a:hover,
+.cover-wrapper.search .bottom .menu .list-h a.active,
+.cover-wrapper.search .bottom .menu .list-h a:active {
+  opacity: 1;
+  -webkit-opacity: 1;
+  -moz-opacity: 1;
+  border-bottom: 2px solid var(--color-site-inner);
+}
+.cover-wrapper.dock .menu,
+.cover-wrapper.featured .menu,
+.cover-wrapper.focus .menu {
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+}
+.cover-wrapper.dock .menu .list-h a,
+.cover-wrapper.featured .menu .list-h a,
+.cover-wrapper.focus .menu .list-h a {
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  line-height: 24px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-bottom: none;
+  text-align: center;
+  align-content: flex-end;
+  color: rgba(68,68,68,0.7);
+  font-size: 1.5rem;
+}
+@media screen and (max-width: 500px) {
+  .cover-wrapper.dock .menu .list-h a,
+  .cover-wrapper.featured .menu .list-h a,
+  .cover-wrapper.focus .menu .list-h a {
+    padding: 12px 8px;
+  }
+}
+.cover-wrapper.dock .menu .list-h a i,
+.cover-wrapper.featured .menu .list-h a i,
+.cover-wrapper.focus .menu .list-h a i {
+  margin: 8px;
+}
+.cover-wrapper.dock .menu .list-h a p,
+.cover-wrapper.featured .menu .list-h a p,
+.cover-wrapper.focus .menu .list-h a p {
+  font-size: 0.875rem;
+}
+.cover-wrapper.dock .menu .list-h a.active,
+.cover-wrapper.featured .menu .list-h a.active,
+.cover-wrapper.focus .menu .list-h a.active {
+  background: var(--color-card);
+  backdrop-filter: none;
+}
+.cover-wrapper.dock .menu .list-h a.active i,
+.cover-wrapper.featured .menu .list-h a.active i,
+.cover-wrapper.focus .menu .list-h a.active i,
+.cover-wrapper.dock .menu .list-h a.active i+p,
+.cover-wrapper.featured .menu .list-h a.active i+p,
+.cover-wrapper.focus .menu .list-h a.active i+p {
+  color: #44d7b6;
+}
+.cover-wrapper.dock .menu .list-h a.active img+p,
+.cover-wrapper.featured .menu .list-h a.active img+p,
+.cover-wrapper.focus .menu .list-h a.active img+p {
+  color: var(--color-text);
+}
+.cover-wrapper.dock .menu .list-h a:hover,
+.cover-wrapper.featured .menu .list-h a:hover,
+.cover-wrapper.focus .menu .list-h a:hover {
+  background: var(--color-card);
+}
+.cover-wrapper.dock .top {
+  margin-bottom: 48px;
+}
+.cover-wrapper.dock .menu {
+  background: rgba(255,255,255,0.5);
+  position: absolute;
+  bottom: 0;
+  max-width: 100%;
+}
+.cover-wrapper.dock .menu .list-h {
+  flex-wrap: nowrap;
+  -webkit-flex-wrap: nowrap;
+  -khtml-flex-wrap: nowrap;
+  -moz-flex-wrap: nowrap;
+  -o-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  margin: 4px;
+}
+.cover-wrapper.dock .menu .list-h a+a {
+  margin-left: 4px;
+}
+@media screen and (max-width: 500px) {
+  .cover-wrapper.dock .menu .list-h {
+    overflow-x: scroll;
+  }
+  .cover-wrapper.dock .menu .list-h::-webkit-scrollbar {
+    height: 0;
+    width: 0;
+  }
+  .cover-wrapper.dock .menu .list-h::-webkit-scrollbar-track-piece {
+    background: transparent;
+  }
+  .cover-wrapper.dock .menu .list-h::-webkit-scrollbar-thumb {
+    background: #44d7b6;
+    cursor: pointer;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+  }
+  .cover-wrapper.dock .menu .list-h::-webkit-scrollbar-thumb:hover {
+    background: #ff5722;
+  }
+}
+@supports (backdrop-filter: blur(20px)) {
+  .cover-wrapper.dock .menu {
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: saturate(200%) blur(20px);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-mode: 'dark';
+  }
+  :root:not([color-scheme]) {
+    --color-site-body: #121212;
+    --color-read-bkg: #222;
+    --color-read-post: #444;
+    --color-site-bg: #222;
+    --color-site-inner: #eee;
+    --color-site-footer: #aaa;
+    --color-card: #444;
+    --color-text: #eee;
+    --color-block: #3a3a3a;
+    --color-codeblock: #1f1f1f;
+    --color-inlinecode: #d56d28;
+    --color-h1: #eee;
+    --color-h2: #eee;
+    --color-h3: #ddd;
+    --color-h4: #ddd;
+    --color-h5: #ddd;
+    --color-h6: #ddd;
+    --color-p: #bbb;
+    --color-list: #aaa;
+    --color-list-hl: #69dfc4;
+    --color-meta: #888;
+    --color-link: #888;
+    --color-copyright-bkg: #21252b;
+  }
+  :root:not([color-scheme]) img {
+    filter: brightness(70%) !important;
+  }
+  :root:not([color-scheme]) .blur {
+    background: rgba(34,34,34,0.9) !important;
+  }
+  :root:not([color-scheme]) .white-box.blur {
+    background: rgba(68,68,68,0.9) !important;
+  }
+  :root:not([color-scheme]) .nav-main .u-search-input {
+    background: var(--color-card) !important;
+  }
+  :root:not([color-scheme]) #l_main .article .prev-next>a {
+    background: var(--color-block) !important;
+  }
+  :root:not([color-scheme]) #l_main .article .prev-next>a:hover {
+    background: var(--color-site-bg) !important;
+  }
+  :root:not([color-scheme]) .article blockquote {
+    background: var(--color-block) !important;
+  }
+  :root:not([color-scheme]) .article-title a {
+    color: var(--color-h1) !important;
+  }
+  :root:not([color-scheme]) details>summary {
+    color: var(--color-p) !important;
+    background: var(--color-site-bg) !important;
+  }
+  :root:not([color-scheme]) details {
+    border: 1px solid var(--color-site-bg) !important;
+    background: var(--color-site-bg) !important;
+  }
+  :root:not([color-scheme]) #u-search .modal,
+  :root:not([color-scheme]) #u-search .modal-header,
+  :root:not([color-scheme]) #u-search .modal-body {
+    background: var(--color-card) !important;
+  }
+  :root:not([color-scheme]) #u-search .modal-body .modal-results .result:hover {
+    background: var(--color-block) !important;
+  }
+  :root:not([color-scheme]) .u-search-input:hover {
+    background: var(--color-block) !important;
+  }
+  :root:not([color-scheme]) .u-search-input:focus {
+    background: var(--color-site-body) !important;
+  }
+}
+[color-scheme='dark'] {
+  --color-site-body: #121212;
+  --color-read-bkg: #222;
+  --color-read-post: #444;
+  --color-site-bg: #222;
+  --color-site-inner: #eee;
+  --color-site-footer: #aaa;
+  --color-card: #444;
+  --color-text: #eee;
+  --color-block: #3a3a3a;
+  --color-codeblock: #1f1f1f;
+  --color-inlinecode: #d56d28;
+  --color-h1: #eee;
+  --color-h2: #eee;
+  --color-h3: #ddd;
+  --color-h4: #ddd;
+  --color-h5: #ddd;
+  --color-h6: #ddd;
+  --color-p: #bbb;
+  --color-list: #aaa;
+  --color-list-hl: #69dfc4;
+  --color-meta: #888;
+  --color-link: #888;
+  --color-copyright-bkg: #21252b;
+}
+[color-scheme='dark'] img {
+  filter: brightness(70%) !important;
+}
+[color-scheme='dark'] .blur {
+  background: rgba(34,34,34,0.9) !important;
+}
+[color-scheme='dark'] .white-box.blur {
+  background: rgba(68,68,68,0.9) !important;
+}
+[color-scheme='dark'] .nav-main .u-search-input {
+  background: var(--color-card) !important;
+}
+[color-scheme='dark'] #l_main .article .prev-next>a {
+  background: var(--color-block) !important;
+}
+[color-scheme='dark'] #l_main .article .prev-next>a:hover {
+  background: var(--color-site-bg) !important;
+}
+[color-scheme='dark'] .article blockquote {
+  background: var(--color-block) !important;
+}
+[color-scheme='dark'] .article-title a {
+  color: var(--color-h1) !important;
+}
+[color-scheme='dark'] details>summary {
+  color: var(--color-p) !important;
+  background: var(--color-site-bg) !important;
+}
+[color-scheme='dark'] details {
+  border: 1px solid var(--color-site-bg) !important;
+  background: var(--color-site-bg) !important;
+}
+[color-scheme='dark'] #u-search .modal,
+[color-scheme='dark'] #u-search .modal-header,
+[color-scheme='dark'] #u-search .modal-body {
+  background: var(--color-card) !important;
+}
+[color-scheme='dark'] #u-search .modal-body .modal-results .result:hover {
+  background: var(--color-block) !important;
+}
+[color-scheme='dark'] .u-search-input:hover {
+  background: var(--color-block) !important;
+}
+[color-scheme='dark'] .u-search-input:focus {
+  background: var(--color-site-body) !important;
+}
+@media screen and (max-width: 500px) {
+  [color-scheme='dark'] .l_header .m_search {
+    background: var(--color-site-bg) !important;
+  }
+}
+@font-face {
+  font-family: '"LXGW WenKai Screen R"';
+  src: url("https://unpkg.com/volantis-static@0.0.1654736714924/media/fonts/UbuntuMono/UbuntuMono-Regular.ttf");
+  font-weight: 'normal';
+  font-style: 'normal';
+  font-display: swap;
+}
+@font-face {
+  font-family: '"LXGW WenKai Screen R"';
+  src: url("https://unpkg.com/volantis-static@0.0.1654736714924/media/fonts/VarelaRound/VarelaRound-Regular.ttf");
+  font-weight: 'normal';
+  font-style: 'normal';
+  font-display: swap;
+}
+.l_header {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  width: 100%;
+  height: 52px;
+  background: var(--color-card);
+  box-shadow: 0 1px 2px 0px rgba(0,0,0,0.1);
+  -webkit-box-shadow: 0 1px 2px 0px rgba(0,0,0,0.1);
+}
+.l_header.auto {
+  transition: opacity 0.4s ease;
+  -webkit-transition: opacity 0.4s ease;
+  -khtml-transition: opacity 0.4s ease;
+  -moz-transition: opacity 0.4s ease;
+  -o-transition: opacity 0.4s ease;
+  -ms-transition: opacity 0.4s ease;
+  visibility: hidden;
+}
+.l_header.auto.show {
+  opacity: 1 !important;
+  -webkit-opacity: 1 !important;
+  -moz-opacity: 1 !important;
+  visibility: visible;
+}
+.l_header .container {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+.l_header #wrapper {
+  height: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.l_header #wrapper .nav-main,
+.l_header #wrapper .nav-sub {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  flex-wrap: nowrap;
+  -webkit-flex-wrap: nowrap;
+  -khtml-flex-wrap: nowrap;
+  -moz-flex-wrap: nowrap;
+  -o-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -khtml-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -o-justify-content: space-between;
+  -ms-justify-content: space-between;
+  align-items: center;
+}
+.l_header #wrapper .nav-main {
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+}
+.l_header #wrapper.sub .nav-main {
+  transform: translateY(-52px);
+  -webkit-transform: translateY(-52px);
+  -khtml-transform: translateY(-52px);
+  -moz-transform: translateY(-52px);
+  -o-transform: translateY(-52px);
+  -ms-transform: translateY(-52px);
+}
+.l_header #wrapper .nav-sub {
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+  opacity: 0;
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+  height: 52px;
+  width: calc(100% - 2 * 16px);
+  position: absolute;
+}
+.l_header #wrapper .nav-sub ::-webkit-scrollbar {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: none;
+}
+@media screen and (min-width: 2048px) {
+  .l_header #wrapper .nav-sub {
+    max-width: 55vw;
+    margin: auto;
+  }
+}
+.l_header #wrapper.sub .nav-sub {
+  opacity: 1;
+  -webkit-opacity: 1;
+  -moz-opacity: 1;
+}
+.l_header #wrapper .title {
+  position: relative;
+  color: var(--color-text);
+  padding-left: 24px;
+  max-height: 52px;
+}
+.l_header #wrapper .nav-main .title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+  line-height: 52px;
+  padding: 0 24px;
+  font-size: 1.25rem;
+  font-family: "LXGW WenKai Screen R", "Varela Round", "PingFang SC", "Microsoft YaHei", Helvetica, Arial, Helvetica, monospace;
+}
+.l_header #wrapper .nav-main .title img {
+  height: 52px;
+}
+.l_header .nav-sub {
+  max-width: 1200px;
+  margin: auto;
+}
+.l_header .nav-sub .title {
+  font-weight: bold;
+  font-family: "LXGW WenKai Screen R", UbuntuMono, "Varela Round", "PingFang SC", "Microsoft YaHei", Helvetica, Arial, Menlo, Monaco, monospace, sans-serif;
+  line-height: 1.2;
+  max-height: 52px;
+  white-space: normal;
+  flex-shrink: 1;
+}
+.l_header .switcher {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: none;
+  line-height: 52px;
+  align-items: center;
+}
+.l_header .switcher .s-toc {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: none;
+}
+@media screen and (max-width: 768px) {
+  .l_header .switcher .s-toc {
+    display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+    display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+    display: -ms-flexbox /* TWEENER - IE 10 */;
+    display: -webkit-flex /* NEW - Chrome */;
+    display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+    display: flex;
+  }
+}
+.l_header .switcher >li {
+  height: 36px;
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+  margin: 2px;
+}
+@media screen and (max-width: 500px) {
+  .l_header .switcher >li {
+    margin: 0 1px;
+    height: 36px;
+  }
+}
+.l_header .switcher >li >a {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -khtml-justify-content: center;
+  -moz-justify-content: center;
+  -o-justify-content: center;
+  -ms-justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0.85em 1.1em;
+  border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border: none;
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+  color: #44d7b6;
+}
+.l_header .switcher >li >a:hover {
+  border: none;
+}
+.l_header .switcher >li >a.active,
+.l_header .switcher >li >a:active {
+  border: none;
+  background: var(--color-site-bg);
+}
+@media screen and (max-width: 500px) {
+  .l_header .switcher >li >a {
+    width: 36px;
+    height: 36px;
+  }
+}
+.l_header .nav-sub .switcher {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+}
+.l_header .m_search {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  height: 52px;
+  width: 240px;
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+}
+@media screen and (max-width: 1024px) {
+  .l_header .m_search {
+    width: 44px;
+    min-width: 44px;
+  }
+  .l_header .m_search input::placeholder {
+    opacity: 0;
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+  }
+  .l_header .m_search:hover {
+    width: 240px;
+  }
+  .l_header .m_search:hover input::placeholder {
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@media screen and (min-width: 500px) {
+  .l_header .m_search:hover .input {
+    width: 100%;
+  }
+  .l_header .m_search:hover .input::placeholder {
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+@media screen and (max-width: 500px) {
+  .l_header .m_search {
+    min-width: 0;
+  }
+  .l_header .m_search input::placeholder {
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+  }
+}
+.l_header .m_search .form {
+  position: relative;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.l_header .m_search .icon {
+  position: absolute;
+  width: 36px;
+  left: 5px;
+  color: var(--color-meta);
+}
+@media screen and (max-width: 500px) {
+  .l_header .m_search .icon {
+    display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+    display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+    display: none;
+  }
+}
+.l_header .m_search .input {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  line-height: 1.3;
+  width: 100%;
+  color: var(--color-text);
+  background: #fafafa;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  padding-left: 40px;
+  font-size: 0.875rem;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  border: none;
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+}
+@media screen and (min-width: 500px) {
+  .l_header .m_search .input:focus {
+    box-shadow: 0 4px 8px 0px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0 4px 8px 0px rgba(0,0,0,0.1);
+  }
+}
+@media screen and (max-width: 500px) {
+  .l_header .m_search .input {
+    background: var(--color-block);
+    padding-left: 8px;
+    border: none;
+  }
+  .l_header .m_search .input:hover,
+  .l_header .m_search .input:focus {
+    border: none;
+  }
+}
+@media (max-width: 500px) {
+  .l_header .m_search {
+    left: 0;
+    width: 0;
+    overflow: hidden;
+    position: absolute;
+    background: #fff;
+    transition: all 0.28s ease;
+    -webkit-transition: all 0.28s ease;
+    -khtml-transition: all 0.28s ease;
+    -moz-transition: all 0.28s ease;
+    -o-transition: all 0.28s ease;
+    -ms-transition: all 0.28s ease;
+  }
+  .l_header .m_search .input {
+    border-radius: 26px;
+    -webkit-border-radius: 26px;
+    margin-left: 16px;
+    padding-left: 16px;
+  }
+  .l_header.z_search-open .m_search {
+    width: 100%;
+  }
+  .l_header.z_search-open .m_search .input {
+    width: calc(100% - 120px);
+  }
+}
+ul.m-pc >li>a {
+  color: inherit;
+  border-bottom: 2px solid transparent;
+}
+ul.m-pc >li>a:active,
+ul.m-pc >li>a.active {
+  border-bottom: 2px solid #44d7b6;
+}
+ul.m-pc li:hover >ul.list-v,
+ul.list-v li:hover >ul.list-v {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+}
+ul.nav-list-h {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: -ms-flexbox /* TWEENER - IE 10 */;
+  display: -webkit-flex /* NEW - Chrome */;
+  display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+  display: flex;
+  align-items: stretch;
+}
+ul.nav-list-h>li {
+  position: relative;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -khtml-justify-content: center;
+  -moz-justify-content: center;
+  -o-justify-content: center;
+  -ms-justify-content: center;
+  height: 100%;
+  line-height: 2.4;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+}
+ul.nav-list-h>li >a {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 600;
+}
+ul.list-v {
+  z-index: 1;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: none;
+  position: absolute;
+  background: var(--color-card);
+  box-shadow: 0 2px 4px 0px rgba(0,0,0,0.08), 0 4px 8px 0px rgba(0,0,0,0.08), 0 8px 16px 0px rgba(0,0,0,0.08);
+  -webkit-box-shadow: 0 2px 4px 0px rgba(0,0,0,0.08), 0 4px 8px 0px rgba(0,0,0,0.08), 0 8px 16px 0px rgba(0,0,0,0.08);
+  margin-top: -6px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  padding: 8px 0;
+}
+ul.list-v.show {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+}
+ul.list-v hr {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+ul.list-v >li {
+  white-space: nowrap;
+  word-break: keep-all;
+}
+ul.list-v >li.header {
+  font-size: 0.78125rem;
+  font-weight: bold;
+  line-height: 2em;
+  color: var(--color-meta);
+  margin: 8px 16px 4px;
+}
+ul.list-v >li.header i {
+  margin-right: 8px;
+}
+ul.list-v >li ul {
+  margin-left: 0;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: none;
+  margin-top: -40px;
+}
+ul.list-v .aplayer-container {
+  min-height: 64px;
+  padding: 6px 16px;
+}
+ul.list-v >li>a {
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+  color: var(--color-list);
+  font-size: 0.875rem;
+  font-weight: bold;
+  line-height: 36px;
+  padding: 0 20px 0 16px;
+  text-overflow: ellipsis;
+  margin: 0 4px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+}
+@media screen and (max-width: 1024px) {
+  ul.list-v >li>a {
+    line-height: 40px;
+  }
+}
+ul.list-v >li>a >i {
+  margin-right: 8px;
+}
+ul.list-v >li>a:active,
+ul.list-v >li>a.active {
+  color: var(--color-list-hl);
+}
+ul.list-v >li>a:hover {
+  color: var(--color-list-hl);
+  background: var(--color-site-bg);
+}
+.l_header .menu >ul>li>a {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: block;
+  padding: 0 8px;
+}
+.l_header .menu >ul>li>a >i {
+  margin-right: 4px;
+}
+.l_header ul.nav-list-h>li {
+  color: var(--color-list);
+  line-height: 52px;
+}
+.l_header ul.nav-list-h>li >a {
+  max-height: 52px;
+  overflow: hidden;
+  color: inherit;
+}
+.l_header ul.nav-list-h>li >a:active,
+.l_header ul.nav-list-h>li >a.active {
+  color: #44d7b6;
+}
+.l_header ul.nav-list-h>li:hover>a {
+  color: var(--color-list-hl);
+}
+.l_header ul.nav-list-h>li i.music {
+  animation: rotate-effect 1.5s linear infinite;
+  -webkit-animation: rotate-effect 1.5s linear infinite;
+  -khtml-animation: rotate-effect 1.5s linear infinite;
+  -moz-animation: rotate-effect 1.5s linear infinite;
+  -o-animation: rotate-effect 1.5s linear infinite;
+  -ms-animation: rotate-effect 1.5s linear infinite;
+}
+@-moz-keyframes rotate-effect {
+  0% {
+    transform: rotate(0);
+    -webkit-transform: rotate(0);
+    -khtml-transform: rotate(0);
+    -moz-transform: rotate(0);
+    -o-transform: rotate(0);
+    -ms-transform: rotate(0);
+  }
+  25% {
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -khtml-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -khtml-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -khtml-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -khtml-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes rotate-effect {
+  0% {
+    transform: rotate(0);
+    -webkit-transform: rotate(0);
+    -khtml-transform: rotate(0);
+    -moz-transform: rotate(0);
+    -o-transform: rotate(0);
+    -ms-transform: rotate(0);
+  }
+  25% {
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -khtml-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -khtml-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -khtml-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -khtml-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+  }
+}
+@-o-keyframes rotate-effect {
+  0% {
+    transform: rotate(0);
+    -webkit-transform: rotate(0);
+    -khtml-transform: rotate(0);
+    -moz-transform: rotate(0);
+    -o-transform: rotate(0);
+    -ms-transform: rotate(0);
+  }
+  25% {
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -khtml-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -khtml-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -khtml-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -khtml-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+  }
+}
+@keyframes rotate-effect {
+  0% {
+    transform: rotate(0);
+    -webkit-transform: rotate(0);
+    -khtml-transform: rotate(0);
+    -moz-transform: rotate(0);
+    -o-transform: rotate(0);
+    -ms-transform: rotate(0);
+  }
+  25% {
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -khtml-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -khtml-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -khtml-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -khtml-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+  }
+}
+.menu-phone li ul.list-v {
+  right: calc(100% - 0.5 * 16px);
+}
+.menu-phone li ul.list-v ul {
+  right: calc(100% - 0.5 * 16px);
+}
+#wrapper {
+  max-width: 1200px;
+  margin: auto;
+}
+@media screen and (min-width: 2048px) {
+  #wrapper {
+    max-width: 55vw;
+  }
+}
+#wrapper .menu {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1 1;
+  -ms-flex: 1 1;
+  flex: 1 1;
+  margin: 0 16px 0 0;
+}
+#wrapper .menu .list-v ul {
+  left: calc(100% - 0.5 * 16px);
+}
+.menu-phone {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: none;
+  margin-top: 16px;
+  right: 8px;
+  transition: all 0.28s ease;
+  -webkit-transition: all 0.28s ease;
+  -khtml-transition: all 0.28s ease;
+  -moz-transition: all 0.28s ease;
+  -o-transition: all 0.28s ease;
+  -ms-transition: all 0.28s ease;
+}
+.menu-phone ul {
+  right: calc(100% - 0.5 * 16px);
+}
+@media screen and (max-width: 500px) {
+  .menu-phone {
+    display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+    display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+    display: block;
+  }
+}
+.l_header {
+  max-width: 65vw;
+  left: calc((100% - 65vw) * 0.5);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+@media screen and (max-width: 2048px) {
+  .l_header {
+    max-width: 1232px;
+    left: calc((100% - 1232px) * 0.5);
+  }
+}
+@media screen and (max-width: 1232px) {
+  .l_header {
+    left: 0;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    max-width: 100%;
+  }
+}
+@media screen and (max-width: 500px) {
+  .l_header .container {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .l_header #wrapper .nav-main .title {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .l_header #wrapper .nav-sub {
+    width: 100%;
+  }
+  .l_header #wrapper .nav-sub .title {
+    overflow-y: scroll;
+    margin-top: 2px;
+    padding: 8px 16px;
+  }
+  .l_header #wrapper .switcher {
+    display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+    display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+    display: -ms-flexbox /* TWEENER - IE 10 */;
+    display: -webkit-flex /* NEW - Chrome */;
+    display: flex /* NEW, Spec - Opera 12.1, Firefox 20+ */;
+    display: flex;
+    margin-right: 8px;
+  }
+  .l_header .menu {
+    display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+    display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+    display: none;
+  }
+}
+@media screen and (max-width: 500px) {
+  .list-v li {
+    max-width: 270px;
+  }
+}
+#u-search {
+  display: -webkit-box /* OLD - iOS 6-, Safari 3.1-6 */;
+  display: -moz-box /* OLD - Firefox 19- (buggy but mostly works) */;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 60px 20px;
+  z-index: 1001;
+}
+@media screen and (max-width: 680px) {
+  #u-search {
+    padding: 0px;
+  }
+}
+@media screen and (prefers-color-scheme: dark) and (max-width: 500px) {
+  .l_header .m_search {
+    background: var(--color-site-bg) !important;
+  }
+}
+
+  </style>
+  <link rel="stylesheet" href="/css/style.css" media="print" onload="this.media='all';this.onload=null">
+  <noscript><link rel="stylesheet" href="/css/style.css"></noscript>
+    <script>
+      let userColorScheme=localStorage.getItem("color-scheme")
+      if(userColorScheme){
+        document.documentElement.setAttribute("color-scheme", userColorScheme);
+      }
+    </script>
+  
+<script>
+if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode))
+    document.write(
+	'<style>'+
+		'html{'+
+			'overflow-x: hidden !important;'+
+			'overflow-y: hidden !important;'+
+		'}'+
+		'.kill-ie{'+
+			'text-align:center;'+
+			'height: 100%;'+
+			'margin-top: 15%;'+
+			'margin-bottom: 5500%;'+
+		'}'+
+    '.kill-t{'+
+      'font-size: 2rem;'+
+    '}'+
+    '.kill-c{'+
+      'font-size: 1.2rem;'+
+    '}'+
+		'#l_header,#l_body{'+
+			'display: none;'+
+		'}'+
+	'</style>'+
+    '<div class="kill-ie">'+
+        `<span class="kill-t"><b>抱歉，您的浏览器无法访问本站</b></span><br/>`+
+        `<span class="kill-c">微软已经于2016年终止了对 Internet Explorer (IE) 10 及更早版本的支持，<br/>继续使用存在极大的安全隐患，请使用当代主流的浏览器进行访问。</span><br/>`+
+        `<a target="_blank" rel="noopener" href="https://blogs.windows.com/windowsexperience/2021/05/19/the-future-of-internet-explorer-on-windows-10-is-in-microsoft-edge/"><strong>了解详情 ></strong></a>`+
+    '</div>');
+</script>
+
+
+<noscript>
+	<style>
+		html{
+			overflow-x: hidden !important;
+			overflow-y: hidden !important;
+		}
+		.kill-noscript{
+			text-align:center;
+			height: 100%;
+			margin-top: 15%;
+			margin-bottom: 5500%;
+		}
+    .kill-t{
+      font-size: 2rem;
+    }
+    .kill-c{
+      font-size: 1.2rem;
+    }
+		#l_header,#l_body{
+			display: none;
+		}
+	</style>
+    <div class="kill-noscript">
+        <span class="kill-t"><b>抱歉，您的浏览器无法访问本站</b></span><br/>
+        <span class="kill-c">本页面需要浏览器支持（启用）JavaScript</span><br/>
+        <a target="_blank" rel="noopener" href="https://www.baidu.com/s?wd=启用JavaScript"><strong>了解详情 ></strong></a>
+    </div>
+</noscript>
+
+
+  <script>
+  /************这个文件存放不需要重载的全局变量和全局函数*********/
+  window.volantis = {}; // volantis 全局变量
+  volantis.debug = "env"; // 调试模式
+  volantis.dom = {}; // 页面Dom see: /source/js/app.js etc.
+
+  volantis.GLOBAL_CONFIG ={
+    debug: "env",
+    cdn: {"js":{"app":"/js/app.js","parallax":"/js/plugins/parallax.js","rightMenu":"/js/plugins/rightMenu.js","rightMenus":"/js/plugins/rightMenus.js","sites":"/js/plugins/tags/sites.js","friends":"/js/plugins/tags/friends.js","contributors":"/js/plugins/tags/contributors.js","search":"/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
+    default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
+    lastupdate: new Date(1691894849743),
+    sidebar: {
+      for_page: ["blogger","category","tagcloud","webinfo"],
+      for_post: ["toc"],
+      webinfo: {
+        lastupd: {
+          enable: true,
+          friendlyShow: true
+        },
+        runtime: {
+          data: "2020/01/01",
+          unit: "天"
+        }
+      }
+    },
+    plugins: {
+      message: {"enable":true,"css":"https://unpkg.com/volantis-static@0.0.1654736714924/libs/izitoast/dist/css/iziToast.min.css","js":"https://unpkg.com/volantis-static@0.0.1654736714924/libs/izitoast/dist/js/iziToast.min.js","icon":{"default":"fa-solid fa-info-circle light-blue","quection":"fa-solid fa-question-circle light-blue"},"time":{"default":5000,"quection":20000},"position":"topRight","transitionIn":"bounceInLeft","transitionOut":"fadeOutRight","titleColor":"var(--color-text)","messageColor":"var(--color-text)","backgroundColor":"var(--color-card)","zindex":2147483647,"copyright":{"enable":true,"title":"知识共享许可协议","message":"请遵守 CC BY-NC-SA 4.0 协议。","icon":"far fa-copyright light-blue"},"aplayer":{"enable":true,"play":"fa-solid fa-play","pause":"fa-solid fa-pause"},"rightmenu":{"enable":true,"notice":true}},
+      fancybox: {"css":"https://unpkg.com/volantis-static@0.0.1654736714924/libs/@fancyapps/ui/dist/fancybox.css","js":"https://unpkg.com/volantis-static@0.0.1654736714924/libs/@fancyapps/ui/dist/fancybox.umd.js"},
+      
+      
+      
+    }
+  }
+
+  /******************** volantis.EventListener ********************************/
+  // 事件监听器 see: /source/js/app.js
+  volantis.EventListener = {}
+  // 这里存放pjax切换页面时将被移除的事件监听器
+  volantis.EventListener.list = []
+  //构造方法
+  function volantisEventListener(type, f, ele) {
+    this.type = type
+    this.f = f
+    this.ele = ele
+  }
+  // 移除事件监听器
+  volantis.EventListener.remove = () => {
+    volantis.EventListener.list.forEach(function (i) {
+      i.ele.removeEventListener(i.type, i.f, false)
+    })
+    volantis.EventListener.list = []
+  }
+  /******************** volantis.dom.$ ********************************/
+  // 注：这里没有选择器，也没有forEach一次只处理一个dom，这里重新封装主题常用的dom方法，返回的是dom对象，对象包含了以下方法，同时保留dom的原生API
+  function volantisDom(ele) {
+    if (!ele) ele = document.createElement("div")
+    this.ele = ele;
+    // ==============================================================
+    this.ele.find = (c) => {
+      let q = this.ele.querySelector(c)
+      if (q)
+        return new volantisDom(q)
+    }
+    // ==============================================================
+    this.ele.hasClass = (c) => {
+      return this.ele.className.match(new RegExp('(\\s|^)' + c + '(\\s|$)'));
+    }
+    this.ele.addClass = (c) => {
+      this.ele.classList.add(c);
+      return this.ele
+    }
+    this.ele.removeClass = (c) => {
+      this.ele.classList.remove(c);
+      return this.ele
+    }
+    this.ele.toggleClass = (c) => {
+      if (this.ele.hasClass(c)) {
+        this.ele.removeClass(c)
+      } else {
+        this.ele.addClass(c)
+      }
+      return this.ele
+    }
+    // ==============================================================
+    // 参数 r 为 true 表示pjax切换页面时事件监听器将被移除，false不移除
+    this.ele.on = (c, f, r = 1) => {
+      this.ele.addEventListener(c, f, false)
+      if (r) {
+        volantis.EventListener.list.push(new volantisEventListener(c, f, this.ele))
+      }
+      return this.ele
+    }
+    this.ele.click = (f, r) => {
+      this.ele.on("click", f, r)
+      return this.ele
+    }
+    this.ele.scroll = (f, r) => {
+      this.ele.on("scroll", f, r)
+      return this.ele
+    }
+    // ==============================================================
+    this.ele.html = (c) => {
+      // if(c=== undefined){
+      //   return this.ele.innerHTML
+      // }else{
+      this.ele.innerHTML = c
+      return this.ele
+      // }
+    }
+    // ==============================================================
+    this.ele.hide = (c) => {
+      this.ele.style.display = "none"
+      return this.ele
+    }
+    this.ele.show = (c) => {
+      this.ele.style.display = "block"
+      return this.ele
+    }
+    // ==============================================================
+    return this.ele
+  }
+  volantis.dom.$ = (ele) => {
+    return !!ele ? new volantisDom(ele) : null;
+  }
+  /******************** RunItem ********************************/
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = ()=>{
+          volantis.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) =>{
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index,1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+  /******************** Pjax ********************************/
+  // /layout/_plugins/pjax/index.ejs
+  // volantis.pjax.send(callBack[,"callBackName"]) 传入pjax:send回调函数
+  // volantis.pjax.push(callBack[,"callBackName"]) 传入pjax:complete回调函数
+  // volantis.pjax.error(callBack[,"callBackName"]) 传入pjax:error回调函数
+  volantis.pjax = {};
+  volantis.pjax.method = {
+    complete: new RunItem(),
+    error: new RunItem(),
+    send: new RunItem(),
+  };
+  volantis.pjax = Object.assign(volantis.pjax, {
+    push: volantis.pjax.method.complete.push,
+    error: volantis.pjax.method.error.push,
+    send: volantis.pjax.method.send.push,
+  });
+  /******************** RightMenu ********************************/
+  // volantis.rightmenu.handle(callBack[,"callBackName"]) 外部菜单项控制
+  // 可在 volantis.mouseEvent 处获取右键事件
+  volantis.rightmenu = {};
+  volantis.rightmenu.method = {
+    handle: new RunItem(),
+  }
+  volantis.rightmenu = Object.assign(volantis.rightmenu, {
+    handle: volantis.rightmenu.method.handle.push,
+  });
+  /********************  Dark Mode  ********************************/
+  // /layout/_partial/scripts/darkmode.ejs
+  // volantis.dark.mode 当前模式 dark or light
+  // volantis.dark.toggle() 暗黑模式触发器
+  // volantis.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  volantis.dark = {};
+  volantis.dark.method = {
+    toggle: new RunItem(),
+  };
+  volantis.dark = Object.assign(volantis.dark, {
+    push: volantis.dark.method.toggle.push,
+  });
+  /********************  Message  ********************************/
+  // VolantisApp.message
+  /********************  isMobile  ********************************/
+  // /source/js/app.js
+  // volantis.isMobile
+  // volantis.isMobileOld
+  /********************脚本动态加载函数********************************/
+  // volantis.js(src, cb)  cb 可以传入onload回调函数 或者 JSON对象 例如: volantis.js("src", ()=>{}) 或 volantis.js("src", {defer:true,onload:()=>{}})
+  // volantis.css(src)
+
+  // 返回Promise对象，如下方法同步加载资源，这利于处理文件资源之间的依赖关系，例如：APlayer 需要在 MetingJS 之前加载
+  // (async () => {
+  //     await volantis.js("...theme.plugins.aplayer.js.aplayer...")
+  //     await volantis.js("...theme.plugins.aplayer.js.meting...")
+  // })();
+
+  // 已经加入了setTimeout
+  volantis.js = (src, cb) => {
+    return new Promise(resolve => {
+      setTimeout(function () {
+        var HEAD = document.getElementsByTagName("head")[0] || document.documentElement;
+        var script = document.createElement("script");
+        script.setAttribute("type", "text/javascript");
+        if (cb) {
+          if (JSON.stringify(cb)) {
+            for (let p in cb) {
+              if (p == "onload") {
+                script[p] = () => {
+                  cb[p]()
+                  resolve()
+                }
+              } else {
+                script[p] = cb[p]
+                script.onload = resolve
+              }
+            }
+          } else {
+            script.onload = () => {
+              cb()
+              resolve()
+            };
+          }
+        } else {
+          script.onload = resolve
+        }
+        script.setAttribute("src", src);
+        HEAD.appendChild(script);
+      });
+    });
+  }
+  volantis.css = (src) => {
+    return new Promise(resolve => {
+      setTimeout(function () {
+        var link = document.createElement('link');
+        link.rel = "stylesheet";
+        link.href = src;
+        link.onload = resolve;
+        document.getElementsByTagName("head")[0].appendChild(link);
+      });
+    });
+  }
+  /********************按需加载的插件********************************/
+  // volantis.import.jQuery().then(()=>{})
+  volantis.import = {
+    jQuery: () => {
+      if (typeof jQuery == "undefined") {
+        return volantis.js("https://unpkg.com/volantis-static@0.0.1654736714924/libs/jquery/dist/jquery.min.js")
+      } else {
+        return new Promise(resolve => {
+          resolve()
+        });
+      }
+    }
+  }
+  /********************** requestAnimationFrame ********************************/
+  // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+  // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+  volantis.requestAnimationFrame = (fn)=>{
+    if (!window.requestAnimationFrame) {
+      window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+    }
+    window.requestAnimationFrame(fn)
+  }
+  /************************ layoutHelper *****************************************/
+  volantis.layoutHelper = (helper, html, opt)=>{
+    opt = Object.assign({clean:false, pjax:true}, opt)
+    function myhelper(helper, html, clean) {
+      volantis.tempDiv = document.createElement("div");
+      volantis.tempDiv.innerHTML = html;
+      let layoutHelper = document.querySelector("#layoutHelper-"+helper)
+      if (layoutHelper) {
+        if (clean) {
+          layoutHelper.innerHTML = ""
+        }
+        layoutHelper.append(volantis.tempDiv);
+      }
+    }
+    myhelper(helper, html, opt.clean)
+    if (opt.pjax) {
+      volantis.pjax.push(()=>{
+        myhelper(helper, html, opt.clean)
+      },"layoutHelper-"+helper)
+    }
+  }
+  /****************************** 滚动事件处理 ****************************************/
+  volantis.scroll = {
+    engine: new RunItem(),
+    unengine: new RunItem(),
+  };
+  volantis.scroll = Object.assign(volantis.scroll, {
+    push: volantis.scroll.engine.push,
+  });
+  // 滚动条距离顶部的距离
+  volantis.scroll.getScrollTop = () =>{
+    let scrollPos;
+    if (window.pageYOffset) {
+      scrollPos = window.pageYOffset;
+    } else if (document.compatMode && document.compatMode != 'BackCompat') {
+      scrollPos = document.documentElement.scrollTop;
+    } else if (document.body) {
+      scrollPos = document.body.scrollTop;
+    }
+    return scrollPos;
+  }
+  // 使用 requestAnimationFrame 处理滚动事件
+  // `volantis.scroll.del` 中存储了一个数值, 该数值检测一定时间间隔内滚动条滚动的位移, 数值的检测频率是浏览器的刷新频率. 数值为正数时, 表示向下滚动. 数值为负数时, 表示向上滚动.
+  volantis.scroll.handleScrollEvents = () => {
+    volantis.scroll.lastScrollTop = volantis.scroll.getScrollTop()
+    function loop() {
+      const scrollTop = volantis.scroll.getScrollTop();
+      if (volantis.scroll.lastScrollTop !== scrollTop) {
+        volantis.scroll.del = scrollTop - volantis.scroll.lastScrollTop;
+        volantis.scroll.lastScrollTop = scrollTop;
+        // if (volantis.scroll.del > 0) {
+        //   console.log("向下滚动");
+        // } else {
+        //   console.log("向上滚动");
+        // }
+        // 注销过期的unengine未滚动事件
+        volantis.scroll.unengine.list=[]
+        volantis.scroll.engine.start();
+      }else{
+        volantis.scroll.unengine.start();
+      }
+      volantis.requestAnimationFrame(loop)
+    }
+    volantis.requestAnimationFrame(loop)
+  }
+  volantis.scroll.handleScrollEvents()
+  volantis.scroll.ele = null;
+  // 触发页面滚动至目标元素位置
+  volantis.scroll.to = (ele, option = {}) => {
+    if (!ele) return;
+    volantis.scroll.ele = ele;
+    // 默认配置
+    opt = {
+      top: ele.getBoundingClientRect().top + document.documentElement.scrollTop,
+      behavior: "smooth"
+    }
+    // 定义配置
+    if ("top" in option) {
+      opt.top = option.top
+    }
+    if ("behavior" in option) {
+      opt.behavior = option.behavior
+    }
+    if ("addTop" in option) {
+      opt.top += option.addTop
+    }
+    if (!("observerDic" in option)) {
+      option.observerDic = 100
+    }
+    // 滚动
+    window.scrollTo(opt);
+    // 监视器
+    // 监视并矫正元素滚动到指定位置
+    // 用于处理 lazyload 引起的 cls 导致的定位失败问题
+    // option.observer = false
+    if (option.observer) {
+      setTimeout(() => {
+        if (volantis.scroll.ele != ele) {
+          return
+        }
+        volantis.scroll.unengine.push(() => {
+          let me = ele.getBoundingClientRect().top
+          if(!(me >= -option.observerDic && me <= option.observerDic)){
+            volantis.scroll.to(ele, option)
+          }
+          volantis.scroll.unengine.remove("unengineObserver")
+        },"unengineObserver")
+      },1000)
+    }
+  }
+  /********************** Content Visibility ********************************/
+  // 见 source/css/first.styl 如果遇到任何问题 删除 .post-story 即可
+  // 一个元素被声明 content-visibility 属性后 如果元素不在 viewport 中 浏览器不会计算其后代元素样式和属性 从而节省 Style & Layout 耗时
+  // content-visibility 的副作用: 锚点失效 等等(实验初期 暂不明确), 使用此方法清除样式
+  volantis.cleanContentVisibility = ()=>{
+    if (document.querySelector(".post-story")) {
+      console.log("cleanContentVisibility");
+      document.querySelectorAll(".post-story").forEach(e=>{
+        e.classList.remove("post-story")
+      })
+    }
+  }
+  /******************************************************************************/
+  /******************************************************************************/
+  /******************************************************************************/
+  //图像加载出错时的处理
+  function errorImgAvatar(img) {
+    img.src = "https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg";
+    img.onerror = null;
+  }
+  function errorImgCover(img) {
+    img.src = "https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg";
+    img.onerror = null;
+  }
+  /******************************************************************************/
+</script>
+
+  <!-- import head_end begin -->
+  <!-- import head_end end -->
+  <!-- Custom Files headEnd begin-->
+  
+  <!-- Custom Files headEnd end-->
+  <!-- front-matter head_end begin -->
+  <!-- front-matter head_end end -->
+</head>
+  <body itemscope itemtype="http://schema.org/WebPage">
+    <!-- import body_begin begin-->
+    <!-- import body_begin end-->
+    <!-- Custom Files bodyBegin begin-->
+    
+    <!-- Custom Files bodyBegin end-->
+    <!-- front-matter body_begin begin -->
+    <!-- front-matter body_begin end -->
+    <header itemscope itemtype="http://schema.org/WPHeader" id="l_header" class="l_header auto shadow show" style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fa-solid fa-comments fa-fw" target="_self"  href="/" onclick="return false;" title="comment"></a></li>
+        
+          <li><a id="s-toc" class="s-toc fa-solid fa-list fa-fw" target="_self"  href="/" onclick="return false;" title="toc"></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='/img/meta/logo.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover"
+                href="/" title="博客"
+                  
+                  
+                  
+                    active-action="action-home"
+                  >
+                  <i class='fa-solid fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover"
+                href="/archives/" title="归档"
+                  
+                  
+                  
+                    active-action="action-archives"
+                  >
+                  <i class='fa-solid fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box header toggle-mode-btn">
+                  <i class='fa-solid fa-moon fa-fw'></i>
+                </a>
+              <li>
+            
+          
+          
+				</ul>
+			</div>
+      
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fa-solid fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+      
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fa-solid fa-search fa-fw" target="_self" href="/" onclick="return false;" title="search"></a></li>
+				
+				<li>
+          <a class="s-menu fa-solid fa-bars fa-fw" target="_self" href="/" onclick="return false;" title="menu"></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover"
+                href="/" title="博客"
+                  
+                  
+                  
+                    active-action="action-home"
+                  >
+                  <i class='fa-solid fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover"
+                href="/archives/" title="归档"
+                  
+                  
+                  
+                    active-action="action-archives"
+                  >
+                  <i class='fa-solid fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box header toggle-mode-btn">
+                  <i class='fa-solid fa-moon fa-fw'></i>
+                </a>
+              <li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+
+      <!-- Custom Files header begin -->
+      
+      <!-- Custom Files header end -->
+		</div>
+	</div>
+  </div>
+</header>
+
+    <div id="l_body">
+      <div id="l_cover">
+  
+    
+      <!-- see: /layout/_partial/scripts/_ctrl/coverCtrl.ejs -->
+      <div id="none" class='cover-wrapper post dock' style="display: none;">
+        
+  <div class='cover-bg lazyload placeholder' data-bg="https://gcore.jsdelivr.net/gh/MHG-LAB/cron@gh-pages/bing/bing.jpg"></div>
+
+<div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Volantis</p>
+    
+    
+  </div>
+  <div class='bottom'>
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a href="/v4/getting-started/"
+              
+              
+              active-action="action-v4getting-started">
+              <img src='https://unpkg.com/volantis-static@0.0.1654736714924/media/twemoji/assets/svg/1f5c3.svg'><p>文档</p>
+            </a>
+          
+            <a href="/faqs/"
+              
+              
+              active-action="action-faqs">
+              <img src='https://unpkg.com/volantis-static@0.0.1654736714924/media/twemoji/assets/svg/1f516.svg'><p>帮助</p>
+            </a>
+          
+            <a href="/examples/"
+              
+              
+              active-action="action-examples">
+              <img src='https://unpkg.com/volantis-static@0.0.1654736714924/media/twemoji/assets/svg/1f396.svg'><p>示例</p>
+            </a>
+          
+            <a href="/contributors/"
+              
+              
+              active-action="action-contributors">
+              <img src='https://unpkg.com/volantis-static@0.0.1654736714924/media/twemoji/assets/svg/1f389.svg'><p>社区</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              active-action="action-archives">
+              <img src='https://unpkg.com/volantis-static@0.0.1654736714924/media/twemoji/assets/svg/1f4f0.svg'><p>博客</p>
+            </a>
+          
+            <a target="_blank" rel="noopener" href="https://github.com/volantis-x/hexo-theme-volantis/"
+              
+              
+              active-action="action-https:githubcomvolantis-xhexo-theme-volantis">
+              <img src='https://unpkg.com/volantis-static@0.0.1654736714924/media/twemoji/assets/svg/1f9ec.svg'><p>源码</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+        <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+      </div>
+    
+  
+</div>
+
+      <div id="safearea">
+        <div class="body-wrapper">
+          
+<div id="l_main" class=''>
+  <article itemscope itemtype="http://schema.org/Article" class="article post white-box reveal md shadow floatable blur article-type-post" id="post" itemscope itemprop="blogPost">
+  <link itemprop="mainEntityOfPage" href="https://yzctzl.github.io/2023/KBLive/">
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Yzctzl">
+  </span>
+  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
+    <meta itemprop="name" content="Yzctzl">
+    <meta itemprop="description" content="奇迹">
+  </span>
+  
+
+
+  
+    <div class='headimg-div'>
+      <a class='headimg-a'>
+        <img itemprop="image" class='headimg' src='/img/2023/KBLive/headimg.png'/>
+      </a>
+    </div>
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title" itemprop="name headline">
+        尝试逆个简单的 Flutter App —— 𝘚
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author' itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a itemprop="url" class='author' href="/" rel="nofollow">
+    <img itemprop="image" src="/img/meta/logo.png" class="lazyload" data-srcset="/img/meta/logo.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+    <p itemprop="name">yzctzl</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class='new-meta-item category'>
+    <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+    <a class="category-link" href="/categories/Android/">Android</a>
+    
+      <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <a href="/categories/Android/" itemprop="url"><span itemprop="name">Android</span></a>
+      </span>
+    
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date" itemprop="dateCreated datePublished" datetime="2023-04-08T00:00:00+08:00">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2023年4月8日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+
+
+<div class="new-meta-item browse">
+  <a class='notlink'>
+    <p>
+      <i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+      
+      <span id="busuanzi_value_page_pv"><i class="fa-solid fa-loader fa-spin fa-fw" aria-hidden="true"></i></span>
+      
+      <span>次浏览</span>
+    </p>
+  </a>
+</div>
+
+
+          
+        
+        <!-- Custom Files topMeta begin-->
+        
+        <!-- Custom Files topMeta end-->
+      </div>
+    
+  </div>
+
+
+  <div id="layoutHelper-page-plugins"></div>
+  <div id="post-body" itemprop="articleBody">
+    <p>Flutter 是 Google 发布的一个跨平台的框架，其基于 Dart 语言，运行于 <a target="_blank" rel="noopener" href="https://mrale.ph/dartvm/">Dart VM</a> 中，其中的寄存器有自定义的使用规则、还有自定义 ABI、自定义的 Stack 等，加上其目前处于快速发展阶段，变更频繁，导致逆向非常困难。</p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/ReactJSTeams/next.js/raw/master/examples/nested-components/.gitignore">𝘚</a> 是当前直播盒子行业的领头羊，支持国内外近乎所有平台；其用 老版本 Flutter 开发，尽管 Java 层加了 360 壳，但并不影响使用 frida 和 IDA 等工具 hook，下面一窥其内部协议。</p>
+<h2 id="Flutter-逆向基础"><a href="#Flutter-逆向基础" class="headerlink" title="Flutter 逆向基础"></a>Flutter 逆向基础</h2><p><a target="_blank" rel="noopener" href="https://blog.tst.sh/reverse-engineering-flutter-apps-part-1/">Reverse engineering Flutter apps (Part 1)</a> 这篇文章提供了关于 快照、寄存器、Object Pool 等关键内容的信息，推荐首先阅读。</p>
+<h3 id="Dart-VM"><a href="#Dart-VM" class="headerlink" title="Dart VM"></a>Dart VM</h3><p>目前来看，下面这篇应该是最权威的介绍 Dart VM 的文章：<br><a target="_blank" rel="noopener" href="https://mrale.ph/dartvm/">https://mrale.ph/dartvm/</a></p>
+<h3 id="Register"><a href="#Register" class="headerlink" title="Register"></a>Register</h3><p>关于寄存器定义源码在：<a target="_blank" rel="noopener" href="https://github.com/dart-lang/sdk/blob/main/runtime/vm/constants_arm.h">ARM32</a>, <a target="_blank" rel="noopener" href="https://github.com/dart-lang/sdk/blob/main/runtime/vm/constants_arm64.h">AARCH64</a> 中，其中 Arm 指令集变化并不大，但 aarch64 变化较大。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># ARM32</span><br><span class="line">r0  -  r1 |     | Returns</span><br><span class="line">r0  -  r9 |     | General purpose</span><br><span class="line">r4  - r10 |     | Callee saved registers</span><br><span class="line">       r5 | pp  | Object pool</span><br><span class="line">      r10 | thr | Current thread</span><br><span class="line">      r11 | fp  | Frame pointer</span><br><span class="line">      r12 | ip  | Scratch register</span><br><span class="line">      r13 | sp  | Stack pointer</span><br><span class="line">      r14 | lr  | Link register</span><br><span class="line">      r15 | pc  | Program counter</span><br><span class="line"># AARCH64</span><br><span class="line">       r0 |     | Returns</span><br><span class="line">r0  -  r7 |     | Arguments</span><br><span class="line">r0  - r14 |     | General purpose</span><br><span class="line">      r15 | sp  | Dart stack pointer</span><br><span class="line">      r16 | ip0 | Scratch register</span><br><span class="line">      r17 | ip1 | Scratch register</span><br><span class="line">      r18 |     | Platform register</span><br><span class="line">r19 - r25 |     | General purpose</span><br><span class="line">r19 - r28 |     | Callee saved registers</span><br><span class="line">      r26 | thr | Current thread</span><br><span class="line">      r27 | pp  | Object pool</span><br><span class="line">      r28 | brm | Barrier mask</span><br><span class="line">      r29 | fp  | Frame pointer</span><br><span class="line">      r30 | lr  | Link register</span><br><span class="line">      r31 | zr  | Zero / CSP</span><br></pre></td></tr></table></figure>
+
+<h3 id="快照"><a href="#快照" class="headerlink" title="快照"></a>快照</h3><p>libapp.so 是 Flutter 的一种快照，Flutter 中有 三种快照：</p>
+<ol>
+<li><code>kernel</code>: 实际上只是生成了 AST，运行时：AST -&gt; IR -&gt; ASM</li>
+<li><code>app-jit</code>: parsed&#x2F;compiled 所有的函数和类（train run），到时仅运行 user code</li>
+<li><code>app-aot</code>: 从 main 开始完整的编译所有代码</li>
+</ol>
+<p>平时打包到 apk 中的就是 app-aot 格式的快照，相当于 vm heap snapshot。</p>
+<p>对这三种快照的介绍：<a target="_blank" rel="noopener" href="https://github.com/dart-lang/sdk/wiki/Snapshots">Snapshots</a>，更多关于快照的内容 <a target="_blank" rel="noopener" href="https://blog.tst.sh/reverse-engineering-flutter-apps-part-1/#anatomy-of-a-snapshot">Anatomy of a snapshot</a>。</p>
+<h3 id="确定版本"><a href="#确定版本" class="headerlink" title="确定版本"></a>确定版本</h3><p>可通过快照 Hash 来确定，比如 𝘚 使用的是：8ee4ef7a67df9845fba331734198a953，如果抹除了快照 Hash，暂时无法确定版本。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/kb_flutter_ver.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/kb_flutter_ver.png" class="lazyload" data-srcset="/img/2023/KBLive/kb_flutter_ver.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>在开始逆向之前，应该做一些准备工作，来降低逆向的难度，主要是按照下面两篇文章：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.guardsquare.com/blog/current-state-and-future-of-reversing-flutter-apps">The Current State &amp; Future of Reversing Flutter™ Apps</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.guardsquare.com/blog/obstacles-in-dart-decompilation-and-the-impact-on-flutter-app-security">Obstacles in Dart Decompilation &amp; the Impact on Flutter™ App Security</a></li>
+</ol>
+<p>但因为文章中是 64 位的 app，所以需要做一点点修改，具体参考左侧仓库中的 arm32 branch。</p>
+<h3 id="提取信息"><a href="#提取信息" class="headerlink" title="提取信息"></a>提取信息</h3><p>Flutter 快照中存在符号信息，但无法被 IDA 正确识别，若要提取信息，有两种方法，第一种是解析 Dart 快照，比如：<a target="_blank" rel="noopener" href="https://github.com/mildsunrise/darter">darter</a>, <a target="_blank" rel="noopener" href="https://github.com/rscloura/Doldrums">Doldrums</a>，但因为其快照格式更新频繁，所以维护成本高；第二种方式方法是：魔改 Flutter runtime library，使程序可以在运行的时侯 dump 出有用信息，其最知名的就是 reFlutter。</p>
+<h4 id="reFlutter"><a href="#reFlutter" class="headerlink" title="reFlutter"></a>reFlutter</h4>
+
+<p>使用 reFlutter 需要重新打包 apk，也可以使用 <a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-275287.htm">flutter 逆向助手</a> 基于 reFlutter 但不需要重新打包即可 dump。</p>
+<h4 id="Obfuscation"><a href="#Obfuscation" class="headerlink" title="Obfuscation"></a>Obfuscation</h4><p>Flutter 默认自带混淆插件，会混淆函数的符号信息，如果此时恰好有旧版本没有混淆的，那么可以使用：<a target="_blank" rel="noopener" href="https://www.zynamics.com/bindiff/manual/">BinDiff</a> 或 <a target="_blank" rel="noopener" href="https://github.com/joxeankoret/diaphora">Diaphora</a>，通过对比来确定函数名，具体参考第一篇文章。</p>
+<h3 id="Rename-Functions"><a href="#Rename-Functions" class="headerlink" title="Rename Functions"></a>Rename Functions</h3><p>拥有了类和函数的符号信息，下面就可以将 IDA 中对应偏移的函数重命名，首先要做的就是把 reFlutter 获取到的 dump.dart 解析以下，转为 json，方便重命名，具体参考 <a target="_blank" rel="noopener" href="https://github.com/yzctzl/flutter-re-demo/blob/arm32/parse_info.py">parse_info.py</a>。</p>
+<p>解析完成后，可用 <a target="_blank" rel="noopener" href="https://github.com/yzctzl/flutter-re-demo/blob/arm32/rename_flutter_functions.py">rename_flutter_functions.py</a> 这个 IDAPython 脚本批量将 json 中的信息 全部重命名到 IDA 数据库中。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/rename_func.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/rename_func.png" class="lazyload" data-srcset="/img/2023/KBLive/rename_func.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>完成函数的重命名之后，对 𝘚 而言就可以使用 IDA 进行动态调试了，下面的步骤也非常 重要&#x2F;有趣，尽管对 𝘚 的动态调试动态调试影响不大。</p>
+<h3 id="反汇编很奇怪"><a href="#反汇编很奇怪" class="headerlink" title="反汇编很奇怪"></a>反汇编很奇怪</h3><p>伪代码非常不可读，甚至不如 反汇编，这是为什么呢？</p>
+<ol>
+<li>Flutter 中所有 object 都是通过 object pool 间接引用</li>
+<li>Flutter 使用了自定义的栈 r13&#x2F;x15，并且通过栈来传递参数</li>
+<li>Flutter 使用自定义的二进制接口 (ABI)</li>
+</ol>
+<p>下面就根据第二篇文章的内容，来完成修复。</p>
+<h3 id="Object-Pool"><a href="#Object-Pool" class="headerlink" title="Object Pool"></a>Object Pool</h3><p>Flutter 中所有类都是通过 Object Pool <code>(R5/X27)</code> 来间接访问的，这就导致 IDA 反汇编几乎找不到任何类。</p>
+<p>保存到快照中的 object pool 是序列化之后的，这些内容无法直接使用。想要反序列化之后的 object pool 需要 dump 运行中的内存。</p>
+<p>那么如果想要恢复出 Object，要将 app 跑起来，具体步骤为：</p>
+<ol>
+<li>dump 出运行时 r5&#x2F;x27 指向的附近的所有内存</li>
+<li>rebase libapp.so 使其和 dump 出来的内存对齐</li>
+<li>手动读取 object pool，导入其中 object 指向的内存块</li>
+<li>使用 ida python 脚本恢复 object</li>
+</ol>
+<p>具体的方法和脚本，参见左侧仓库：<a target="_blank" rel="noopener" href="https://github.com/yzctzl/flutter-re-demo/blob/arm32/hooking/dump_flutter_memory.js">dump_flutter_memory.js</a> 或原文。</p>
+<h3 id="object"><a href="#object" class="headerlink" title="object"></a>object</h3><p>以下对结构的讨论仅对 𝘚 起效，其他版本的快照，需要根据 <a target="_blank" rel="noopener" href="https://github.com/dart-lang/sdk/blob/2.16.2/runtime/vm/app_snapshot.cc">app_snapshot.cc</a> 做些修改。</p>
+<h4 id="object-结构"><a href="#object-结构" class="headerlink" title="object 结构"></a>object 结构</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">DartObjectTag</span>  <span class="comment">// 4B</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> is_canonical_and_gc;  <span class="comment">// 1B 表示引用数量？</span></span><br><span class="line">    <span class="type">char</span> size_tag;</span><br><span class="line">    __int16 cid;               <span class="comment">// object 类型 ID</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">DartUnkObject</span>  <span class="comment">// 未知对象</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> is_canonical_and_gc;</span><br><span class="line">    <span class="type">char</span> size_tag;</span><br><span class="line">    __int16 cid;</span><br><span class="line">    &lt;<span class="type">int</span> padding&gt;  <span class="comment">// int: arm32 = __int32, aarch64 = __int64</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 常常是一个指针列表，依次指向该对象的各种属性</span></span><br><span class="line">    <span class="comment">// DartObject *attribute_objects[]</span></span><br><span class="line">    &lt;unknown <span class="keyword">class</span> <span class="title class_">specific</span> data&gt;</span><br><span class="line">    &lt;<span class="type">int</span> padding&gt;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">DartString</span>  <span class="comment">// 字符串</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> is_canonical_and_gc;</span><br><span class="line">    <span class="type">char</span> size_tag;</span><br><span class="line">    __int16 cid;    <span class="comment">// arm32 = 0x51, aarch64 = 0x55</span></span><br><span class="line">    <span class="type">int</span> s_len;      <span class="comment">// int: arm32 = __int32, aarch64 = __int64</span></span><br><span class="line">    &lt;<span class="type">int</span> padding&gt;</span><br><span class="line">    <span class="type">char</span> s[];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">DartBytes</span>  <span class="comment">// Bytes 串</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> is_canonical_and_gc;</span><br><span class="line">    <span class="type">char</span> size_tag;</span><br><span class="line">    __int16 cid;    <span class="comment">// arm32 = 0x6F</span></span><br><span class="line">    <span class="type">int</span> b_len;      <span class="comment">// int: arm32 = __int32, aarch64 = __int64</span></span><br><span class="line">    &lt;<span class="type">int</span> padding&gt;</span><br><span class="line">    __int8 b[];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">DartObjectPool</span> </span><br><span class="line">&#123;</span><br><span class="line">    DartObjectTag tag; </span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> nb_dart_objects_in_object_pool;  <span class="comment">// int: arm32 = __int32, aarch64 = __int64</span></span><br><span class="line">    DartObject *object_pool_array[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="odd-pointer"><a href="#odd-pointer" class="headerlink" title="odd pointer"></a>odd pointer</h4><p>指向 object 的指针都是奇数，这是为了区分对象和数字，数字是偶数，这就代表：如果一个指针是奇数，那它指向的内存是从其指向内存的上一个字节开始的，比如：0xBF965CC1，它指向的其实是 0xBF965CC0 并且这块内存对应的是一个 object；另如：0xBF967750，它指向一个数字。</p>
+<h4 id="创建-IDA-struct"><a href="#创建-IDA-struct" class="headerlink" title="创建 IDA struct"></a>创建 IDA struct</h4><p>通过上面的步骤，导入 r5&#x2F;x27 指向的内存之后，就可用 <a target="_blank" rel="noopener" href="https://github.com/yzctzl/flutter-re-demo/blob/arm32/create_dart_objects.py">create_dart_objects.py</a> 脚本来解析 object pool，解析完成后，可能会有些报红，按照缺少的内存位置导入相应 dump 出来的内存段。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/flutter_object_pool_recover.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/flutter_object_pool_recover.png" class="lazyload" data-srcset="/img/2023/KBLive/flutter_object_pool_recover.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<h4 id="映射"><a href="#映射" class="headerlink" title="映射"></a>映射</h4><p>将创建的 struct 与反汇编相关联：<a target="_blank" rel="noopener" href="https://github.com/yzctzl/flutter-re-demo/blob/arm32/add_xref_to_dart_objects.py">add_xref_to_dart_objects.py</a>。</p>
+<p>将创建的 struct 与伪代码相关联：在反汇编时 根据 microcode r5.4&#x2F;x27.8 来 Hook，替换为 内存中 Object 位置，相当于把原来的间接访问改为直接访问。脚本在：<a target="_blank" rel="noopener" href="https://github.com/yzctzl/flutter-re-demo/blob/arm32/add_dart_objects_in_decompiled_code.py">add_dart_objects_in_decompiled_code.py</a> 中。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/psu_microcode.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/psu_microcode.png" class="lazyload" data-srcset="/img/2023/KBLive/psu_microcode.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<h3 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h3><p>arm 指令集无需修改，但 aarch64 指令集需要，方法简单粗暴：遍历所有指令找到 x15 然后替换为 sp，<a target="_blank" rel="noopener" href="https://github.com/yzctzl/flutter-re-demo/blob/arm32/patch_dart_stack_pointer.py">patch_dart_stack_pointer.py</a>。</p>
+<h3 id="传参和返回-ABI"><a href="#传参和返回-ABI" class="headerlink" title="传参和返回(ABI)"></a>传参和返回(ABI)</h3><p>Flutter 的参数传递全部都是通过 <code>sp(r13/x15)/fp</code> 完成的，返回值和通常一样都是 <code>r0</code>；也因为都是在栈上传参的，所以 IDA 无法正确识别参数，可以适当修改函数签名，如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> __usercall <span class="title">LocalPuzzles___handlePublishTapped</span><span class="params">(<span class="type">void</span> *context@&lt;^<span class="number">16.8</span>&gt;, <span class="type">void</span> *uuid@&lt;^<span class="number">8.8</span>&gt;, <span class="type">void</span> *user@&lt;^<span class="number">0.8</span>&gt;)</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> __usercall LiveTool__decryptData@&lt;R0&gt;<span class="params">(DartString1 *str@&lt;^<span class="number">0.4</span>&gt;)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>一个个的修改函数的签名过于麻烦，这里仅需要修改用到的几个关键函数足够了。</p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>完成上述步骤后，IDA 中的代码其实还没到初步可读的程度，主因是 r10(thr)，很多的函数访问都是通过该寄存器来完成的，其指向的函数大都无法静态追踪。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/r10_problem.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/r10_problem.png" class="lazyload" data-srcset="/img/2023/KBLive/r10_problem.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p>执行完如下脚本之后，就完成了原文中的各种静态恢复：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/recent_script.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/recent_script.png" class="lazyload" data-srcset="/img/2023/KBLive/recent_script.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>恢复完的函数名和结构体：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/libapp_recover.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/libapp_recover.png" class="lazyload" data-srcset="/img/2023/KBLive/libapp_recover.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>恢复完的伪代码，效果不佳，其中黄色的 v5 就是 r10：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/dec_data_psu.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/dec_data_psu.png" class="lazyload" data-srcset="/img/2023/KBLive/dec_data_psu.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<h2 id="抓包"><a href="#抓包" class="headerlink" title="抓包"></a>抓包</h2><h3 id="BoringSSL"><a href="#BoringSSL" class="headerlink" title="BoringSSL"></a>BoringSSL</h3><p>因为 Flutter 使用的并非系统提供的 ssl 库，而是其自带的 BoringSSL 库，所以，通用的系统 vpn 和 proxy 方式不能起效，需要转发全部流量才行，可用 ProxyDroid 或直接用 <a target="_blank" rel="noopener" href="https://evilpan.com/2023/01/30/android-iptables/">iptables</a> 来抓包，此外可以尝试基于 ebpf 的流量控制工具。</p>
+<p>针对抓不到包的问题已经有不少文章讨论过了，如：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://blog.nviso.eu/2019/08/13/intercepting-traffic-from-android-flutter-applications/">Intercepting traffic from Android Flutter applications</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.nviso.eu/2020/05/20/intercepting-flutter-traffic-on-android-x64/">Intercepting Flutter traffic on Android (ARMv8)</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.nviso.eu/2022/08/18/intercept-flutter-traffic-on-ios-and-android-http-https-dio-pinning/">Intercept Flutter traffic on iOS and Android (HTTP&#x2F;HTTPS&#x2F;Dio Pinning)</a></li>
+</ol>
+<p>这位大佬详细分析了 Android 和 IOS 平台的 Flutter 应用无法抓包的原因以及 hook 位置和抓包方法。</p>
+<p>其对应的源码位于：<a target="_blank" rel="noopener" href="https://github.com/google/boringssl/blob/master/ssl/ssl_x509.cc#L357">ssl_crypto_x509_session_verify_cert_chain</a>。</p>
+<p>有两种方式干掉 ssl pinning，一种是想办法识别该函数的特征，然后 hook 掉，另外一种是直接使用魔改的 flutter 库替换原版的 flutter，两种方法分别对应如下：</p>
+<h3 id="frida"><a href="#frida" class="headerlink" title="frida"></a>frida</h3><p>上文作者提供了一个 frida 脚本 <a target="_blank" rel="noopener" href="https://github.com/NVISOsecurity/disable-flutter-tls-verification">disable-flutter-tls-verification</a>（原版有个小 bug: <a target="_blank" rel="noopener" href="https://gist.github.com/yzctzl/a468b0c2f615dfb607fb44ced43d1d7e">fixed version</a>），提供了相对通用的匹配规则来 hook 该函数。</p>
+<h3 id="reFlutter-1"><a href="#reFlutter-1" class="headerlink" title="reFlutter"></a>reFlutter</h3><p>除了上述方法外，还可以用 reFlutter 重打包，替换掉 libflutter.so，然后配合 BurpSuite 抓包，具体参考：<a target="_blank" rel="noopener" href="https://github.com/Impact-I/reFlutter#traffic-interception">Traffic interception</a> 和 <a target="_blank" rel="noopener" href="https://l33t-en0ugh.gitbook.io/infosec/android-pentesting/bypass-ssl-pinning-for-flutter-apps-using-reflutter-framework">Bypass SSL Pinning for flutter apps using reFlutter Framework</a>。</p>
+<h3 id="抓包结果"><a href="#抓包结果" class="headerlink" title="抓包结果"></a>抓包结果</h3><div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/capture.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/capture.png" class="lazyload" data-srcset="/img/2023/KBLive/capture.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<h2 id="frida-1"><a href="#frida-1" class="headerlink" title="frida"></a>frida</h2><p>因为 r10(thr) 的存在，导致静态分析几乎无法解决任何问题，仅仅能够通过重命名后的函数名来猜测关键位置，hook 判断流程。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Java</span>.<span class="title function_">perform</span>(hookdecData)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用该函数极易导致崩溃</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Caller</span>(<span class="params">baseAddr, funAddr, context, funame</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(</span><br><span class="line">        funame + <span class="string">&quot; Base address: &quot;</span> + baseAddr + <span class="string">&quot; funAddr: &quot;</span> + funAddr + <span class="string">&quot; ==&gt; &quot;</span> +</span><br><span class="line">            <span class="title class_">Thread</span>.<span class="title function_">backtrace</span>(context, <span class="title class_">Backtracer</span>.<span class="property">ACCURATE</span>).<span class="title function_">map</span>(<span class="title class_">DebugSymbol</span>.<span class="property">fromAddress</span>).<span class="title function_">join</span>(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">sp_info</span>(<span class="params">sp</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`sp: <span class="subst">$&#123;sp&#125;</span>: <span class="subst">$&#123;sp.readPointer()&#125;</span>, <span class="subst">$&#123;sp.add(<span class="number">4</span>)&#125;</span>: <span class="subst">$&#123;sp.add(<span class="number">4</span>).readPointer()&#125;</span>, <span class="subst">$&#123;sp.add(<span class="number">8</span>)&#125;</span>: <span class="subst">$&#123;sp.add(<span class="number">8</span>).readPointer()&#125;</span>`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">dec_info</span>(<span class="params">sp</span>) &#123;</span><br><span class="line">    <span class="comment">// cid == 0bxx: 获取数据位置 首先 -1 得到 object 起点，然后 +4 得到数据在内存中位置</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(sp.<span class="title function_">readPointer</span>()             <span class="comment">// 首先是一个 cid == 0b12</span></span><br><span class="line">                .<span class="title function_">add</span>(-<span class="number">1</span> + <span class="number">4</span>).<span class="title function_">readPointer</span>()    <span class="comment">// 然后 cid == 00bf 存储了 bytes 的指针</span></span><br><span class="line">                .<span class="title function_">add</span>(-<span class="number">1</span> + <span class="number">4</span>).<span class="title function_">readPointer</span>()    <span class="comment">// +4 -1 得到 iv 在内存中位置</span></span><br><span class="line">                .<span class="title function_">readByteArray</span>(<span class="number">16</span>));         <span class="comment">// 从该位置获取长度 16b 的 iv</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(sp.<span class="title function_">add</span>(<span class="number">8</span>).<span class="title function_">readPointer</span>()  <span class="comment">// 首先从 栈上读取一个指针，其指向 cid == 0b18</span></span><br><span class="line">                .<span class="title function_">add</span>(-<span class="number">1</span> + <span class="number">4</span>).<span class="title function_">readPointer</span>()  <span class="comment">// cid == 0b11</span></span><br><span class="line">                .<span class="title function_">add</span>(-<span class="number">1</span> + <span class="number">4</span>).<span class="title function_">readPointer</span>()  <span class="comment">// cid == 00bf 存储的是 bytes 的指针</span></span><br><span class="line">                .<span class="title function_">add</span>(-<span class="number">1</span> + <span class="number">4</span>).<span class="title function_">readPointer</span>()  <span class="comment">// +4 -1 得到 key 在内存中位置</span></span><br><span class="line">                .<span class="title function_">readByteArray</span>(<span class="number">32</span>));     <span class="comment">// 从该位置获取长度 32b 的 key</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">hookdecData</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> baseAddr = <span class="title class_">Module</span>.<span class="title function_">findBaseAddress</span>(<span class="string">&quot;libapp.so&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> snapAddr = <span class="title class_">Module</span>.<span class="title function_">findExportByName</span>(<span class="string">&#x27;libapp.so&#x27;</span>, <span class="string">&#x27;_kDartIsolateSnapshotInstructions&#x27;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(baseAddr, snapAddr)</span><br><span class="line"></span><br><span class="line">    <span class="title class_">Interceptor</span>.<span class="title function_">attach</span>(snapAddr.<span class="title function_">add</span>(<span class="number">0x35fda0</span>), &#123;</span><br><span class="line">        <span class="attr">onEnter</span>: <span class="keyword">function</span> (<span class="params">args</span>) &#123;  <span class="comment">// 传入一个参数：需要解密的 data 字符串，cid == 0x51</span></span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">context</span>.<span class="property">r10</span>.<span class="title function_">readByteArray</span>(<span class="number">1024</span>));</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;enter decryptData: &quot;</span>, snapAddr.<span class="title function_">add</span>(<span class="number">0x35fda0</span>), <span class="title function_">sp_info</span>(<span class="variable language_">this</span>.<span class="property">context</span>.<span class="property">sp</span>));</span><br><span class="line">            <span class="comment">// let s_len = this.context.sp.readPointer().add(-1 + 4).readU32() / 2</span></span><br><span class="line">            <span class="comment">// console.log(this.context.sp.readPointer().add(-1).readByteArray(12 + s_len));</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">onLeave</span>: <span class="keyword">function</span> (<span class="params">ret</span>) &#123;</span><br><span class="line">            <span class="comment">// console.log(&quot;leave: decryptData, r0: &quot;, this.context.r0);</span></span><br><span class="line">            <span class="comment">// console.log(this.context.r0.readByteArray(32));</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="title class_">Interceptor</span>.<span class="title function_">attach</span>(baseAddr.<span class="title function_">add</span>(<span class="number">0x1e3d88</span>), &#123;</span><br><span class="line">        <span class="attr">onEnter</span>: <span class="keyword">function</span> (<span class="params">args</span>) &#123;</span><br><span class="line">            <span class="comment">// Caller(baseAddr, baseAddr.add(0x1e3d88), this.context, &quot;Encrypter_decrypt&quot;)</span></span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">context</span>.<span class="property">r10</span>.<span class="title function_">readByteArray</span>(<span class="number">1024</span>));</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;enter Encrypter_decrypt: &quot;</span>, baseAddr.<span class="title function_">add</span>(<span class="number">0x1e3d88</span>), <span class="title function_">sp_info</span>(<span class="variable language_">this</span>.<span class="property">context</span>.<span class="property">sp</span>));</span><br><span class="line">            <span class="comment">// dec_info(this.context.sp)</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="title class_">Interceptor</span>.<span class="title function_">attach</span>(baseAddr.<span class="title function_">add</span>(<span class="number">0x4f16a4</span>), &#123;</span><br><span class="line">        <span class="attr">onEnter</span>: <span class="keyword">function</span> (<span class="params">args</span>) &#123;</span><br><span class="line">            <span class="comment">// Caller(baseAddr, baseAddr.add(0x4f16a4), this.context, &quot;AES__decrypt&quot;)</span></span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;enter AES__decrypt: &quot;</span>, baseAddr.<span class="title function_">add</span>(<span class="number">0x4f16a4</span>), <span class="variable language_">this</span>.<span class="property">context</span>.<span class="property">r12</span>, <span class="title function_">sp_info</span>(<span class="variable language_">this</span>.<span class="property">context</span>.<span class="property">sp</span>));</span><br><span class="line">            <span class="title function_">dec_info</span>(<span class="variable language_">this</span>.<span class="property">context</span>.<span class="property">sp</span>)</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">onLeave</span>: <span class="keyword">function</span> (<span class="params">ret</span>) &#123;</span><br><span class="line">            <span class="comment">// console.log(&quot;leave: AES__decrypt, r0: &quot;, this.context.r0);</span></span><br><span class="line">            <span class="comment">// let r_len = this.context.r0.add(8-1).readU32() / 2</span></span><br><span class="line">            <span class="comment">// console.log(this.context.r0.add(-1).readByteArray(12 + r_len));</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>经过不断尝试，初步判断调用流程为：<code>decryptData -&gt; Encrypter_decrypt -&gt; AES__decrypt</code>。</p>
+<p>但很快发现 key 是每小时修改的，但并没有在抓包中发现下发的 key，那么初步推测是本地生成的，此时再用 frida 分析就显得非常无力，本来想使用一些 trace 工具，从中找查找加密方式，但苦于没有顺手的 tracer，最终还是拾起了 IDA，啊，真香！</p>
+<h2 id="IDA-动态调试与分析"><a href="#IDA-动态调试与分析" class="headerlink" title="IDA 动态调试与分析"></a>IDA 动态调试与分析</h2><h3 id="decryptData"><a href="#decryptData" class="headerlink" title="decryptData"></a>decryptData</h3><p>通过上面 frida 的分析，<code>decryptData</code> 函数应该是整个解密的入口，然后再在 <code>Encrypter_decrypt</code> 和 <code>AES__decrypt</code> 加上断点，使用 32 位的 server，attach 上，随便在 App 中点击一下：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_01.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_01.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_01.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>成功断下了，然后一路 f8，执行到 下面的位置：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_02.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_02.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_02.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>发现之后就进入到 <code>Encrypter_decrypt</code> 中了，那重启调试器，进去看看，很顺利，进入到一个 <code>C47</code> 开头的函数中：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_03.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_03.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_03.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>通过查看其传入参数，不包含 key，但在其中调用了 <code>Encrypter_decrypt</code> 其中需要 key 参数，所以 <code>C47</code> 及其调用中必然存在 key 的生成规则。</p>
+<p>下面需要详细分析 C47 这个函数：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_04.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_04.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_04.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_05.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_05.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_05.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>其首先获取当前 UTC 时间，格式为 <code>%Y%b%#d%#H</code>，然后转为大写，接下来：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_06.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_06.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_06.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_07.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_07.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_07.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>转为 Uint8List 后每个 byte + 4，这部分在函数内部完成。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_08.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_08.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_08.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>这是拼接上 <code>Shinkansen188</code>，然后获取 <code>UserInfo</code>。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_09.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_09.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_09.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>上图中是 将拼接后的字符做 MD5。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_10.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_10.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_10.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>这里注意 hash 函数包括两种算法，这里用的是 MD5，后面还会用 SHA256。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_11.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_11.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_11.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_12.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_12.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_12.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>如上，其结果经过三层 object 可见。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_13.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_13.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_13.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>接下来把刚才获取到的 UserInfo 中的 token 和 md5 拼接起来。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_14.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_14.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_14.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>做 sha256(token + md5)；然后是些无用操作。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_15.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_15.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_15.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>其结果保存到了 <code>0xBEF89224</code> 中，以 <code>AB B1</code> 开头，这就是需要的 key</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_18.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_18.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_18.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>IV 是固定的，直接以 base64 的方式存储在 so 中。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_16.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_16.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_16.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_17.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_17.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_17.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>后面就是 AES 初始化和 解密 操作了，没有密码学上的魔改，参考 frida 部分，不再赘述。</p>
+<h3 id="encryptDataWithR"><a href="#encryptDataWithR" class="headerlink" title="encryptDataWithR"></a>encryptDataWithR</h3><p>使用上面的 AES 解密可以解决抓包中的大部分加密了，但还有两个特殊情况：</p>
+<ol>
+<li>Host&#x2F;Info : 其 post 的 data 是上面的 key 和 iv 加密的</li>
+<li>Host&#x2F;loadMore : 其 post 的 data 无法正确加密，这是本节内容</li>
+</ol>
+<p>既然是加密，那么把所有 <code>*encry*</code> 都打上断点，然后启动调试器，点开一个视频后，下滑，成功断在 <code>encryptDataWithR</code>，如下图：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_r_01.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_r_01.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_r_01.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>传入参数是 <code>idid_xxxx</code>。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_r_02.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_r_02.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_r_02.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>然后 load 了 Public Key</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_r_03.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_r_03.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_r_03.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<p>然后 parse 转为 Uint8List，以 C7 73 10 开头，后面直接就是 rsa 加密。</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_r_06.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_r_06.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_r_06.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<h2 id="源码对照"><a href="#源码对照" class="headerlink" title="源码对照"></a>源码对照</h2><p>通过上面的观察，AES 解密 &#x2F; RSA 加密 应该是调用了外部包，经过一番搜索，是如下两个：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/leocavalcante/encrypt">https://github.com/leocavalcante/encrypt</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/bcgit/pc-dart">https://github.com/bcgit/pc-dart</a></li>
+</ol>
+<p>比如 RSA 其对应的关键函数：</p>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_r_04.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_r_04.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_r_04.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+<div galleryFlag itemscope itemtype="http://schema.org/ImageGallery" class="gallery " data-group='default'><div class='fancybox'><a class='fancybox' pjax-fancybox itemscope itemtype="http://schema.org/ImageObject" itemprop="url" href='/img/2023/KBLive/ida_r_05.png' data-fancybox='default' data-caption='undefined'><img fancybox itemprop="contentUrl" src="/img/2023/KBLive/ida_r_05.png" class="lazyload" data-srcset="/img/2023/KBLive/ida_r_05.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a><span></span></div></div>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>整个过程中最关键的是这三个步骤：</p>
+<ol>
+<li>了解 Object 的结构和 ABI，这样才能在内存中找到需要的内容</li>
+<li>导入函数名至关重要，否则就像无头苍蝇</li>
+<li>适时找到外部包，这将节省巨量时间</li>
+</ol>
+
+  </div>
+  
+  
+    
+    <div class='footer'>
+       <!-- 参考资料、相关资料等 -->
+      
+        <div class='references'>
+          <section class='header'>
+            
+              <i class="fas fa-quote-left fa-fw" aria-hidden="true"></i>
+            
+            <span>参考资料</span>
+          </section>
+          <section class='body'>
+            <ul>
+              
+                <li>
+                  <a href="https://bbs.kanxue.com/thread-274981.htm" rel="external nofollow noopener noreferrer" target="_blank">
+                  Flutter 概述和逆向技术发展时间线
+                  </a>
+                </li>
+              
+            </ul>
+          </section>
+        </div>
+      
+       <!-- 相关文章 -->
+      
+      <!-- 版权声明组件 -->
+      
+      <!-- 打赏组件 -->
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Android/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Android</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Flutter/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Flutter</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Dart/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Dart</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Reverse/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Reverse</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/IDA/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>IDA</p></a></div>
+  <span hidden itemprop="keywords">Android Flutter Dart Reverse IDA</span>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://yzctzl.github.io/2023/KBLive/&title=尝试逆个简单的 Flutter App —— 𝘚 - Yzctzl&summary="
+          
+          >
+          
+            <img src="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://yzctzl.github.io/2023/KBLive/&title=尝试逆个简单的 Flutter App —— 𝘚 - Yzctzl&summary="
+          
+          >
+          
+            <img src="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+      
+        
+        <div class='hoverbox'>
+          <a class='share'><img src="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/wechat.png" class="lazyload" data-srcset="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/wechat.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a>
+          <div class='target'>
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAEYCAAAAACi5bZQAAAC/klEQVR42u3aQW7DMAwEwPz/0+0HGlhL0knYjG42DFscXxakHj/Wn+uBAAwYMGDAgFkD8yiu2zb25DtX11P1gAEDBgwYMGD2waQbPy2oCzAFdloPGDBgwIABA2YvzGUAOnw+LfxywxffHasHDBgwYMCAAfN1MNWG1On90yAJBgwYMGDAgAEzDVMd5HXvgwEDBgwYMGC+B6baQEobWHc3pt4+iQQDBgwYMGDAvAwmXWlBr74u1wMGDBgwYMCAWQPTXdONrqlGVrkeMGDAgAEDBswamGpASg/0dBtQ6cAt3T8YMGDAgAEDZh/M6Yu7z1ffUz04VB7YgQEDBgwYMGDWwZw2fKoHc9IGVtr4ShtjT78HBgwYMGDAgFkH0204Ve+nwazbCBtrVIEBAwYMGDBg3g5TDVpV2KlCu6BP74MBAwYMGDBg1sCkAWxq0JY2kKaCJBgwYMCAAQPm/8FUQbqQpwFu6geVB25gwIABAwYMmI+DeYRrakBXPYBUhS8P3MCAAQMGDBgwHwtT3cCrNpwO2LqNNDBgwIABAwbMHpi7Nl4NdlNg5QYbGDBgwIABA2Y9zN0B7rTg08LSIFgeuIEBAwYMGDBg1sGkA7V0gDZ9gKn6g8CAAQMGDBgw+2DSoJU2mNKAN/X86Y8FAwYMGDBgwOyHiV9UDH7pYK16gCg+cAQGDBgwYMCAWQtzd4MpbUSlz7UHe2DAgAEDBgyYtTBpId2B3dTArPqeOPmCAQMGDBgwYD4WZnqDp9fVxlVa+OV+wYABAwYMGDBrYLor/XD3B3QHfpfPgwEDBgwYMGDWwNwVmKY3fPqdNFCCAQMGDBgwYPbDVANdt/GUNrrSAHnbwA0MGDBgwIAB83Ew3QB1HKSahVUD6uWPBgMGDBgwYMB8HcxUUEzfk/6gy3rAgAEDBgwYMF8LM93IuisIHh8cAgMGDBgwYMCsgakGqWojK/1udTB3vH8wYMCAAQMGzDqY6uBqauA2HRDTHwgGDBgwYMCA2QdjgQEDBgwYMGCWrV/9HWHK+BuI3gAAAABJRU5ErkJggg==">
+          </div>
+        </div>
+      
+    
+      
+        <a class="-mob-share-telegram" title="" rel="external nofollow noopener noreferrer noopener"
+          
+            target="_blank" href="https://t.me/share/url?url=https://yzctzl.github.io/2023/KBLive/&text=尝试逆个简单的 Flutter App —— 𝘚 - Yzctzl"
+          
+          >
+          
+            <img src="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/telegram.png" class="lazyload" data-srcset="https://gcore.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/telegram.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+    <!-- Custom Files bottomMeta begin -->
+    
+    <!-- Custom Files bottomMeta end -->
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2023/emptiness/'>
+          <p class='title'><i class="fa-solid fa-chevron-left" aria-hidden="true"></i>空</p>
+          <p class='content'>
+  15c2f7342c10e47b969a852fda4fda9af7b4ec71413711b5a38255f537a3bed5292cc0e89997e1feb8e95bfa7f39ee...</p>
+        </a>
+      
+      
+        <a class='next' href='/2023/ReNFQ/'>
+          <p class='title'>实例 F 加密的更新<i class="fa-solid fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>起因昨天很多人 @我 说：F 上新版了，Flutter 写的，还有 Web 端，关键是 ReFLV 中对 F 的解密失效了；于是昨天睡前下了个新版看了下：本来看到 Flutter 心凉了半截，感...</p>
+        </a>
+      
+    </div>
+  
+  <!-- Custom Files postEnd begin-->
+  
+  <!-- Custom Files postEnd end-->
+</article>
+
+
+  
+
+
+  <article class="post white-box shadow floatable blur" id="comments">
+    <span hidden>
+      <meta itemprop="discussionUrl" content="/2023/KBLive/index.html#comments">
+    </span>
+    <p ct><i class='fa-solid fa-comments'></i> 评论</p>
+    
+
+    <div id="layoutHelper-comments"></div>
+
+  </article>
+
+
+
+
+
+
+</div>
+<aside id='l_side' itemscope itemtype="http://schema.org/WPSideBar">
+  
+
+  
+    
+    
+      
+    
+  
+
+
+<div class="widget-sticky pjax">
+
+  
+  
+
+
+  <section class="widget toc-wrapper desktop mobile " id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Flutter-%E9%80%86%E5%90%91%E5%9F%BA%E7%A1%80"><span class="toc-text">Flutter 逆向基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dart-VM"><span class="toc-text">Dart VM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Register"><span class="toc-text">Register</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E7%85%A7"><span class="toc-text">快照</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AE%E5%AE%9A%E7%89%88%E6%9C%AC"><span class="toc-text">确定版本</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-text">准备工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E5%8F%96%E4%BF%A1%E6%81%AF"><span class="toc-text">提取信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#reFlutter"><span class="toc-text">reFlutter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Obfuscation"><span class="toc-text">Obfuscation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Rename-Functions"><span class="toc-text">Rename Functions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E6%B1%87%E7%BC%96%E5%BE%88%E5%A5%87%E6%80%AA"><span class="toc-text">反汇编很奇怪</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Object-Pool"><span class="toc-text">Object Pool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#object"><span class="toc-text">object</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#object-%E7%BB%93%E6%9E%84"><span class="toc-text">object 结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#odd-pointer"><span class="toc-text">odd pointer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA-IDA-struct"><span class="toc-text">创建 IDA struct</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%98%A0%E5%B0%84"><span class="toc-text">映射</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Stack"><span class="toc-text">Stack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E5%8F%82%E5%92%8C%E8%BF%94%E5%9B%9E-ABI"><span class="toc-text">传参和返回(ABI)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98"><span class="toc-text">问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%88%E6%9E%9C"><span class="toc-text">效果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%93%E5%8C%85"><span class="toc-text">抓包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BoringSSL"><span class="toc-text">BoringSSL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#frida"><span class="toc-text">frida</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reFlutter-1"><span class="toc-text">reFlutter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%93%E5%8C%85%E7%BB%93%E6%9E%9C"><span class="toc-text">抓包结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#frida-1"><span class="toc-text">frida</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IDA-%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E4%B8%8E%E5%88%86%E6%9E%90"><span class="toc-text">IDA 动态调试与分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#decryptData"><span class="toc-text">decryptData</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#encryptDataWithR"><span class="toc-text">encryptDataWithR</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%AF%B9%E7%85%A7"><span class="toc-text">源码对照</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol>
+    </div>
+  </section>
+
+  
+
+</div>
+
+
+<!-- 没有 pjax 占位会报错 万恶的 pjax -->
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <!-- Custom Files side begin -->
+  
+  <!-- Custom Files side end -->
+</aside>
+
+
+
+          <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<pjax>
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+  pdata.commentConfig={};
+  //  see: /layout/_partial/scripts/_ctrl/coverCtrl.ejs
+  
+    // header
+    var l_header=document.getElementById("l_header");
+    
+    l_header.classList.add("show");
+    
+    
+      // cover
+      var cover_wrapper=document.querySelector('#l_cover .cover-wrapper');
+      var scroll_down=document.getElementById('scroll-down');
+      cover_wrapper.id="none";
+      cover_wrapper.style.display="none";
+      scroll_down.style.display="none";
+    
+  
+</script>
+</pjax>
+        </div>
+        
+  
+  <footer class="footer clearfix"  itemscope itemtype="http://schema.org/WPFooter">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper" itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          
+            
+              <a href="/atom.xml"
+                class="social fas fa-rss flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer" itemprop="url">
+                
+              </a>
+            
+          
+            
+              <a href="mailto:yzctzl@gmail.com"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer" itemprop="url">
+                
+              </a>
+            
+          
+            
+              <a href="https://github.com/yzctzl"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer" itemprop="url">
+                
+              </a>
+            
+          
+            
+              <a href="https://t.me/tgMrZ"
+                class="social fa-brands fa-telegram flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer" itemprop="url">
+                
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/#5.8.0" target="_blank" class="codename">Volantis</a>
+        作为主题，总访问量为
+          <span id="busuanzi_value_site_pv"><i class="fa-solid fa-loader fa-spin fa-fw" aria-hidden="true"></i></span>
+          次
+        
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2019-2023 YZCTZL All Rights Reserved</a></p>
+
+        </div>
+      
+    
+    <!-- Custom Files footer begin-->
+    
+    <!-- Custom Files footer end-->
+  </footer>
+
+
+        <a id="s-top" class="fa-solid fa-arrow-up fa-fw" href="/" onclick="return false;" title="top"></a>
+      </div>
+    </div>
+    <div>
+      <script>
+  /******************** volantis.dom ********************************/
+  // 页面选择器 将dom对象缓存起来 see: /source/js/app.js etc.
+  volantis.dom.bodyAnchor = volantis.dom.$(document.getElementById("safearea")); // 页面主体
+  volantis.dom.topBtn = volantis.dom.$(document.getElementById('s-top')); // 向上
+  volantis.dom.wrapper = volantis.dom.$(document.getElementById('wrapper')); // 整个导航栏
+  volantis.dom.coverAnchor = volantis.dom.$(document.querySelector('#l_cover .cover-wrapper')); // 1个
+  volantis.dom.switcher = volantis.dom.$(document.querySelector('#l_header .switcher .s-search')); // 搜索按钮   移动端 1个
+  volantis.dom.header = volantis.dom.$(document.getElementById('l_header')); // 移动端导航栏
+  volantis.dom.search = volantis.dom.$(document.querySelector('#l_header .m_search')); // 搜索框 桌面端 移动端 1个
+  volantis.dom.mPhoneList = volantis.dom.$(document.querySelectorAll('#l_header .m-phone .list-v')); //  手机端 子菜单 多个
+</script>
+
+<script>
+  
+  volantis.css("https://unpkg.com/volantis-static@0.0.1654736714924/libs/@fortawesome/fontawesome-free/css/all.min.css");
+  
+  
+  
+</script>
+
+<!-- required -->
+
+
+<!-- internal -->
+
+<script src="/js/app.js"></script>
+
+
+
+
+
+
+<!-- rightmenu要在darkmode之前（ToggleButton） darkmode要在comments之前（volantis.dark.push）-->
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "color-scheme";
+const rootElementDarkModeAttributeName = "color-scheme";
+const setLS = (k, v) => {
+    localStorage.setItem(k, v);
+};
+const removeLS = (k) => {
+    localStorage.removeItem(k);
+};
+const getLS = (k) => {
+    return localStorage.getItem(k);
+};
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+  getCustomDarkMode();
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+/**
+ * get target mode
+ */
+ const getCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  if(currentSetting=="dark"){
+    volantis.dark.mode="light";
+  }else{
+    volantis.dark.mode="dark";
+  }
+  // console.log(volantis.dark.mode)
+};
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+/**
+ * 暗黑模式触发器
+ */
+volantis.dark.toggle=()=>{
+  const mode = toggleCustomDarkMode();
+  applyCustomDarkModeSettings(mode);
+  // 使用 volantis.dark.push 方法传入volantis.dark.toggle回调函数 参见layout/_partial/scripts/global.ejs
+  volantis.dark.method.toggle.start();
+}
+/**
+ * bind event for toggle button
+ */
+
+function bindToggleButton() {
+  var btn= document.querySelectorAll("#wrapper .toggle-mode-btn,#rightmenu-wrapper .toggle-mode-btn")
+  btn.forEach(function (e) {
+    volantis.dom.$(e).on('click',volantis.dark.toggle);
+  })
+}
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", ()=>{
+  volantis.requestAnimationFrame(bindToggleButton)
+});
+volantis.pjax.push(bindToggleButton);
+
+const darkModelListeners={
+  dark:(mediaQueryList )=>{
+    if(mediaQueryList.matches){
+      volantis.dark.mode = "dark";
+    }
+    volantis.dark.method.toggle.start();
+  },
+  light:(mediaQueryList)=>{
+    if(mediaQueryList.matches){
+      volantis.dark.mode = "light";
+    }
+    volantis.dark.method.toggle.start();
+  }
+}
+window.matchMedia('(prefers-color-scheme: dark)').addListener(darkModelListeners.dark)
+window.matchMedia('(prefers-color-scheme: light)').addListener(darkModelListeners.light)
+</script>
+
+
+
+
+<script>
+  function loadIssuesJS() {
+    
+      const sites_api = document.getElementById('sites-api');
+      if (sites_api != undefined && typeof SitesJS === 'undefined') {
+        volantis.js("/js/plugins/tags/sites.js")
+      }
+    
+    
+      const friends_api = document.getElementById('friends-api');
+      if (friends_api != undefined && typeof FriendsJS === 'undefined') {
+        volantis.js("/js/plugins/tags/friends.js")
+      }
+    
+    
+      const contributors_api = document.getElementById('contributors-api');
+      if (contributors_api != undefined && typeof ContributorsJS === 'undefined') {
+        volantis.js("/js/plugins/tags/contributors.js")
+      }
+    
+  };
+  loadIssuesJS()
+  volantis.pjax.push(()=>{
+    loadIssuesJS();
+  })
+
+</script>
+
+
+
+
+  <script defer src="https://unpkg.com/volantis-static@0.0.1654736714924/libs/vanilla-lazyload/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+
+<script>
+  window.FPConfig = {
+	delay: 0,
+	ignoreKeywords: ["#"],
+	maxRPS: 6,
+	hoverDelay: 0
+  };
+</script>
+<script defer src="https://unpkg.com/volantis-static@0.0.1654736714924/libs/flying-pages/flying-pages.min.js"></script>
+
+
+
+
+
+
+
+
+
+      <script>
+  volantis.layoutHelper("comments",`<div id="giscus_container"></div>`)
+
+  volantis.giscus = {};
+
+  function check_giscus() {
+    if (volantis.dark.mode === "dark") {
+      volantis.giscus.Theme = 'dark';
+    } else {
+      volantis.giscus.Theme = 'light';
+    }
+
+    return document.getElementById("giscus_container");
+  }
+
+  function pjax_giscus() {
+    const HEAD = check_giscus();
+    if (!HEAD) return;
+    let cfg = Object.assign({"theme":{"light":"light","dark":"dark"},"repo":"yzctzl/yzctzl.github.io","repo-id":"R_kgDOIt5aTA","category":"Announcements","category-id":"DIC_kwDOIt5aTM4CUCBD","mapping":"pathname","reactions-enabled":"1","emit-metadata":"0","lang":"zh-CN"},pdata.commentConfig)
+    const script = document.createElement('script');
+    script.setAttribute('src', 'https://giscus.app/client.js');
+    Object.keys(cfg).forEach(k=>{
+      if (k != "theme") {
+        script.setAttribute('data-'+k, cfg[k]);
+      }
+    })
+    script.setAttribute('data-theme', volantis.giscus.Theme);
+    script.setAttribute('crossorigin', "anonymous");
+    HEAD.appendChild(script);
+  }
+
+  function dark_giscus() {
+    const HEAD = check_giscus();
+    if (!HEAD) return;
+
+    const message = {
+      setConfig: {
+        theme: volantis.giscus.Theme
+      }
+    };
+    const giscusIframe = document.querySelector('iframe.giscus-frame');
+    giscusIframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+  }
+  pjax_giscus();
+  volantis.pjax.push(pjax_giscus);
+  volantis.dark.push(dark_giscus);
+</script>
+
+    
+
+
+
+
+  <script defer src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" data-pjax></script>
+
+
+<!-- optional -->
+
+  <script>
+  const SearchServiceDataPathRoot = ("/" || "/").endsWith("/") ?
+    "/" || "/" :
+    "//" || "/";
+  const SearchServiceDataPath = SearchServiceDataPathRoot + "content.json";
+
+  function loadSearchScript() {
+    // see: layout/_partial/scripts/_ctrl/cdnCtrl.ejs
+    return volantis.js("/js/search/hexo.js");
+  }
+
+  function loadSearchService() {
+    loadSearchScript();
+    document.querySelectorAll(".input.u-search-input").forEach((e) => {
+      e.removeEventListener("focus", loadSearchService, false);
+    });
+
+    document.querySelectorAll(".u-search-form").forEach((e) => {
+      e.addEventListener("submit", (event) => {
+        event.preventDefault();
+      }, false);
+    });
+  }
+
+  // 打开并搜索 字符串 s
+  function OpenSearch(s) {
+    if (typeof SearchService === 'undefined')
+      loadSearchScript().then(() => {
+        SearchService.setQueryText(s);
+        SearchService.search();
+      });
+    else {
+      SearchService.setQueryText(s);
+      SearchService.search();
+    }
+  }
+
+  // 访问含有 ?s=xxx  的链接时打开搜索 // 与搜索引擎 structured data 相关: /scripts/helpers/structured-data/lib/config.js
+  if (window.location.search && /^\?s=/g.test(window.location.search)) {
+    let queryText = decodeURI(window.location.search)
+      .replace(/\ /g, "-")
+      .replace(/^\?s=/g, "");
+    OpenSearch(queryText);
+  }
+
+  // 搜索输入框获取焦点时加载搜索
+  document.querySelectorAll(".input.u-search-input").forEach((e) => {
+    e.addEventListener("focus", loadSearchService, false);
+  });
+</script>
+
+
+
+
+
+
+
+  <script>
+
+
+
+  function pjax_highlightjs_copyCode(){
+    if (!(document.querySelector(".highlight .code pre") ||
+      document.querySelector(".article pre code"))) {
+      return;
+    }
+    VolantisApp.utilCopyCode(".highlight .code pre, .article pre code")
+  }
+  volantis.requestAnimationFrame(pjax_highlightjs_copyCode)
+  volantis.pjax.push(pjax_highlightjs_copyCode)
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+  function load_swiper() {
+    if (!document.querySelectorAll(".swiper-container")[0]) return;
+    volantis.css("https://unpkg.com/volantis-static@0.0.1654736714924/libs/swiper/swiper-bundle.min.css");
+    volantis.js("https://unpkg.com/volantis-static@0.0.1654736714924/libs/swiper/swiper-bundle.min.js").then(() => {
+      pjax_swiper();
+    });
+  }
+
+  load_swiper();
+
+  function pjax_swiper() {
+    volantis.swiper = new Swiper('.swiper-container', {
+      slidesPerView: 'auto',
+      spaceBetween: 8,
+      centeredSlides: true,
+      loop: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+  }
+
+  volantis.pjax.push(() => {
+    if (!document.querySelectorAll(".swiper-container")[0]) return;
+    if (typeof volantis.swiper === "undefined") {
+      load_swiper();
+    } else {
+      pjax_swiper();
+    }
+  });
+</script>
+
+
+<!-- pjax 标签必须存在于所有页面 否则 pjax error -->
+<pjax>
+
+</pjax>
+
+<script>
+  function listennSidebarTOC() {
+    const navItems = document.querySelectorAll(".toc li");
+    if (!navItems.length) return;
+    let targets = []
+    const sections = [...navItems].map((element) => {
+      const link = element.querySelector(".toc-link");
+      const target = document.getElementById(
+        decodeURI(link.getAttribute("href")).replace("#", "")
+      );
+      targets.push(target)
+      // 解除 a 标签 href 的 锚点定位, a 标签 href 的 锚点定位 会随机启用?? 产生错位???
+      link.setAttribute("onclick","return false;")
+      link.setAttribute("toc-action","toc-"+decodeURI(link.getAttribute("href")).replace("#", ""))
+      link.setAttribute("href","/")
+      // 配置 点击 触发新的锚点定位
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        // 这里的 addTop 是通过错位使得 toc 自动展开.
+        volantis.scroll.to(target,{addTop: 5, observer:true})
+        // Anchor id
+        history.pushState(null, document.title, "#" + target.id);
+      });
+      return target;
+    });
+
+    function activateNavByIndex(target) {
+      if (target.classList.contains("active-current")) return;
+
+      document.querySelectorAll(".toc .active").forEach((element) => {
+        element.classList.remove("active", "active-current");
+      });
+      target.classList.add("active", "active-current");
+      let parent = target.parentNode;
+      while (!parent.matches(".toc")) {
+        if (parent.matches("li")) parent.classList.add("active");
+        parent = parent.parentNode;
+      }
+    }
+
+    // 方案一：
+    volantis.activateNavIndex=0
+    activateNavByIndex(navItems[volantis.activateNavIndex])
+    volantis.scroll.push(()=>{
+      if (targets[0].getBoundingClientRect().top >= 0) {
+        volantis.activateNavIndex = 0
+      }else if (targets[targets.length-1].getBoundingClientRect().top < 0) {
+        volantis.activateNavIndex = targets.length-1
+      } else {
+        for (let index = 0; index < targets.length; index++) {
+          const target0 = targets[index];
+          const target1 = targets[(index+1)%targets.length];
+          if (target0.getBoundingClientRect().top < 0&&target1.getBoundingClientRect().top >= 0) {
+            volantis.activateNavIndex=index
+            break;
+          }
+        }
+      }
+      activateNavByIndex(navItems[volantis.activateNavIndex])
+    })
+
+    // 方案二：
+    // IntersectionObserver 不是完美精确到像素级别 也不是低延时性的
+    // function findIndex(entries) {
+    //   let index = 0;
+    //   let entry = entries[index];
+    //   if (entry.boundingClientRect.top > 0) {
+    //     index = sections.indexOf(entry.target);
+    //     return index === 0 ? 0 : index - 1;
+    //   }
+    //   for (; index < entries.length; index++) {
+    //     if (entries[index].boundingClientRect.top <= 0) {
+    //       entry = entries[index];
+    //     } else {
+    //       return sections.indexOf(entry.target);
+    //     }
+    //   }
+    //   return sections.indexOf(entry.target);
+    // }
+    // function createIntersectionObserver(marginTop) {
+    //   marginTop = Math.floor(marginTop + 10000);
+    //   let intersectionObserver = new IntersectionObserver(
+    //     (entries, observe) => {
+    //       let scrollHeight = document.documentElement.scrollHeight;
+    //       if (scrollHeight > marginTop) {
+    //         observe.disconnect();
+    //         createIntersectionObserver(scrollHeight);
+    //         return;
+    //       }
+    //       let index = findIndex(entries);
+    //       activateNavByIndex(navItems[index]);
+    //     }, {
+    //       rootMargin: marginTop + "px 0px -100% 0px",
+    //       threshold: 0,
+    //     }
+    //   );
+    //   sections.forEach((element) => {
+    //     element && intersectionObserver.observe(element);
+    //   });
+    // }
+    // createIntersectionObserver(document.documentElement.scrollHeight);
+  }
+
+  document.addEventListener("DOMContentLoaded", ()=>{
+    volantis.requestAnimationFrame(listennSidebarTOC)
+  });
+  document.addEventListener("pjax:success", ()=>{
+    volantis.requestAnimationFrame(listennSidebarTOC)
+  });
+</script>
+
+
+
+<script>
+  document.onreadystatechange = function () {
+    if (document.readyState == 'complete') {
+      // 页面加载完毕 样式加载失败，或是当前网速慢，或是开启了省流模式
+      const { saveData, effectiveType } = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {}
+      if (getComputedStyle(document.querySelector("#safearea"), null)["display"] == "none" || saveData || /2g/.test(effectiveType)) {
+        document.querySelectorAll(".reveal").forEach(function (e) {
+          e.style["opacity"] = "1";
+        });
+        document.querySelector("#safearea").style["display"] = "block";
+      }
+    }
+  }
+</script>
+
+
+  <script type="application/ld+json">[{"@context":"http://schema.org","@type":"Organization","name":"Yzctzl","url":"https://yzctzl.github.io/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},{"@context":"http://schema.org","@type":"Person","name":"yzctzl","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://yzctzl.github.io/","sameAs":["https://github.com/volantis-x"],"description":"奇迹"},{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https://yzctzl.github.io/","name":"Yzctzl"}},{"@type":"ListItem","position":2,"item":{"@id":"https://yzctzl.github.io/categories/Android/","name":"Android"}},{"@type":"ListItem","position":3,"item":{"@id":"https://yzctzl.github.io/2023/KBLive/","name":"尝试逆个简单的 Flutter App —— 𝘚"}}]},{"@context":"http://schema.org","@type":"WebSite","name":"Yzctzl","url":"https://yzctzl.github.io/","keywords":null,"description":"奇迹","author":{"@type":"Person","name":"yzctzl","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://yzctzl.github.io/","description":"奇迹"},"publisher":{"@type":"Organization","name":"Yzctzl","url":"https://yzctzl.github.io/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"potentialAction":{"@type":"SearchAction","name":"Site Search","target":{"@type":"EntryPoint","urlTemplate":"https://yzctzl.github.io?s={search_term_string}"},"query-input":"required name=search_term_string"}},{"@context":"http://schema.org","@type":"BlogPosting","headline":"尝试逆个简单的 Flutter App —— 𝘚","description":"记录 𝘚 逆向的完整过程：很简单但 Flutter","inLanguage":["zh-CN","en","default"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://yzctzl.github.io/2023/KBLive/"},"author":{"@type":"Person","name":"yzctzl","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://yzctzl.github.io/"},"publisher":{"@type":"Organization","name":"Yzctzl","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"url":"https://yzctzl.github.io/2023/KBLive/","wordCount":0,"datePublished":"2023-04-07T16:00:00.000Z","dateModified":"2023-08-11T10:51:21.976Z","articleSection":"Android","keywords":"Android,Flutter,Dart,Reverse,IDA","image":{"@type":"ImageObject","url":"/img/2023/KBLive/headimg.png","width":1024,"height":768}}]</script>
+
+
+
+      
+        <!--
+  pjax重载区域接口：
+  1.  <pjax></pjax> 标签 pjax 标签必须存在于所有页面 否则 pjax error
+  2.  script[data-pjax]
+  3.  .pjax-reload script
+  4.  .pjax
+-->
+
+
+
+<script src="https://unpkg.com/volantis-static@0.0.1654736714924/libs/pjax/pjax.min.js"></script>
+
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox]):not([onclick="return false;"]):not([onclick="return!1"]):not([target="_blank"]):not([target="view_window"]):not([href$=".xml"])',
+        selectors: [
+          "head title",
+          "head meta[name=keywords]",
+          "head meta[name=description]",
+          
+          "#l_main",
+          "#pjax-header-nav-list",
+          ".pjax",
+          "pjax", // <pjax></pjax> 标签
+          "script[data-pjax], .pjax-reload script" // script标签添加data-pjax 或 script标签外层添加.pjax-reload 的script代码段重载
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000,
+        
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      // 使用 volantis.pjax.send 方法传入pjax:send回调函数 参见layout/_partial/scripts/global.ejs
+      volantis.pjax.method.send.start();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 使用 volantis.pjax.push 方法传入重载函数 参见layout/_partial/scripts/global.ejs
+      volantis.pjax.method.complete.start();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      if(volantis.debug) {
+        console.error(e);
+        console.log('pjax error: \n' + JSON.stringify(e));
+      }else{
+        // 使用 volantis.pjax.error 方法传入pjax:error回调函数 参见layout/_partial/scripts/global.ejs
+        volantis.pjax.method.error.start();
+        window.location.href = e.triggerElement.href;
+      }
+    });
+</script>
+
+      
+    </div>
+    <!-- import body_end begin-->
+    <!-- import body_end end-->
+    <!-- Custom Files bodyEnd begin-->
+    
+    <!-- Custom Files bodyEnd end-->
+    <!-- front-matter body_end begin -->
+    <!-- front-matter body_end end -->
+  </body>
+</html>
